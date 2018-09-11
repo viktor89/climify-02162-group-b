@@ -1,0 +1,8 @@
+Michelle's Slides:
+  https://docs.google.com/presentation/d/1Ghnq8KiNpWFk0AQTjVkFIEDRH7yTxAp_8qYV_xGN9MU/edit?usp=sharing
+
+Michelle's Installation Guide:
+  https://docs.google.com/document/d/1ulUQvjDV888-D080MMXk6FxepQIwcQ9qjK5EXUqiZUo/edit#
+
+InfluxDB:
+  https://help.aiven.io/influxdb?gclid=CjwKCAjwrNjcBRA3EiwAIIOvq6pIzOWfgE9v1xT88cbRJyvDHIMTTcK8D2suMjVRFnOeEP4OEs7dgxoCEsAQAvD_BwE

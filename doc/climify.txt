@@ -1,0 +1,931 @@
+-- phpMyAdmin SQL Dump
+-- version 4.7.7
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:8889
+-- Generation Time: Sep 10, 2018 at 10:57 PM
+-- Server version: 5.6.38
+-- PHP Version: 7.1.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Database: `Climafy3`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Address`
+--
+
+CREATE TABLE `Address` (
+  `AddressID` int(5) NOT NULL,
+  `UserID` int(5) DEFAULT NULL,
+  `Street` varchar(50) DEFAULT NULL,
+  `ZipNo` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Address`
+--
+
+INSERT INTO `Address` (`AddressID`, `UserID`, `Street`, `ZipNo`) VALUES
+(1, 1, 'nice street', 5454);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Area`
+--
+
+CREATE TABLE `Area` (
+  `AreaID` int(5) NOT NULL,
+  `MapID` int(5) DEFAULT NULL,
+  `AreaName` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `DTUManager`
+--
+
+CREATE TABLE `DTUManager` (
+  `UserID` int(5) NOT NULL,
+  `UserName` varchar(30) DEFAULT NULL,
+  `UserPassword` varchar(255) DEFAULT NULL,
+  `LastLogin` date DEFAULT NULL,
+  `Blocked` int(1) DEFAULT NULL,
+  `Email` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `DTUManager`
+--
+
+INSERT INTO `DTUManager` (`UserID`, `UserName`, `UserPassword`, `LastLogin`, `Blocked`, `Email`) VALUES
+(1, 'manager', '$2y$10$YYDHtRzxdpECuExmF4.qeeDxxrYA0a3ifwQGwxJujdnIyOhkEpDF.', '2018-07-03', 1, 'test@test.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `GeometryMap`
+--
+
+CREATE TABLE `GeometryMap` (
+  `MapID` int(5) NOT NULL DEFAULT '0',
+  `Latitude` float(11,8) DEFAULT NULL,
+  `Longitude` float(11,8) DEFAULT NULL,
+  `Scale` float(7,4) DEFAULT NULL,
+  `Angle` float(5,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `GeometryMap`
+--
+
+INSERT INTO `GeometryMap` (`MapID`, `Latitude`, `Longitude`, `Scale`, `Angle`) VALUES
+(1, 0.97363293, 0.21850473, 12.3865, 15.73);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `HasAttributeSensorUnit`
+--
+
+CREATE TABLE `HasAttributeSensorUnit` (
+  `SensorAttributeID` int(5) NOT NULL DEFAULT '0',
+  `SensorUnitID` int(5) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `InfluxInfo`
+--
+
+CREATE TABLE `InfluxInfo` (
+  `MunID` int(5) DEFAULT NULL,
+  `InfluxName` varchar(30) DEFAULT NULL,
+  `InfluxUser` varchar(30) DEFAULT NULL,
+  `InfluxPassword` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `InfluxInfo`
+--
+
+INSERT INTO `InfluxInfo` (`MunID`, `InfluxName`, `InfluxUser`, `InfluxPassword`) VALUES
+(1, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Institution`
+--
+
+CREATE TABLE `Institution` (
+  `InstID` int(5) NOT NULL,
+  `InstName` varchar(30) NOT NULL,
+  `MunID` int(5) NOT NULL,
+  `InstDescription` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Institution`
+--
+
+INSERT INTO `Institution` (`InstID`, `InstName`, `MunID`, `InstDescription`) VALUES
+(1, 'DTU', 1, '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `InstUser`
+--
+
+CREATE TABLE `InstUser` (
+  `UserID` int(5) NOT NULL DEFAULT '0',
+  `InstID` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `InstUser`
+--
+
+INSERT INTO `InstUser` (`UserID`, `InstID`) VALUES
+(2, 1),
+(3, 1),
+(4, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Location`
+--
+
+CREATE TABLE `Location` (
+  `LocationID` int(5) NOT NULL,
+  `AreaID` int(5) DEFAULT NULL,
+  `LocationName` varchar(30) NOT NULL,
+  `MapID` int(5) DEFAULT NULL,
+  `XAxis` int(3) DEFAULT NULL,
+  `YAxis` int(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Location`
+--
+
+INSERT INTO `Location` (`LocationID`, `AreaID`, `LocationName`, `MapID`, `XAxis`, `YAxis`) VALUES
+(1, NULL, '1.A.', 1, NULL, NULL),
+(2, NULL, '5.B.', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Logbook`
+--
+
+CREATE TABLE `Logbook` (
+  `MsgID` int(5) NOT NULL DEFAULT '0',
+  `LocationID` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Logbook`
+--
+
+INSERT INTO `Logbook` (`MsgID`, `LocationID`) VALUES
+(1, 1),
+(2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Map`
+--
+
+CREATE TABLE `Map` (
+  `MapID` int(5) NOT NULL,
+  `InstID` int(5) DEFAULT NULL,
+  `FileName` varchar(50) NOT NULL,
+  `MapName` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Map`
+--
+
+INSERT INTO `Map` (`MapID`, `InstID`, `FileName`, `MapName`) VALUES
+(1, 1, '5b3b60a2bb1ff.png', '303B');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Message`
+--
+
+CREATE TABLE `Message` (
+  `MsgID` int(5) NOT NULL,
+  `UserID` int(5) DEFAULT NULL,
+  `MsgDate` date NOT NULL,
+  `MsgTitle` varchar(30) NOT NULL,
+  `MsgData` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Message`
+--
+
+INSERT INTO `Message` (`MsgID`, `UserID`, `MsgDate`, `MsgTitle`, `MsgData`) VALUES
+(1, 2, '2018-08-27', 'Temperatur', 'It&#039;s too warm in the classroom and opening the windows don&#039;t provide enough air circulation.'),
+(2, 2, '2018-08-27', 'Støj', 'People passing by in the hall is too noisy and disturbs the class.'),
+(3, 1, '0000-00-00', 'Maintenance notice', 'Climify is scheduled for maintenance in two days');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Municipality`
+--
+
+CREATE TABLE `Municipality` (
+  `MunID` int(5) NOT NULL,
+  `MunName` varchar(30) NOT NULL,
+  `DateOfCreation` date DEFAULT NULL,
+  `Token` varchar(255) DEFAULT NULL,
+  `Country` varchar(2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Municipality`
+--
+
+INSERT INTO `Municipality` (`MunID`, `MunName`, `DateOfCreation`, `Token`, `Country`) VALUES
+(1, 'København', '2018-07-03', '99dfe3afe0c69f52a7d748a7909e8238', 'DK');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `News`
+--
+
+CREATE TABLE `News` (
+  `MsgID` int(5) NOT NULL DEFAULT '0',
+  `InstID` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `News`
+--
+
+INSERT INTO `News` (`MsgID`, `InstID`) VALUES
+(3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Permission`
+--
+
+CREATE TABLE `Permission` (
+  `PermID` int(11) NOT NULL,
+  `PermName` varchar(25) DEFAULT NULL,
+  `PermDescription` varchar(75) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Person`
+--
+
+CREATE TABLE `Person` (
+  `UserID` int(5) NOT NULL,
+  `UserName` varchar(7) NOT NULL,
+  `FirstName` varchar(30) NOT NULL,
+  `LastName` varchar(30) NOT NULL,
+  `Email` varchar(50) NOT NULL,
+  `RoleName` varchar(25) NOT NULL,
+  `UserPassword` varchar(255) NOT NULL,
+  `Blocked` int(1) DEFAULT NULL,
+  `LastLogin` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Person`
+--
+
+INSERT INTO `Person` (`UserID`, `UserName`, `FirstName`, `LastName`, `Email`, `RoleName`, `UserPassword`, `Blocked`, `LastLogin`) VALUES
+(1, 'James', 'James', 'Bond', 'test@test.com', '1', 'wmEfh6hv+DWx/pvWEv2IHujRNaZF6acAryDWrcuKXpg=', 1, NULL),
+(2, 'bstrang', 'Bellatrix', 'LeStrange', 'test@hotmail.com', '2', 'yRzr9j/HZpY9R8DZtMQLzWtE989ZzZUhaEKL/bUYbW0=', 1, NULL),
+(3, 'jakep', 'Jake', 'Peralta', 'test@hotmail.com', '2', 'YjCGBffwnrumUMAiftix17UygDO2iNbUR9+DsbJWEEc=', 1, NULL),
+(4, 'amys', 'Amy', 'Santiago', 'test@hotmail.com', '2', '3KTehpnhvDbI5skUH7QfoCT/XsBSPmE3jfNE2aan0JU=', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Phone`
+--
+
+CREATE TABLE `Phone` (
+  `PhoneID` int(5) NOT NULL,
+  `UserID` int(5) DEFAULT NULL,
+  `PhoneNumber` varchar(15) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Phone`
+--
+
+INSERT INTO `Phone` (`PhoneID`, `UserID`, `PhoneNumber`) VALUES
+(1, 1, '54545454');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProjectManager`
+--
+
+CREATE TABLE `ProjectManager` (
+  `UserID` int(5) NOT NULL DEFAULT '0',
+  `MunID` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `ProjectManager`
+--
+
+INSERT INTO `ProjectManager` (`UserID`, `MunID`) VALUES
+(1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ProjectManagerActivate`
+--
+
+CREATE TABLE `ProjectManagerActivate` (
+  `UserID` int(5) NOT NULL DEFAULT '0',
+  `MunID` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `QuickFeedback`
+--
+
+CREATE TABLE `QuickFeedback` (
+  `QuickFeedbackID` int(5) NOT NULL,
+  `LocationID` int(5) DEFAULT NULL,
+  `Temperature` int(2) DEFAULT NULL,
+  `Humidity` int(2) DEFAULT NULL,
+  `CO2` int(2) DEFAULT NULL,
+  `Noise` int(2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Role`
+--
+
+CREATE TABLE `Role` (
+  `RoleID` int(11) NOT NULL DEFAULT '0',
+  `RoleName` varchar(25) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `RolePermission`
+--
+
+CREATE TABLE `RolePermission` (
+  `RoleID` int(11) NOT NULL,
+  `PermID` int(5) NOT NULL,
+  `InstID` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `SensorAttribute`
+--
+
+CREATE TABLE `SensorAttribute` (
+  `SensorAttributeID` int(5) NOT NULL,
+  `SensorAttributeName` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `SensorInstance`
+--
+
+CREATE TABLE `SensorInstance` (
+  `SensorID` varchar(50) NOT NULL DEFAULT '',
+  `SensorTypeID` int(5) DEFAULT NULL,
+  `LocationID` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `SensorType`
+--
+
+CREATE TABLE `SensorType` (
+  `SensorTypeID` int(5) NOT NULL,
+  `SensorTypeName` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `SensorUnit`
+--
+
+CREATE TABLE `SensorUnit` (
+  `SensorUnitID` int(5) NOT NULL,
+  `SensorUnitName` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `TypeHAU`
+--
+
+CREATE TABLE `TypeHAU` (
+  `SensorTypeID` int(5) DEFAULT NULL,
+  `SensorAttributeID` int(5) DEFAULT NULL,
+  `SensorUnitID` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `UserActivate`
+--
+
+CREATE TABLE `UserActivate` (
+  `AdminUserID` int(5) NOT NULL,
+  `NewUserID` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Zip`
+--
+
+CREATE TABLE `Zip` (
+  `ZipNo` int(5) NOT NULL DEFAULT '0',
+  `City` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `Zip`
+--
+
+INSERT INTO `Zip` (`ZipNo`, `City`) VALUES
+(5454, 'California');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `Address`
+--
+ALTER TABLE `Address`
+  ADD PRIMARY KEY (`AddressID`),
+  ADD KEY `UserID` (`UserID`),
+  ADD KEY `ZipNo` (`ZipNo`);
+
+--
+-- Indexes for table `Area`
+--
+ALTER TABLE `Area`
+  ADD PRIMARY KEY (`AreaID`),
+  ADD KEY `MapID` (`MapID`);
+
+--
+-- Indexes for table `DTUManager`
+--
+ALTER TABLE `DTUManager`
+  ADD PRIMARY KEY (`UserID`);
+
+--
+-- Indexes for table `GeometryMap`
+--
+ALTER TABLE `GeometryMap`
+  ADD PRIMARY KEY (`MapID`);
+
+--
+-- Indexes for table `HasAttributeSensorUnit`
+--
+ALTER TABLE `HasAttributeSensorUnit`
+  ADD PRIMARY KEY (`SensorAttributeID`,`SensorUnitID`),
+  ADD KEY `SensorUnitID` (`SensorUnitID`);
+
+--
+-- Indexes for table `InfluxInfo`
+--
+ALTER TABLE `InfluxInfo`
+  ADD KEY `MunID` (`MunID`);
+
+--
+-- Indexes for table `Institution`
+--
+ALTER TABLE `Institution`
+  ADD PRIMARY KEY (`InstID`),
+  ADD KEY `MunID` (`MunID`);
+
+--
+-- Indexes for table `InstUser`
+--
+ALTER TABLE `InstUser`
+  ADD PRIMARY KEY (`UserID`),
+  ADD KEY `InstID` (`InstID`);
+
+--
+-- Indexes for table `Location`
+--
+ALTER TABLE `Location`
+  ADD PRIMARY KEY (`LocationID`),
+  ADD KEY `AreaID` (`AreaID`),
+  ADD KEY `MapID` (`MapID`);
+
+--
+-- Indexes for table `Logbook`
+--
+ALTER TABLE `Logbook`
+  ADD PRIMARY KEY (`MsgID`),
+  ADD KEY `LocationID` (`LocationID`);
+
+--
+-- Indexes for table `Map`
+--
+ALTER TABLE `Map`
+  ADD PRIMARY KEY (`MapID`),
+  ADD KEY `InstID` (`InstID`);
+
+--
+-- Indexes for table `Message`
+--
+ALTER TABLE `Message`
+  ADD PRIMARY KEY (`MsgID`),
+  ADD KEY `UserID` (`UserID`);
+
+--
+-- Indexes for table `Municipality`
+--
+ALTER TABLE `Municipality`
+  ADD PRIMARY KEY (`MunID`);
+
+--
+-- Indexes for table `News`
+--
+ALTER TABLE `News`
+  ADD PRIMARY KEY (`MsgID`),
+  ADD KEY `InstID` (`InstID`);
+
+--
+-- Indexes for table `Permission`
+--
+ALTER TABLE `Permission`
+  ADD PRIMARY KEY (`PermID`);
+
+--
+-- Indexes for table `Person`
+--
+ALTER TABLE `Person`
+  ADD PRIMARY KEY (`UserID`),
+  ADD UNIQUE KEY `username_unique` (`UserName`);
+
+--
+-- Indexes for table `Phone`
+--
+ALTER TABLE `Phone`
+  ADD PRIMARY KEY (`PhoneID`),
+  ADD KEY `UserID` (`UserID`);
+
+--
+-- Indexes for table `ProjectManager`
+--
+ALTER TABLE `ProjectManager`
+  ADD PRIMARY KEY (`UserID`),
+  ADD KEY `MunID` (`MunID`);
+
+--
+-- Indexes for table `ProjectManagerActivate`
+--
+ALTER TABLE `ProjectManagerActivate`
+  ADD PRIMARY KEY (`UserID`),
+  ADD KEY `MunID` (`MunID`);
+
+--
+-- Indexes for table `QuickFeedback`
+--
+ALTER TABLE `QuickFeedback`
+  ADD PRIMARY KEY (`QuickFeedbackID`),
+  ADD KEY `LocationID` (`LocationID`);
+
+--
+-- Indexes for table `Role`
+--
+ALTER TABLE `Role`
+  ADD PRIMARY KEY (`RoleID`);
+
+--
+-- Indexes for table `RolePermission`
+--
+ALTER TABLE `RolePermission`
+  ADD PRIMARY KEY (`RoleID`,`PermID`,`InstID`),
+  ADD KEY `PermID` (`PermID`),
+  ADD KEY `InstID` (`InstID`);
+
+--
+-- Indexes for table `SensorAttribute`
+--
+ALTER TABLE `SensorAttribute`
+  ADD PRIMARY KEY (`SensorAttributeID`);
+
+--
+-- Indexes for table `SensorInstance`
+--
+ALTER TABLE `SensorInstance`
+  ADD PRIMARY KEY (`SensorID`),
+  ADD KEY `LocationID` (`LocationID`),
+  ADD KEY `SensorTypeID` (`SensorTypeID`);
+
+--
+-- Indexes for table `SensorType`
+--
+ALTER TABLE `SensorType`
+  ADD PRIMARY KEY (`SensorTypeID`);
+
+--
+-- Indexes for table `SensorUnit`
+--
+ALTER TABLE `SensorUnit`
+  ADD PRIMARY KEY (`SensorUnitID`);
+
+--
+-- Indexes for table `TypeHAU`
+--
+ALTER TABLE `TypeHAU`
+  ADD KEY `SensorTypeID` (`SensorTypeID`),
+  ADD KEY `SensorAttributeID` (`SensorAttributeID`),
+  ADD KEY `SensorUnitID` (`SensorUnitID`);
+
+--
+-- Indexes for table `UserActivate`
+--
+ALTER TABLE `UserActivate`
+  ADD PRIMARY KEY (`NewUserID`),
+  ADD KEY `AdminUserID` (`AdminUserID`);
+
+--
+-- Indexes for table `Zip`
+--
+ALTER TABLE `Zip`
+  ADD PRIMARY KEY (`ZipNo`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `Address`
+--
+ALTER TABLE `Address`
+  MODIFY `AddressID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `Area`
+--
+ALTER TABLE `Area`
+  MODIFY `AreaID` int(5) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `DTUManager`
+--
+ALTER TABLE `DTUManager`
+  MODIFY `UserID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `Institution`
+--
+ALTER TABLE `Institution`
+  MODIFY `InstID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `Location`
+--
+ALTER TABLE `Location`
+  MODIFY `LocationID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `Map`
+--
+ALTER TABLE `Map`
+  MODIFY `MapID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `Message`
+--
+ALTER TABLE `Message`
+  MODIFY `MsgID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `Municipality`
+--
+ALTER TABLE `Municipality`
+  MODIFY `MunID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `Permission`
+--
+ALTER TABLE `Permission`
+  MODIFY `PermID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `Person`
+--
+ALTER TABLE `Person`
+  MODIFY `UserID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `Phone`
+--
+ALTER TABLE `Phone`
+  MODIFY `PhoneID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `QuickFeedback`
+--
+ALTER TABLE `QuickFeedback`
+  MODIFY `QuickFeedbackID` int(5) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `SensorAttribute`
+--
+ALTER TABLE `SensorAttribute`
+  MODIFY `SensorAttributeID` int(5) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `SensorType`
+--
+ALTER TABLE `SensorType`
+  MODIFY `SensorTypeID` int(5) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `SensorUnit`
+--
+ALTER TABLE `SensorUnit`
+  MODIFY `SensorUnitID` int(5) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `Address`
+--
+ALTER TABLE `Address`
+  ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Person` (`UserID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `address_ibfk_2` FOREIGN KEY (`ZipNo`) REFERENCES `Zip` (`ZipNo`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `Area`
+--
+ALTER TABLE `Area`
+  ADD CONSTRAINT `area_ibfk_1` FOREIGN KEY (`MapID`) REFERENCES `Map` (`MapID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `GeometryMap`
+--
+ALTER TABLE `GeometryMap`
+  ADD CONSTRAINT `geometrymap_ibfk_1` FOREIGN KEY (`MapID`) REFERENCES `Map` (`MapID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `HasAttributeSensorUnit`
+--
+ALTER TABLE `HasAttributeSensorUnit`
+  ADD CONSTRAINT `hasattributesensorunit_ibfk_1` FOREIGN KEY (`SensorAttributeID`) REFERENCES `SensorAttribute` (`SensorAttributeID`),
+  ADD CONSTRAINT `hasattributesensorunit_ibfk_2` FOREIGN KEY (`SensorUnitID`) REFERENCES `SensorUnit` (`SensorUnitID`);
+
+--
+-- Constraints for table `InfluxInfo`
+--
+ALTER TABLE `InfluxInfo`
+  ADD CONSTRAINT `influxinfo_ibfk_1` FOREIGN KEY (`MunID`) REFERENCES `Municipality` (`MunID`);
+
+--
+-- Constraints for table `Institution`
+--
+ALTER TABLE `Institution`
+  ADD CONSTRAINT `institution_ibfk_1` FOREIGN KEY (`MunID`) REFERENCES `Municipality` (`MunID`);
+
+--
+-- Constraints for table `InstUser`
+--
+ALTER TABLE `InstUser`
+  ADD CONSTRAINT `instuser_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Person` (`UserID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `instuser_ibfk_2` FOREIGN KEY (`InstID`) REFERENCES `Institution` (`InstID`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `Location`
+--
+ALTER TABLE `Location`
+  ADD CONSTRAINT `location_ibfk_1` FOREIGN KEY (`AreaID`) REFERENCES `Area` (`AreaID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `location_ibfk_2` FOREIGN KEY (`MapID`) REFERENCES `Map` (`MapID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `Logbook`
+--
+ALTER TABLE `Logbook`
+  ADD CONSTRAINT `logbook_ibfk_1` FOREIGN KEY (`MsgID`) REFERENCES `Message` (`MsgID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `logbook_ibfk_2` FOREIGN KEY (`LocationID`) REFERENCES `Location` (`LocationID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `Map`
+--
+ALTER TABLE `Map`
+  ADD CONSTRAINT `map_ibfk_1` FOREIGN KEY (`InstID`) REFERENCES `Institution` (`InstID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `Message`
+--
+ALTER TABLE `Message`
+  ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Person` (`UserID`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `News`
+--
+ALTER TABLE `News`
+  ADD CONSTRAINT `news_ibfk_1` FOREIGN KEY (`MsgID`) REFERENCES `Message` (`MsgID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `news_ibfk_2` FOREIGN KEY (`InstID`) REFERENCES `Institution` (`InstID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `Phone`
+--
+ALTER TABLE `Phone`
+  ADD CONSTRAINT `phone_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Person` (`UserID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `ProjectManager`
+--
+ALTER TABLE `ProjectManager`
+  ADD CONSTRAINT `projectmanager_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Person` (`UserID`),
+  ADD CONSTRAINT `projectmanager_ibfk_2` FOREIGN KEY (`MunID`) REFERENCES `Municipality` (`MunID`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `ProjectManagerActivate`
+--
+ALTER TABLE `ProjectManagerActivate`
+  ADD CONSTRAINT `projectmanageractivate_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Person` (`UserID`),
+  ADD CONSTRAINT `projectmanageractivate_ibfk_2` FOREIGN KEY (`MunID`) REFERENCES `Municipality` (`MunID`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `QuickFeedback`
+--
+ALTER TABLE `QuickFeedback`
+  ADD CONSTRAINT `quickfeedback_ibfk_1` FOREIGN KEY (`LocationID`) REFERENCES `Location` (`LocationID`) ON DELETE SET NULL;
+
+--
+-- Constraints for table `RolePermission`
+--
+ALTER TABLE `RolePermission`
+  ADD CONSTRAINT `rolepermission_ibfk_1` FOREIGN KEY (`RoleID`) REFERENCES `Role` (`RoleID`),
+  ADD CONSTRAINT `rolepermission_ibfk_2` FOREIGN KEY (`PermID`) REFERENCES `Permission` (`PermID`),
+  ADD CONSTRAINT `rolepermission_ibfk_3` FOREIGN KEY (`InstID`) REFERENCES `Institution` (`InstID`);
+
+--
+-- Constraints for table `SensorInstance`
+--
+ALTER TABLE `SensorInstance`
+  ADD CONSTRAINT `sensorinstance_ibfk_1` FOREIGN KEY (`LocationID`) REFERENCES `Location` (`LocationID`) ON DELETE SET NULL,
+  ADD CONSTRAINT `sensorinstance_ibfk_2` FOREIGN KEY (`SensorTypeID`) REFERENCES `SensorType` (`SensorTypeID`);
+
+--
+-- Constraints for table `TypeHAU`
+--
+ALTER TABLE `TypeHAU`
+  ADD CONSTRAINT `typehau_ibfk_1` FOREIGN KEY (`SensorTypeID`) REFERENCES `SensorType` (`SensorTypeID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `typehau_ibfk_2` FOREIGN KEY (`SensorAttributeID`) REFERENCES `SensorAttribute` (`SensorAttributeID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `typehau_ibfk_3` FOREIGN KEY (`SensorUnitID`) REFERENCES `SensorUnit` (`SensorUnitID`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `UserActivate`
+--
+ALTER TABLE `UserActivate`
+  ADD CONSTRAINT `useractivate_ibfk_1` FOREIGN KEY (`AdminUserID`) REFERENCES `Person` (`UserID`),
+  ADD CONSTRAINT `useractivate_ibfk_2` FOREIGN KEY (`NewUserID`) REFERENCES `Person` (`UserID`);

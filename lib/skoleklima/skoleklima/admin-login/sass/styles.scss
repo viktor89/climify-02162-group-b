@@ -1,0 +1,508 @@
+/**********************************/
+//		Main style
+/**********************************/
+
+$side-nav-width: 200px;
+
+// Import
+@import 'const/style-fonts.scss';
+@import 'const/style-colors.scss';
+@import 'const/sass-flexbox.scss';
+
+//  Mixin
+@mixin boxShadow() { 
+    -webkit-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.5);
+    -o-box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 14px 0px rgba(0,0,0,0.5);
+}
+
+/**********************************/
+//		General 
+/**********************************/
+
+* { 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: $primary-font;
+    font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    margin: 0;
+}
+
+h1 { font-size: 2em; font-family: $headline-font }
+h2 { font-size: 1.5em; font-family: $headline-font }
+h3 { font-size: 1.3em; font-family: $headline-font }
+h4 { font-size: 1em; font-family: $headline-font }
+h5 { font-size: 0.8em; font-family: $headline-font }
+h6 { font-size: 0.7em; font-family: $headline-font }
+p { font-size: 1em; font-family: $primary-font }
+
+a {
+    &:link, &:visited, &:hover, &:focus, &:active {
+        color: $light-green;
+    } 
+}
+
+hr {
+    border: 0;
+    height: 0;
+    border-bottom: 1px solid $dark-blue;
+    margin: 20px 0;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+input, select {
+    outline: none;
+    border: 1px solid #c7c7c7;
+    padding: .2em .5em;
+    border-radius: 2px;
+    height: 26px !important;
+}
+
+textarea {
+    outline: none;
+    border-radius: 2px;
+}
+
+.viewport {
+    width: 100vw;
+}
+
+button {
+    border-radius: 2px !important;
+    color: #000000 !important;
+    outline: none !important;
+    background-color: $light-blue;
+    padding: .2em .5em;
+    border: 1px solid $dark-gray;
+    border-radius: 2px;
+    height: 26px;
+    min-width: 140px;
+    line-height: 0.5em;
+    &:hover, &:focus {
+        cursor: pointer;
+        background-color: $dark-blue;
+    }
+}
+
+.button-disabled {
+    background-color: $light-gray !important;
+    color: $medium-gray !important;
+    &:hover, &:focus {
+        cursor: auto !important;
+        background-color: $light-gray !important;
+    }
+}
+
+.sweet-alert button {
+    background-color: $light-blue !important;
+}
+
+.link {
+    &:hover {
+        cursor: pointer;
+    } 
+}
+
+.wrong-login {
+    border: 2px solid $light-red !important; 
+}
+
+.wrong-input {
+    border: 1px solid $light-red !important; 
+}
+
+.flex {
+    @include display-flex();
+}
+
+/**********************************/
+//		Login view
+/**********************************/
+
+.viewport-login {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    @include display-flex();
+    @include align-items(center);
+    @include justify-content(center);
+    background-color: #ffffff;
+    & .login-background-image {
+        position: fixed;
+        left: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        background: url('../../img/login/login_bg.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        -webkit-filter: blur(5px);
+        -moz-filter: blur(5px);
+        -o-filter: blur(5px);
+        -ms-filter: blur(5px);
+        filter: blur(5px);
+        opacity: .9;
+        z-index: 0;
+    }
+    & .login-form-wrapper {
+        background-color: #ffffff;
+        @include display-flex();
+        @include flex-direction(column);
+        @include boxShadow();
+        padding: 20px;
+        min-width: 340px;
+        min-height: 340px;
+        z-index: 2;
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        & input {
+            margin: 5px 0 15px 0;
+        }
+        .g-recaptcha {
+            margin: 10px 0 20px 0;
+        }
+        & span {
+            width: 100%;
+            @include display-flex();
+            @include justify-content(flex-end);
+            & #btn-login-system {
+                width: auto;
+            }
+        }
+
+
+    }
+    & .logo-container {
+        @include display-flex();
+        @include align-items(baseline);
+        position: fixed;
+        right: 5px;
+        bottom: 5px;
+        z-index: 1;
+        & p {
+            color: $dark-gray;
+            margin-right: 10px;
+        }
+        & img {
+            height: 50px;
+            width: auto;
+        }
+    }
+
+}
+
+/**********************************/
+//		header 
+/**********************************/
+
+header {
+    height: 25px;
+    width: 100%;
+    @include boxShadow();
+    background-color: $dark-blue;
+    & .header-content {
+        @include display-flex();
+        @include justify-content(space-between);
+        @include align-items(center);
+        height: 100%;
+        width: 100%;
+        margin: 0 20px 0 10px;
+        & #btn-sign-out {
+            @include display-flex();
+            & i {
+                margin-left: 5px;
+                width: 40px;
+            }
+        }
+    }
+}
+
+/**********************************/
+//		Dashboard 
+/**********************************/
+
+/*
+Regarding DTU Managers:
+*/
+
+
+
+.DTUManager-list {
+    margin-bottom: 20px !important;
+    width: 155px;
+    & .update-spinner {
+        margin: 5px;
+    }
+    margin: 10px 20px 0 20px;
+    border: 1px solid #000000;
+    border-radius: 2px;
+    background-color:#DD6B55;
+    & .user-list-single-wrapper {
+        
+   
+
+        &:nth-child(odd) {
+            background: $light-blue;
+        }
+        &:nth-child(even) {
+            background: #7fa3b7;
+        }
+        & .user-list-single-header {
+            padding: 0 10px;
+            @include display-flex();
+            @include justify-content(space-between);
+            @include align-items(center);
+            & .ico-hide-meta {
+                display: none;
+            }
+            & h4, p {
+                width: 40%;
+            }
+        }
+
+
+        & .user-list-single-meta {
+            display: none;
+            padding: 10px 10px 20px 10px;
+            background: $light-gray;
+            width: 100%;
+            min-height: 1em;
+
+
+            & .user-meta-subusers {
+                padding-right: 10px;
+                margin-top: 10px;
+                & .create-subuser-wrapper {
+                    border: 1px solid $dark-blue;
+                    padding: 10px;
+                    margin: 10px 0 20px 0;
+                    & p {
+                        margin-bottom: 10px;
+                    }
+                    & span {
+                        @include display-flex();
+                        @include justify-content(space-between);
+                        margin: 0;
+                    }
+                }
+                & span {
+                    margin-bottom: 20px;
+                    @include display-flex();
+                    @include justify-content(space-between);
+                }
+                & .user-meta-subusers-userlist {
+
+                    & .single-company-user {
+                        margin-bottom: 5px;
+                        @include display-flex();
+                        @include justify-content(space-between);
+                        & p {
+                            width: 20%;
+                        }
+                        & i {
+                            margin-right: 15px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+#btn-create-manager {
+    border-radius: 2px !important;
+    color: #000000 !important;
+    outline: none !important;
+    background-color: #DD6B55;
+    padding: .2em .5em;
+    border: 1px solid $dark-gray;
+    border-radius: 2px;
+    height: 26px;
+    min-width: 140px;
+    line-height: 0.5em;
+    &:hover, &:focus {
+        cursor: pointer;
+        background-color: #DD6B55;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+.viewport-dashboard {
+    position: relative;
+    width: 100vw;
+    & .top-btn-wrapper {
+        width: 100%;
+        padding: 20px 20px 0 20px;
+        @include display-flex();
+        @include justify-content(space-between);
+
+    }
+    & .header-text-wrapper {
+        width: 100%;
+        padding: 10px 20px 0 20px ;
+    }
+    & .user-list {
+        margin-bottom: 20px !important;
+        width: 200px;
+        & .update-spinner {
+            margin: 5px;
+        }
+      //  margin: 10px 20px 0 20px;
+    //    border: 1px solid #000000;
+        border-radius: 2px;
+        & .user-list-single-wrapper {
+            //  margin-bottom: 20px;
+             margin: 10px 20px 0 20px;
+             border: 1px solid #000000;
+
+            
+            background: $light-blue;
+            /*
+            &:nth-child(odd) {
+                background: $light-blue;
+            }
+            &:nth-child(even) {
+                background: #7fa3b7;
+            }
+            */
+            
+            & .user-list-single-header {
+                padding: 0 10px;
+                @include display-flex();
+                @include justify-content(space-between);
+                @include align-items(center);
+                & .ico-hide-meta {
+                    display: none;
+                }
+                & h4, p {
+                    width: 40%;
+                }
+            }
+
+
+            & .user-list-single-meta {
+                display: none;
+                padding: 10px 10px 20px 10px;
+                background: $light-gray;
+                width: 100%;
+                min-height: 1em;
+                & .user-meta-company {
+                    @include display-flex();
+                    & .inp-system:not(.inp-system-status-select) {
+                        width: 100%;
+                    }
+                    & input {
+                        background: transparent;
+                        border: none;
+                    }
+                    & .user-list-single-meta-left {
+                        width: 33%;
+                    }
+                    & .user-list-single-meta-middle {
+                        width: 33%;
+                    }
+                    & .user-list-single-meta-right {
+                        position: relative;
+                        width: 40%;
+                        min-height: 100%;
+                        & .inp-system-status-select {
+                            margin-top: 10px;
+                        }
+                        & span {
+                            margin-top: 10px;
+                            @include display-flex();
+                            @include justify-content(flex-end);
+                            & .btn-save-sel-company {
+                                margin-left: 10px;  
+                            } 
+                            & .btn-delete-sel-company {
+                                background: $light-red; 
+                            }           
+                        }
+                        & h4 {
+                            margin-top: 20px;
+                        }
+                    }
+                }
+                & .user-meta-dbconnection {
+                    padding-right: 10px;
+                    & .dbconnection-imp {
+                        border: 1px solid $dark-blue;
+                        padding: 10px;
+                        margin: 10px 0 20px 0;
+                        & p {
+                            margin-bottom: 10px;
+                            width: 20%;
+                        }
+                        & span {
+                            @include display-flex();
+                            @include justify-content(space-between);
+                            margin: 0;
+                        }
+                    }
+                }
+                & .user-meta-subusers {
+                    padding-right: 10px;
+                    margin-top: 10px;
+                    & .create-subuser-wrapper {
+                        border: 1px solid $dark-blue;
+                        padding: 10px;
+                        margin: 10px 0 20px 0;
+                        & p {
+                            margin-bottom: 10px;
+                        }
+                        & span {
+                            @include display-flex();
+                            @include justify-content(space-between);
+                            margin: 0;
+                        }
+                    }
+                    & span {
+                        margin-bottom: 20px;
+                        @include display-flex();
+                        @include justify-content(space-between);
+                    }
+                    & .user-meta-subusers-userlist {
+
+                        & .single-company-user {
+                            margin-bottom: 5px;
+                            @include display-flex();
+                            @include justify-content(space-between);
+                            & p {
+                                width: 20%;
+                            }
+                            & i {
+                                margin-right: 15px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
