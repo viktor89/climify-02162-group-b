@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA;;GAEG;AAoBH;;GAEG;AAoDH;;GAEG;AAgCH;;GAEG;AAMH;;GAEG;AAUH;;GAEG;AASH;;GAEG;AASH;;GAEG;AAQH;;GAEG;AAOH;;GAEG;AA0DH;;GAEG;AAkDH;;GAEG;AAkDH;;GAEG",
+"sources": ["../../sass/const/sass-flexbox.scss"],
+"names": [],
+"file": "sass-flexbox.css"
+}

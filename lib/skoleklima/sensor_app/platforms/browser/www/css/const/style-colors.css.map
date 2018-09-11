@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACA,YAAY;AAGZ,yBAAyB;AAEzB,2BAA2B;AAE3B,2BAA2B;AAG3B,kBAAkB",
+"sources": ["../../sass/const/style-colors.scss"],
+"names": [],
+"file": "style-colors.css"
+}

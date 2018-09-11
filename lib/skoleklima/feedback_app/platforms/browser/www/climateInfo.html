@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<html>
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=yes, initial-scale=1, maximum-scale=5, minimum-scale=1, width=device-width" />
+        <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+        <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+        <!-- Good default declaration:
+* gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+* https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+* Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+* Enable inline JS: add 'unsafe-inline' to default-src
+* Enable eval(): add 'unsafe-eval' to default-src
+* Create your own at http://cspisawesome.com
+-->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+
+
+        <title>Climify Feedback App</title>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> 
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCH3z0AYLLOwg0HhYvfXVWVVG1isTjyMUU&libraries=geometry"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    </head>
+
+    <body>  
+        <div id="app-header">
+
+            <button id="btn-refresh" class="header-btn"></button>
+            <div>
+                <p id="your-location">Your location: </p>
+                <h2 id="user-location">Unknown</h2>
+            </div>
+            <button id="btn-info" class="header-btn"></button>
+            <button id="btn-back" class="header-btn"></button>
+        </div>
+        <div id="app-body">
+            <div id="innerContainer">
+                <h3 id="current-indoor-climate">Current indoor climate</h3>
+
+                <div class="feedback-grid">
+                    <div class="grid-icon-opt1">
+                        <button id="btn-good-temp" class="grid-btn good temp"></button>
+                    </div>
+                    <div class="grid-icon-opt2">
+
+                        <img src="img/climate/sun.png">
+                        <h2 id="info-temp-level">- -</h2>
+                    </div>
+                    <div class="grid-icon-opt3">
+                        <button id="btn-bad-temp" class="grid-btn bad temp"></button>
+                    </div>
+                </div>
+                <div class="feedback-grid">
+                    <!-- TODO: tilføj div for hver info, grid aligner selv -->
+                    <div class="grid-icon-opt1">
+                        <button id="btn-good-humid" class="grid-btn good humid"></button>
+                    </div>
+                    <div class="grid-icon-opt2">
+
+                        <img src="img/climate/drop.png">
+                        <h2 id="info-humid-level">- -</h2>
+                    </div>
+                    <div class="grid-icon-opt3">
+                        <button id="btn-bad-humid" class="grid-btn bad humid"></button>
+                    </div>
+                </div>
+                <div class="feedback-grid">
+                    <!-- TODO: tilføj div for hver info, grid aligner selv -->
+                    <div class="grid-icon-op1">
+                        <button id="btn-good-co2" class="grid-btn good co2">
+                        </button>
+                    </div>
+                    <div class="grid-icon-opt2">
+
+                        <img src="img/climate/cloud.png">
+                        <h2 id="info-co2-level">- -</h2>
+                    </div>
+                    <div class="grid-icon-opt3">
+                        <button id="btn-bad-co2" class="grid-btn bad co2"></button>
+                    </div>
+                </div>
+                <div class="feedback-grid">
+                    <!-- TODO: tilføj div for hver info, grid aligner selv -->
+                    <div class="grid-icon-opt1">
+                        <button id="btn-good-noise" class="grid-btn good noise"></button>
+                    </div>
+                    <div class="grid-icon-opt2">
+                        <img src="img/climate/ear.png">
+                        <h2 id="info-noise-level">- -</h2>
+                    </div>
+                    <div class="grid-icon-opt3">
+                        <button id="btn-bad-noise" class="grid-btn bad noise"></button>
+                    </div>
+                </div>
+
+
+
+                <!-- For captcha -->
+                <!--<p>To submit your ratings, tick the box:</p>-->
+            </div>
+
+            <!-- Form for user information if desired -->
+            <!--
+<div id="feedback-user-form" style="display:none;overflow:hidden;">
+<h2 style="margin:20px 0 0 0;">Your information</h2>
+
+<div style="margin:20px;">
+<label for="inp-fname">First name</label>
+<input type="text" id="inp-fname">
+<label for="inp-lname">Last name</label>
+<input type="text" id="inp-lname">
+<label for="inp-age">Age</label>
+<input type="number" id="inp-age" min="5" max="110" size="3">
+<p style="display:block;float:left;">Gender</p>
+<br>
+<div id="gender-select" style="display:grid; grid-template-columns: auto auto; margin-left:auto;margin-right:auto;">
+<div>
+<input type="radio" name="gender" value="male" checked> Male
+</div>
+<div>
+<input type="radio" name="gender" value="female" > Female
+</div>
+</div>
+</div>
+
+</div>
+-->
+
+            <div id="feedback-p1" style="display:none;">
+                <h2 style="margin:20px 0 0 0;">Your week</h2>
+                <div class="question-grid">
+                    <div class="item0">
+                        How was your week inside the institution?
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q1-rating" value="1" > Great
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q1-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q1-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q1-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q1-rating" value="5" > Terrible
+                    </div>
+                </div>
+
+                <div class="question-grid">
+                    <div class="item0">
+                        How was your week outside the institution?
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Great
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Terrible
+                    </div>
+                </div>
+            </div>
+
+            <div id="feedback-p2" style="display:none;">
+                <h2 style="margin:20px 0 0 0;">Your location</h2>
+                <div class="question-grid">
+                    <div class="item0">
+                        How is your current location?
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q1-rating" value="1" > Not too hot
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q1-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q1-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q1-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q1-rating" value="5" > Too hot
+                    </div>
+                </div>
+
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Not too cold
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Too cold
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > No draught
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Draught
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Fresh air
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Bad air
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Not too noisy
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Too noisy
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Not too bright
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Too bright
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Not too dark
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Too dark
+                    </div>
+                </div>
+            </div>
+
+            <div id="feedback-p3" style="display:none;">
+                <h2 style="margin:20px 0 0 0;">Your wellbeing</h2>
+                <div class="question-grid">
+                    <div class="item0">
+                        How are you feeling?
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q1-rating" value="1" > Clear nose
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q1-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q1-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q1-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q1-rating" value="5" > Stuffy nose
+                    </div>
+                </div>
+
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Good skin
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Dry skin
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Clear throat
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Sore throat
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Fresh eyes
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Tired eyes
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Not tired
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Very tired
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > No headache
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Headache
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Focused
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Distracted
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Motivated
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Unmotivated
+                    </div>
+                </div>
+                <div class="question-grid">
+                    <div class="item0">
+                    </div>
+                    <div class="item1">
+                        <input type="radio" name="q2-rating" value="1" > Good
+                    </div>
+                    <div class="item2">
+                        <input type="radio" name="q2-rating" value="2" > 
+                    </div>
+                    <div class="item3">
+                        <input type="radio" name="q2-rating" value="3" checked> 
+                    </div>
+                    <div class="item4">
+                        <input type="radio" name="q2-rating" value="4" > 
+                    </div>
+                    <div class="item5">
+                        <input type="radio" name="q2-rating" value="5" > Bad
+                    </div>
+                </div>
+            </div>
+            <div id="feedback-p4" style="display:none;">
+                <h1>Thank you for your feedback.</h1>
+            </div>
+
+            <button type="button" id="btn-send" class="button-disabled">Done</button>
+
+            <div id="app-footer">
+
+                <button type="button" id="btn-next">Questionnaire</button>
+            </div>
+
+        </div>
+        <!--</div>-->
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script src="http://code.jquery.com/jquery.js"></script> 
+        <script type="text/javascript">
+            setUp();
+
+
+        </script>
+    </body>
+</html>

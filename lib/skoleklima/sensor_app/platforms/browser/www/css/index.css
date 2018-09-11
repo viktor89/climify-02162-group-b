@@ -1,0 +1,514 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.
+*/
+* {
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0 */
+}
+
+
+
+
+/**********************************/
+/**********************************/
+/* Font family */
+/* COLORS */
+/* BODY BAGROUND COLOR */
+/* HEADER BAGROUND COLOR */
+/* FOOTER BAGROUND COLOR */
+/* OTHER COLORS */
+/*
+Display
+*/
+.flex, .app-login, .app-login .login-form-wrapper, .app-login .login-form-wrapper span, .app-login .logo-container, header .header-content, header .header-content #btn-sign-out {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -webkit-flexbox;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex; }
+
+/*
+Flex direction
+*/
+.app-login .login-form-wrapper {
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column; }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arimo", sans-serif;
+    font-size: 16px; }
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    margin: 0; }
+
+h1 {
+    font-size: 2em;
+    font-family: "Poppins", sans-serif; }
+
+h2 {
+    font-size: 1.5em;
+    font-family: "Poppins", sans-serif; }
+
+h3 {
+    font-size: 1.3em;
+    font-family: "Poppins", sans-serif; }
+
+h4 {
+    font-size: 1em;
+    font-family: "Poppins", sans-serif; }
+
+h5 {
+    font-size: 0.8em;
+    font-family: "Poppins", sans-serif; }
+
+h6 {
+    font-size: 0.7em;
+    font-family: "Poppins", sans-serif; }
+
+p {
+    font-size: 1em;
+    font-family: "Arimo", sans-serif; }
+
+a:link, a:visited, a:hover, a:focus, a:active {
+    color: #20c4c8; }
+
+hr {
+    border: 0;
+    height: 0;
+    border-bottom: 1px solid #92b2c7;
+    margin: 20px 0; }
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    height:100%;
+    margin:0px;
+    padding:0px;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden; }
+
+input, select {
+    outline: none;
+    border: 1px solid #c7c7c7;
+    padding: .2em .5em;
+    border-radius: 2px;
+    height: 26px !important; }
+
+textarea {
+    outline: none;
+    border-radius: 2px; }
+
+.app {
+    width: 100vw; }
+
+button {
+    border-radius: 2px !important;
+    color: #000000;
+    outline: none !important;
+    background-color: #b4c8d6;
+    padding: 1em;
+    margin: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #4f5567;
+    height: 26px;
+    min-width: 140px;
+    line-height: 0.1em; 
+    display:block;
+    width:90%;
+    font-size:20px;
+    box-shadow:0 1px 15px 0 rgba(0,0,0,0.19);
+}
+button:hover, button:focus {
+    cursor: pointer;
+    background-color: #92b2c7; }
+
+.button-disabled {
+    background-color: #c4c2c2 !important;
+    color: #a39f9e !important; }
+.button-disabled:hover, .button-disabled:focus {
+    cursor: auto !important;
+    background-color: #c4c2c2 !important; }
+
+.sweet-alert button {
+    background-color: #89b2c8 !important; }
+
+.link:hover {
+    cursor: pointer; }
+
+.wrong-login {
+    border: 2px solid #DD6B55 !important; }
+
+.wrong-input {
+    border: 1px solid #DD6B55 !important; }
+
+/**********************************/
+/**********************************/
+.app-login {
+    text-align:center;
+    margin: auto;
+}
+.app-login .login-background-image {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('../img/login/login_bg.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    opacity: .9;
+    z-index: 0; }
+.app-login .login-form-wrapper {
+    background-color: #ffffff;
+    -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 80vw;
+    height: 60vh;
+    position: relative;
+    top: 10vh;
+    z-index: 2; 
+    left:10%;
+    
+}
+.app-login .login-form-wrapper h1 {
+    text-align: center;
+    margin-bottom: 20px; }
+.app-login .login-form-wrapper input {
+    margin: 10px 0 15px 0; }
+.app-login .login-form-wrapper{
+    margin: 10px 0 0 0; }
+.app-login .login-form-wrapper span {
+    width: 100%; }
+.app-login .login-form-wrapper span #btn-login-system {
+    width: 100%; 
+    height: 10vh;
+    margin: 20px;
+}
+.app-login .logo-container {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    z-index: 1; }
+.app-login .logo-container p {
+    color: #4f5567;
+    margin-right: 10px; }
+.app-login .logo-container img {
+    height: 10px;
+    width: auto; }
+
+/**********************************/
+/**********************************/
+
+div.ui-loader.ui-body-a {
+    border: 1px solid         #2A2A2A /*{a-body-border}*/;
+    background:             red /*{a-body-background-color}*/;
+    color:                     #fff /*{a-body-color}*/;
+    font-weight: normal;
+    background-image:         linear-gradient(#666, #222);    
+    display: none;
+}
+
+header {
+    height: 25px;
+    width: 100%;
+    -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.5);
+    background-color: #92b2c7; }
+header .header-content {
+    height: 100%;
+    width: 100%;
+    margin: 0 20px 0 10px; }
+header .header-content #btn-sign-out i {
+    margin-left: 5px;
+    width: 40px; }
+
+
+body {
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-color:#E4E4E4;
+    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #A7A7A7),
+        color-stop(0.51, #E4E4E4)
+    );
+    background-attachment:fixed;
+    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    font-size:12px;
+    height:100%;
+    margin:0px;
+    padding:0px;
+    /*text-transform:uppercase;*/
+    width:100%;
+    text-align: center;background: #f2f6f8;
+}
+
+/* Portrait layout (default) */
+.app {
+    position:absolute;             /* position in the center of the screen */
+    left:50%;
+    top:50%;
+    height:50px;                   /* text area height */
+    width:225px;                   /* text area width */
+    text-align:center;
+    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
+    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
+    /* offset horizontal: half of text area width */
+}
+
+/* Landscape layout (with min-width) */
+@media screen and (min-aspect-ratio: 1/1) and (min-width:400px) {
+    .app {
+        background-position:left center;
+        padding:75px 0px 75px 170px;  /* padding-top + padding-bottom + text area = image height */
+        margin:-90px 0px 0px -198px;  /* offset vertical: half of image height */
+        /* offset horizontal: half of image width and text area width */
+    }
+}
+
+#img{
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1;
+}
+#app-body{
+    position: relative;
+    height: 65vh;
+    overflow:scroll;
+    margin: 0 auto; 
+}
+
+#innerContainer{
+    display:block;
+    position:absolute;
+    top: 0; 
+ 
+    /*box-shadow: 0 5px 0px #333;*/
+} 
+#sensorForm{
+    position: relative;
+    display:none;
+    top: 15%;
+}
+#add-sensor{
+    margin:20px;
+}
+#to-location{
+    margin:20px;
+}
+#add-sensor-location{
+    margin:20px;
+    color:darkgreen;
+}
+#btn-register-sensor{
+    width:70%;
+}
+.nav-buttons{
+    display:block;
+}
+#btn-add-location{
+    margin-left:auto;
+    margin-right:auto;
+}
+#btn-add-sensor{
+    margin-left:auto;
+    margin-right:auto;
+}
+.guide{
+    display:none;
+}
+.guide-text{
+    margin-bottom:8px;
+}
+#step1{
+    display:block;
+}
+#step2{
+    display:none;
+}
+#step3{
+    display:none;
+}
+#myCanvas{
+    position:absolute;
+    top: 0;
+    left: 0;
+    z-index:4; 
+}
+#myCanvasCurrentLocation{
+    position:absolute;
+    top: 0;
+    left: 0;
+    z-index:3;  
+}
+#myCanvasLocations{
+    position:absolute;
+    top: 0;
+    left: 0;
+    z-index:2;  
+}
+
+#inp-sensor-id {
+    font-size:1.4em;
+    width: 80%;
+    padding: 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#inp-location-name {
+    font-size:1em;
+    width: 70%;
+    padding: 2px;
+    margin: 0px 0 0 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#your-location{
+}
+#user-location{
+    color:darkgreen;
+}
+
+#app-header {
+    background-color: #89b2c8; 
+    margin-left:auto;
+    margin-right:auto;
+    padding:10px;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.5);
+    position: fixed;
+    width: 100vw;
+    /*height: 16vh;*/
+    min-height: 84px;
+    top:0;
+    z-index: 5;
+    display:grid;
+    grid-template-columns: auto auto auto;
+    align-content: left;
+}
+
+#app-footer{
+    bottom:0;
+    width: 100%;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.5);
+    position:fixed;
+    background-color: #89b2c8;
+    padding:10px;
+    /*height: 23vh;*/
+    min-height: 134px;
+    z-index: 5;
+}
+
+#app-body {
+    position:relative;
+    top: 82px;
+    height: calc(100vh - 84px - 134px);
+    overflow:scroll;
+}
+
+#btn-back {
+    display:block;
+    float:right;
+    margin:auto;
+    /*width:40px;
+    height:40px;*/;
+    background-color:transparent;
+    min-width:0;
+    font-size:15px;
+    /*background-image:url(../img/exit.png);*/
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #89b2c8;
+    border:none;
+}
+
+#btn-next{
+    width: 10%;
+    margin:auto;
+
+}
+
+#step3{
+    position: relative;
+    line-height: 0px;
+}
+
+#step3Text{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+#inp-location-name{ 
+    margin-bottom: 5px;
+}
+
+#btn-refresh {
+    margin:auto;
+    width:40px;
+    height:40px;
+    background-color:transparent;
+    min-width:0;
+    font-size:15px;
+    background-image:url(../img/refresh.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    justify-self:start;
+    border: none;
+}
+
+#unknown-location-text {
+    visibility:visible;
+    
+}
