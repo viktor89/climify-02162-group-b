@@ -11,16 +11,16 @@ date_default_timezone_set('Europe/Copenhagen');
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', 'skoleklima');
+define('DB_NAME', getenv('MYSQL_DATABASE'));
 
 /** MySQL database username */
-define('DB_USER', 'skoleklima');
+define('DB_USER', getenv('MYSQL_USER'));
 
 /** MySQL database password XXX */
-define('DB_PASSWORD', 'skoleklima');
+define('DB_PASSWORD', getenv('MYSQL_PASSWORD'));
 
 /** MySQL hostname XXX */
-define('DB_HOST', 'mysqldb:3306');
+define('DB_HOST', getenv('MYSQL_HOST').':3306');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8mb4');
