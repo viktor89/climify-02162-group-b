@@ -1,4 +1,5 @@
-<?php 
+<?php
+error_reporting(0);
 
 // ** Conpany meta info ** //
 $software_Name = "Klimaovervågning";
