@@ -1899,7 +1899,8 @@ function getLiveDataForEachLocation(locID, index){
             //alert("getLiveData success");
             //alert("sData from getsensoronschool: "+sData);
             //alert(sData);
-            var jData = JSON.parse(sData); 
+            console.log(sData);
+            var jData = JSON.parse(sData);
 
             if (jData.status == "error") {
             	swal("", "Something went wrong. Try again later", "error");

@@ -113,7 +113,7 @@ while ($currentSensorIDArray = mysqli_fetch_assoc($result)) {
 //echo print_r($sensors);
 
 $sensorData = json_encode( $sensors , JSON_UNESCAPED_UNICODE );
-echo '{"status":"ok", "sensorData":"'.$sensorData.'"}';
+echo json_encode(["status"=>"ok", $sensorData]);
 
 $conn->close();
 

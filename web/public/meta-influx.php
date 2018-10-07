@@ -16,16 +16,16 @@ $company_Website = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME_INFLUX', 'scadb');
+define('DB_NAME_INFLUX', getenv('MYSQL_DATABASE'));
 
 /** MySQL database username */
-//define('DB_USER', 'system');
+define('DB_USER', getenv('INFLUXDB_USER'));
 
 /** MySQL database password XXX */
-//define('DB_PASSWORD', 'XXX-PASSWORD-XXX');
+define('DB_PASSWORD', getenv('INFLUXDB_USER_PASSWORD'));
 
 /** MySQL hostname XXX */
-define('DB_HOST_INFLUX', localhost');
+define('DB_HOST_INFLUX', 'influx-db');
 
 define('DB_PORT_INFLUX', '8086');
 
