@@ -17,15 +17,34 @@ services:
     depends_on:
       - php
       - mysqldb
+      - influx-db
   php:
     build:
       context: ./Docker/php-fpm
     restart: always
     env_file:
       - .env
+    environment:
+      - 'INFLUXDB_DB=${MYSQL_DATABASE}'
+      - 'INFLUXDB_ADMIN_USER=root'
+      - 'INFLUXDB_ADMIN_PASSWORD=${MYSQL_ROOT_PASSWORD}'
+      - 'INFLUXDB_USER=${MYSQL_USER}'
+      - 'INFLUXDB_USER_PASSWORD=${MYSQL_PASSWORD}'
     volumes:
       - './etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini'
       - './web:/var/www/html'
+  influx-db:
+    image: 'influxdb:latest'
+    ports:
+      - '8086:8086'
+    env_file:
+      - .env
+    environment:
+      - 'INFLUXDB_DB=${MYSQL_DATABASE}'
+      - 'INFLUXDB_ADMIN_USER=root'
+      - 'INFLUXDB_ADMIN_PASSWORD=${MYSQL_ROOT_PASSWORD}'
+      - 'INFLUXDB_USER=${MYSQL_USER}'
+      - 'INFLUXDB_USER_PASSWORD=${MYSQL_PASSWORD}'
   myadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
