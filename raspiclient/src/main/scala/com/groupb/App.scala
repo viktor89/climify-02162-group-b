@@ -3,8 +3,6 @@ package com.groupb
 import org.eclipse.paho.client.mqttv3._
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import java.util.concurrent._
-import org.springframework.web.client.RestTemplate
-import org.springframework.http.ResponseEntity 
 
 /**
  * @author pll
@@ -15,10 +13,9 @@ object App extends App {
     def run(): Unit = {
       val data = InfluxDBHandler.readData
       val msg = new RootMessage(data)
-      val serverUrl = "http://se2-webapp02.compute.dtu.dk/send"
-      val action = new RestTemplate
-      val response = action.postForEntity(serverUrl, msg, classOf[String])
-      if (response.getBody() == 200) {
+      val body = HTTPHandler.postRequest("http://se2-webapp02.compute.dtu.dk/send",
+        JsonMapper.toJson(msg))
+      if (body == "200") {
         InfluxDBHandler.clearDB
       }
     }
@@ -35,9 +32,7 @@ object App extends App {
     client.setCallback(callback)
   }
 
-  val register = new RestTemplate
-  val registerURL = "http://se2-webapp02.compute.dtu.dk/register"
-  register.postForEntity(registerURL, MACAddress.computeMAC, classOf[String])
+  HTTPHandler.postRequest("http://se2-webapp02.compute.dtu.dk/register", MACAddress.computeMAC)
   executor.scheduleAtFixedRate(task, 2, 5, TimeUnit.SECONDS)
   subscribeToMQTT
 }
