@@ -38,8 +38,8 @@ class TState(val _uuid: String, val _temp : Int) extends Message {
 
 class ViewInbox extends Message {
   override def act(): Unit = {
-    val discurl = "http://localhost:8080/rest/extensions"
-    HTTPHandler.getRequest(discurl)
+    val discurl = "http://localhost:8080/rest/discovery/bindings/zwave/scan"
+    HTTPHandler.postRequest(discurl, "")
     val raspurl = "http://localhost:8080/rest/inbox"
     val content = HTTPHandler.getRequest(raspurl)
     val serverurl = "http://http://se2-webapp02.compute.dtu.dk/send"
