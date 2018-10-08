@@ -1,13 +1,9 @@
 package com.groupb
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
 import org.springframework.web.client.RestTemplate
 import org.springframework.http.ResponseEntity
-import java.net.{InetAddress, NetworkInterface}
 
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -46,6 +42,10 @@ class TState(val _uuid: String, val _temp : Int) extends Message {
 
 class ViewInbox extends Message {
   override def act(): Unit = {
+    val discovery = new RestTemplate
+    val discurl = "http://localhost:8080/rest/extensions"
+    discovery.getForEntity(discurl, classOf[Object])
+
     val inbox = new RestTemplate
     val raspurl = "http://localhost:8080/rest/inbox"
     val response = inbox.getForEntity(raspurl, classOf[Object])

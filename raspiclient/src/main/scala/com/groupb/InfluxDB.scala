@@ -30,7 +30,7 @@ object InfluxDBHandler {
   }
 
   def clearDB(): Unit = {
-    val clearQuery = database.query("DELETE WHERE time > 2018-06-19")
+    val clearQuery = database.query("DELETE WHERE time > 2018-06-19") // Can clear more than needed
     Await.result(clearQuery, Duration.Inf)
   }
 }
