@@ -32,7 +32,14 @@ object App extends App {
     client.setCallback(callback)
   }
 
+
   HTTPHandler.postRequest("http://se2-webapp02.compute.dtu.dk/register", MACAddress.computeMAC)
-  executor.scheduleAtFixedRate(task, 2, 5, TimeUnit.SECONDS)
+  val future = executor.scheduleAtFixedRate(task, 2, 5, TimeUnit.SECONDS)
+
+  sys.addShutdownHook({
+    println("Shutdown")
+    future.cancel(false)
+    System.exit(0)
+  })
   subscribeToMQTT
 }
