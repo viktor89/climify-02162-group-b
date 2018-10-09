@@ -3,6 +3,8 @@
 namespace MongoDB\Tests\Operation;
 
 use MongoDB\Driver\BulkWrite;
+use MongoDB\Driver\Manager;
+use MongoDB\Driver\ReadPreference;
 use MongoDB\Model\BSONDocument;
 use MongoDB\Operation\FindAndModify;
 use MongoDB\Tests\CommandObserver;
@@ -10,6 +12,30 @@ use stdClass;
 
 class FindAndModifyFunctionalTest extends FunctionalTestCase
 {
+    /**
+     * @see https://jira.mongodb.org/browse/PHPLIB-344
+     */
+    public function testManagerReadConcernIsOmitted()
+    {
+        $manager = new Manager($this->getUri(), ['readConcernLevel' => 'majority']);
+        $server = $manager->selectServer(new ReadPreference(ReadPreference::RP_PRIMARY));
+
+        (new CommandObserver)->observe(
+            function() use ($server) {
+                $operation = new FindAndModify(
+                    $this->getDatabaseName(),
+                    $this->getCollectionName(),
+                    ['remove' => true]
+                );
+
+                $operation->execute($server);
+            },
+            function(array $event) {
+                $this->assertObjectNotHasAttribute('readConcern', $event['started']->getCommand());
+            }
+        );
+    }
+
     public function testDefaultWriteConcernIsOmitted()
     {
         (new CommandObserver)->observe(
@@ -22,8 +48,8 @@ class FindAndModifyFunctionalTest extends FunctionalTestCase
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function(stdClass $command) {
-                $this->assertObjectNotHasAttribute('writeConcern', $command);
+            function(array $event) {
+                $this->assertObjectNotHasAttribute('writeConcern', $event['started']->getCommand());
             }
         );
     }
@@ -44,8 +70,8 @@ class FindAndModifyFunctionalTest extends FunctionalTestCase
 
                 $operation->execute($this->getPrimaryServer());
             },
-            function(stdClass $command) {
-                $this->assertObjectHasAttribute('lsid', $command);
+            function(array $event) {
+                $this->assertObjectHasAttribute('lsid', $event['started']->getCommand());
             }
         );
     }

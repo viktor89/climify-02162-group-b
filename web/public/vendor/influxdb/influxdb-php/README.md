@@ -44,7 +44,7 @@ $database = InfluxDB\Client::fromDSN(sprintf('influxdb://user:pass@%s:%s/%s', $h
 $client = $database->getClient();
 ```
 
-### Reading
+### Reading data
 
 To fetch records from InfluxDB you can do a query directly on a database:
 
@@ -67,6 +67,7 @@ $result = $database->getQueryBuilder()
 	->select('cpucount')
 	->from('test_metric')
 	->limit(2)
+	->offset(2)
 	->getResultSet()
 	->getPoints();
 
@@ -88,6 +89,15 @@ $lastQuery = $client->getLastQuery();
 
 // or access the static variable directly:
 $lastQuery = Client::lastQuery;
+```
+
+### Reading data using a timeout
+
+In production if you are querying InfluxDB to generate a response to a web or API request, you may want to set a specific timeout for InfluxDB calls rather than the default of letting them run indefinitely.
+
+```php
+// Fetch the database using a 5 second time out
+$database = InfluxDB\Client::fromDSN(sprintf('influxdb://user:pass@%s:%s/%s', $host, $port, $dbname), 5);
 ```
 
 ### Writing data
@@ -324,6 +334,14 @@ $client->admin->revoke(\InfluxDB\Client\Admin::PRIVILEGE_ALL, 'admin_user');
 
 
 ## Changelog
+
+#### 1.14.7
+- Added offset in QueryBuilder (thanks @lifekent and @BentCoder)
+
+#### 1.14.6
+- dependencies update (#97), by @aldas
+- Adding timeout information. (#103), by @NickBusey
+- Add ability to specify connect_timeout for guzzle (#105), by @brycefranzen
 
 #### 1.14.5
 - Update key concepts link to point to the proper place.
