@@ -17,19 +17,14 @@ trait Message {
   def act(): Unit
 }
 
-class ApproveThing(val _name : String) extends Message {
-  var name: String = _name
-
+class ApproveThing(val name : String) extends Message {
   override def act(): Unit = {
     val url = "http://localhost:8080/rest/inbox/" + name + "/approve"
     HTTPHandler.postRequest(url, name)
   }
 }
 
-class TState(val _uuid: String, val _temp : Int) extends Message {
-  var uuid: String = _uuid
-  var temp: Int = _temp
-
+class TState(val uuid: String, val temp : Int) extends Message {
   override def act(): Unit = {
     val url = "http://localhost:8080/rest/items" + uuid
     HTTPHandler.postRequest(url, Integer.toString(temp))
@@ -43,7 +38,7 @@ class ViewInbox extends Message {
     val raspurl = "http://localhost:8080/rest/inbox"
     val content = HTTPHandler.getRequest(raspurl)
     val serverurl = "http://http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox/"
-    val msg = new RootMessage(content)
+    val msg = new RootMessage(MACAddress.computeMAC, content)
     val jsoncontent = JsonMapper.toJson(msg)
     HTTPHandler.postRequest(serverurl, jsoncontent)
   }
