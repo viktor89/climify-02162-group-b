@@ -9,11 +9,11 @@ object JsonMapper {
   mapper.registerModule(DefaultScalaModule)
   mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-  def toJson(value : Any) : String = {
+  def toJson(value : Any) = {
     mapper.writeValueAsString(value)
   }
 
-  def convert[Type](jsonString : String)(implicit m : Manifest[Type]) : Type = {
+  def convert[Type](jsonString : String)(implicit m : Manifest[Type]) = {
     mapper.readValue[Type](jsonString)
   }
 }

@@ -10,18 +10,18 @@ import java.util.concurrent._
 object App extends App {
   val executor = new ScheduledThreadPoolExecutor(1)
   val task = new Runnable {
-    def run(): Unit = {
+    def run() = {
       val data = InfluxDBHandler.readData
       val msg = new RootMessage(MACAddress.computeMAC, data)
       val body = HTTPHandler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send/",
         JsonMapper.toJson(msg))
-      if (body == "200") {
+      if (body.code == 200) {
         InfluxDBHandler.clearDB
       }
     }
   }
 
-  def subscribeToMQTT() : Unit = {
+  def subscribeToMQTT() = {
     val brokerURL = s"tcp://broker.mqttdashboard.com:8000"
     val topic = "qwe123"
     val persistance = new MemoryPersistence

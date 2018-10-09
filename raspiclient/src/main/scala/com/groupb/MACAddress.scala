@@ -3,7 +3,7 @@ package com.groupb
 import java.net.{InetAddress, NetworkInterface}
 
 object MACAddress {
-  def computeMAC() : String = {
+  def computeMAC() = {
     val ip = InetAddress.getLocalHost()
     val interface = NetworkInterface.getByInetAddress(ip)
     val mac = interface.getHardwareAddress()
