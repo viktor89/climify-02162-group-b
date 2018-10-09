@@ -13,7 +13,7 @@ object App extends App {
     def run(): Unit = {
       val data = InfluxDBHandler.readData
       val msg = new RootMessage(data)
-      val body = HTTPHandler.postRequest("http://se2-webapp02.compute.dtu.dk/send",
+      val body = HTTPHandler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send/",
         JsonMapper.toJson(msg))
       if (body == "200") {
         InfluxDBHandler.clearDB
@@ -32,8 +32,8 @@ object App extends App {
     client.setCallback(callback)
   }
 
-
-  HTTPHandler.postRequest("http://se2-webapp02.compute.dtu.dk/register", MACAddress.computeMAC)
+  val registerMsg = new RootMessage("[]")
+  HTTPHandler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/register/", JsonMapper.toJson(registerMsg))
   val future = executor.scheduleAtFixedRate(task, 2, 5, TimeUnit.SECONDS)
 
   sys.addShutdownHook({

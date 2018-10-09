@@ -42,7 +42,7 @@ class ViewInbox extends Message {
     HTTPHandler.postRequest(discurl, "")
     val raspurl = "http://localhost:8080/rest/inbox"
     val content = HTTPHandler.getRequest(raspurl)
-    val serverurl = "http://http://se2-webapp02.compute.dtu.dk/send"
+    val serverurl = "http://http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox/"
     val msg = new RootMessage(content)
     val jsoncontent = JsonMapper.toJson(msg)
     HTTPHandler.postRequest(serverurl, jsoncontent)
