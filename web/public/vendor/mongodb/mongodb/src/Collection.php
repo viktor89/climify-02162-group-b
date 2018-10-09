@@ -29,16 +29,21 @@ use MongoDB\Driver\Exception\RuntimeException as DriverRuntimeException;
 use MongoDB\Exception\InvalidArgumentException;
 use MongoDB\Exception\UnexpectedValueException;
 use MongoDB\Exception\UnsupportedException;
+use MongoDB\Model\IndexInfo;
 use MongoDB\Model\IndexInfoIterator;
 use MongoDB\Operation\Aggregate;
 use MongoDB\Operation\BulkWrite;
 use MongoDB\Operation\CreateIndexes;
 use MongoDB\Operation\Count;
+use MongoDB\Operation\CountDocuments;
 use MongoDB\Operation\DeleteMany;
 use MongoDB\Operation\DeleteOne;
 use MongoDB\Operation\Distinct;
 use MongoDB\Operation\DropCollection;
 use MongoDB\Operation\DropIndexes;
+use MongoDB\Operation\EstimatedDocumentCount;
+use MongoDB\Operation\Explain;
+use MongoDB\Operation\Explainable;
 use MongoDB\Operation\Find;
 use MongoDB\Operation\FindOne;
 use MongoDB\Operation\FindOneAndDelete;
@@ -205,7 +210,7 @@ class Collection
             $options['readConcern'] = $this->readConcern;
         }
 
-        if ( ! isset($options['typeMap']) && ( ! isset($options['useCursor']) || $options['useCursor'])) {
+        if ( ! isset($options['typeMap'])) {
             $options['typeMap'] = $this->typeMap;
         }
 
@@ -252,6 +257,8 @@ class Collection
      * @throws UnsupportedException if options are not supported by the selected server
      * @throws InvalidArgumentException for parameter/option parsing errors
      * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
+     *
+     * @deprecated 1.4
      */
     public function count($filter = [], array $options = [])
     {
@@ -271,13 +278,42 @@ class Collection
     }
 
     /**
+     * Gets the number of documents matching the filter.
+     *
+     * @see CountDocuments::__construct() for supported options
+     * @param array|object $filter  Query by which to filter documents
+     * @param array        $options Command options
+     * @return integer
+     * @throws UnexpectedValueException if the command response was malformed
+     * @throws UnsupportedException if options are not supported by the selected server
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
+     */
+    public function countDocuments($filter = [], array $options = [])
+    {
+        if ( ! isset($options['readPreference'])) {
+            $options['readPreference'] = $this->readPreference;
+        }
+
+        $server = $this->manager->selectServer($options['readPreference']);
+
+        if ( ! isset($options['readConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForReadConcern)) {
+            $options['readConcern'] = $this->readConcern;
+        }
+
+        $operation = new CountDocuments($this->databaseName, $this->collectionName, $filter, $options);
+
+        return $operation->execute($server);
+    }
+
+    /**
      * Create a single index for the collection.
      *
      * @see Collection::createIndexes()
      * @see CreateIndexes::__construct() for supported command options
      * @param array|object $key     Document containing fields mapped to values,
      *                              which denote order or an index type
-     * @param array        $options Index options
+     * @param array        $options Index and command options
      * @return string The name of the created index
      * @throws UnsupportedException if options are not supported by the selected server
      * @throws InvalidArgumentException for parameter/option parsing errors
@@ -285,8 +321,9 @@ class Collection
      */
     public function createIndex($key, array $options = [])
     {
-        $indexOptions = array_diff_key($options, ['maxTimeMS' => 1, 'writeConcern' => 1]);
-        $commandOptions = array_intersect_key($options, ['maxTimeMS' => 1, 'writeConcern' => 1]);
+        $commandOptionKeys = ['maxTimeMS' => 1, 'session' => 1, 'writeConcern' => 1];
+        $indexOptions = array_diff_key($options, $commandOptionKeys);
+        $commandOptions = array_intersect_key($options, $commandOptionKeys);
 
         return current($this->createIndexes([['key' => $key] + $indexOptions], $commandOptions));
     }
@@ -440,7 +477,7 @@ class Collection
      * Drop a single index in the collection.
      *
      * @see DropIndexes::__construct() for supported options
-     * @param string $indexName Index name
+     * @param string|IndexInfo $indexName Index name or model object
      * @param array  $options   Additional options
      * @return array|object Command result document
      * @throws UnsupportedException if options are not supported by the selected server
@@ -493,6 +530,63 @@ class Collection
         }
 
         $operation = new DropIndexes($this->databaseName, $this->collectionName, '*', $options);
+
+        return $operation->execute($server);
+    }
+
+    /**
+     * Gets an estimated number of documents in the collection using the collection metadata.
+     *
+     * @see EstimatedDocumentCount::__construct() for supported options
+     * @param array $options Command options
+     * @return integer
+     * @throws UnexpectedValueException if the command response was malformed
+     * @throws UnsupportedException if options are not supported by the selected server
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
+     */
+    public function EstimatedDocumentCount(array $options = [])
+    {
+        if ( ! isset($options['readPreference'])) {
+            $options['readPreference'] = $this->readPreference;
+        }
+
+        $server = $this->manager->selectServer($options['readPreference']);
+
+        if ( ! isset($options['readConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForReadConcern)) {
+            $options['readConcern'] = $this->readConcern;
+        }
+
+        $operation = new EstimatedDocumentCount($this->databaseName, $this->collectionName, $options);
+
+        return $operation->execute($server);
+    }
+
+    /**
+     * Explains explainable commands.
+     *
+     * @see Explain::__construct() for supported options
+     * @see http://docs.mongodb.org/manual/reference/command/explain/
+     * @param Explainable $explainable  Command on which to run explain
+     * @param array       $options      Additional options
+     * @return array|object
+     * @throws UnsupportedException if explainable or options are not supported by the selected server
+     * @throws InvalidArgumentException for parameter/option parsing errors
+     * @throws DriverRuntimeException for other driver errors (e.g. connection errors)
+     */
+    public function explain(Explainable $explainable, array $options = [])
+    {
+        if ( ! isset($options['readPreference'])) {
+            $options['readPreference'] = $this->readPreference;
+        }
+
+        if ( ! isset($options['typeMap'])) {
+            $options['typeMap'] = $this->typeMap;
+        }
+
+        $server = $this->manager->selectServer($options['readPreference']);
+
+        $operation = new Explain($this->databaseName, $explainable, $options);
 
         return $operation->execute($server);
     }
@@ -855,7 +949,7 @@ class Collection
             $options['typeMap'] = $this->typeMap;
         }
 
-        if (! isset($options['writeConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForWritableCommandWriteConcern)) {
+        if ( ! isset($options['writeConcern']) && \MongoDB\server_supports_feature($server, self::$wireVersionForWritableCommandWriteConcern)) {
             $options['writeConcern'] = $this->writeConcern;
         }
 

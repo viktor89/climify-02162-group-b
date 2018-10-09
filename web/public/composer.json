@@ -1,6 +1,6 @@
 {
     "require": {
-        "mongodb/mongodb": "^1.3",
+        "mongodb/mongodb": "^1.4",
         "jenssegers/mongodb": "^3.4",
         "influxdb/influxdb-php": "^1.14"
     }
