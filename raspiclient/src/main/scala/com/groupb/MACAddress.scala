@@ -1,15 +1,18 @@
 package com.groupb
 
 import java.net.{InetAddress, NetworkInterface}
+import scala.collection.JavaConverters._
 
 object MACAddress {
+  private def scanNetworkInterfaces() = {
+    NetworkInterface.getNetworkInterfaces.asScala map (_.getHardwareAddress) filter (_ != null)
+  }
+
   def computeMAC() = {
-    val ip = InetAddress.getLocalHost()
-    val interface = NetworkInterface.getByInetAddress(ip)
-    val mac = interface.getHardwareAddress()
+    val addresses = scanNetworkInterfaces.toList
     val sb = new StringBuilder
-    for(i <- 0 to mac.length) {
-      sb.append("%02X%s".format(mac(i), if (i < mac.length-1) "-" else ""))
+    for(i <- 0 to addresses(0).length-1) {
+      sb.append("%02X%s".format(addresses(0)(i), if (i < addresses(0).length-1) "-" else ""))
     }
     sb.toString
   }

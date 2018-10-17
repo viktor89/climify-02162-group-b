@@ -4,12 +4,12 @@
   <artifactId>raspiclient</artifactId>
   <version>0.0.1</version>
   <name>${project.artifactId}</name>
-  <description>My wonderfull scala app</description>
+  <description>Raspberry Pi Client for Climify</description>
   <inceptionYear>2018</inceptionYear>
   <licenses>
     <license>
-      <name>My License</name>
-      <url>http://....</url>
+      <name>GPLv3</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -68,6 +68,18 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.scalamock</groupId>
+      <artifactId>scalamock_2.12</artifactId>
+      <version>4.1.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.scalacheck</groupId>
+      <artifactId>scalacheck_2.12</artifactId>
+      <version>1.14.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_${scala.compat.version}</artifactId>
       <version>3.0.5</version>
@@ -86,6 +98,8 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+
 
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
@@ -128,8 +142,6 @@
           <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
           <junitxml>.</junitxml>
           <filereports>TestSuiteReport.txt</filereports>
-          <!-- Comma separated list of JUnit test class names to execute -->
-          <jUnitClasses>samples.AppTest</jUnitClasses>
         </configuration>
         <executions>
           <execution>
@@ -150,7 +162,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>com.your-package.MainClass</mainClass>
+              <mainClass>com.groupb.App</mainClass>
             </manifest>
           </archive>
         </configuration>

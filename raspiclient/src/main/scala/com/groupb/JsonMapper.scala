@@ -17,7 +17,7 @@ object JsonMapper {
     mapper.readValue[Type](jsonString)
   }
 
-  def wrapForTransport(data : String) = {
-    "{ \"mac\":"+MACAddress.computeMAC +",\"data\":"+data +" }"
+  def wrapForTransport(mac : String, data : String) = {
+    "{ \"mac\":"+ mac +",\"data\":"+data +" }"
   }
 }
