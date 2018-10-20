@@ -1,27 +1,9 @@
 package com.groupb
 
-case class Monad[C, A](g : C => A) {
-  def apply(c : C) : A = {
-    g(c)
-  }
-
-  def map[B](f : A => B) : Monad[C, B] = {
-    c => {
-      f(g(c))
-    }
-  }
-
-  def flatMap[B](f : A => Monad[C, B]) : Monad[C, B] = {
-    c => {
-      f(g(c))(c)
-    }
-  }
+case class Monad[A, B](g : A => B) {
+  def apply(a : A) = g(a)
+  def map[C](f : B => C) : Monad[A, C] =
+    Monad(a => f(g(a)))
+  def flatMap[C](f : B => Monad[A, C]) : Monad[A, C] =
+    Monad(a => f(g(a))(a))
 }
-
-def pure[A](a : A) : C => A = {
-  c => {
-    a
-  }
-}
-
-implicit def monad[A, B](f : A => B) = Monad(f)
