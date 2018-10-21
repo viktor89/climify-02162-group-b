@@ -3,16 +3,6 @@ package com.groupb
 import org.eclipse.paho.client.mqttv3._
 import scalaj.http._
 
-trait HttpConnection {
-  def getRequest(url : String) : HttpResponse[String]
-  def postRequest(url : String, data : String) : HttpResponse[String]
-}
-
-object HttpHandler extends HttpConnection {
-  def getRequest(url : String) = Http(url).asString
-  def postRequest(url : String, data : String) = Http(url).postData(data).asString
-}
-
 class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
   def act(msg : Message) = {
     msg match {
