@@ -29,7 +29,7 @@ object App extends App {
     val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
     client.connect
     client.subscribe(topic)
-    val callback = new MQTTHandler
+    val callback = new MQTTHandler(HttpHandler)
     client.setCallback(callback)
   }
 
