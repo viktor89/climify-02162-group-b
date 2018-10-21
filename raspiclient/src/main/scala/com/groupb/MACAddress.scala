@@ -5,7 +5,9 @@ import scala.collection.JavaConverters._
 
 object MACAddress {
   private def scanNetworkInterfaces() = {
-    NetworkInterface.getNetworkInterfaces.asScala map (_.getHardwareAddress) filter (_ != null)
+    NetworkInterface.getNetworkInterfaces.asScala collect {
+      case inet if inet.getHardwareAddress != null => inet.getHardwareAddress
+    }
   }
 
   def computeMAC() = {
