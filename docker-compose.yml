@@ -33,10 +33,18 @@ services:
     volumes:
       - './etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini'
       - './web:/var/www/html'
+  chronograf:
+    image: chronograf:1.3.8
+    environment:
+      INFLUXDB_URL: http://influx-db:8086
+    ports:
+    - "8888:8888"
+    links:
+    - influx-db
   influx-db:
     image: 'influxdb:latest'
     ports:
-      - '8086:8086'
+      - '8086'
     env_file:
       - .env
     environment:
