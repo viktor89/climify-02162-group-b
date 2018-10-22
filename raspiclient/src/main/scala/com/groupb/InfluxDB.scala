@@ -6,11 +6,12 @@ import scala.concurrent.{ Await, Future }
 import scala.util._
 import scala.collection.JavaConverters
 import com.paulgoldbaum.influxdbclient._
+import com.paulgoldbaum.influxdbclient.Parameter.Precision.Precision
 
 object InfluxDBHandler {
   def readData(db : Database) = {
     val list = new ArrayList[Data]
-    val seriesQuery = db.query("SELECT * FROM /^*/")
+    val seriesQuery = db.query("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
     val result = Await.result(seriesQuery, Duration.Inf)
     result.series.foreach(serie =>
       serie.records.foreach(record =>
@@ -19,6 +20,6 @@ object InfluxDBHandler {
   }
 
   def clearDB(db : Database)(data : Seq[Data]) = {
-    data.foreach(d => db.query("DELETE WHERE time = " + d.time + " AND measurement =" + d.sensorName))
+    data.foreach(d => db.exec("DELETE WHERE time = " + d.time + " AND measurement =" + d.sensorName))
   }
 }
