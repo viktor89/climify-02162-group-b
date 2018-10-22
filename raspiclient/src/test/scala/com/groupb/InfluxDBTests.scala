@@ -1,39 +1,34 @@
 package com.groupb
 
 import com.paulgoldbaum.influxdbclient._
+import com.paulgoldbaum.influxdbclient.Parameter.Precision.Precision
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalamock.scalatest.MockFactory
-import ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
-  val record1 = new Record(Map("time" -> 0, "value" -> 1), List(0, 0))
-  val record2 = new Record(Map("time" -> 0, "value" -> 1), List(1, 0))
-  val record3 = new Record(Map("time" -> 0, "value" -> 1), List(2, 0))
-  val tagSet = new TagSet(Map[String, Int](), List())
-  val series1 = new Series("Test1", List("time", "value"), List(record1, record2, record3), tagSet)
-  val series2 = new Series("Test2", List("time", "value"), List(record1, record2, record3), tagSet)
+  def simulation(json : String) = Future {
+    QueryResult.fromJson(json)
+  }
 
   "InfluxDBHandler" should "return an empty sequence when the database is empty" in {
-    val simulatedFuture = Future {
-      new QueryResult(List[Series]())
-    }
+    val jsonResult = """{"results":[{"series":[]}]}"""
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/")
-      .returns(simulatedFuture)
+      .expects("SELECT * FROM /^*/", *)
+      .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
     result.size should be (0)
   }
 
   it should "return an sequence with one series when the database contains one series" in {
-    val simulatedFuture = Future {
-      new QueryResult(List[Series](series1))
-    }
+    val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}""" 
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/")
-      .returns(simulatedFuture)
+      .expects("SELECT * FROM /^*/", *)
+      .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
     result.size should be (3)
@@ -43,13 +38,11 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
   }
 
   it should "return an sequence with two series when the database contains two series" in {
-    val simulatedFuture = Future {
-      new QueryResult(List[Series](series1, series2))
-    }
+    val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}, {"name":"Test2","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/")
-      .returns(simulatedFuture)
+      .expects("SELECT * FROM /^*/", *)
+      .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
     result.size should be (6)
@@ -72,35 +65,35 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
 
     inSequence {
       (mockDB.query _)
-        .expects("DELETE WHERE time=0 AND measurement =Test1")
+        .expects("DELETE WHERE time = 0 AND measurement =Test1", *)
       (mockDB.query _)
-        .expects("DELETE WHERE time=1 AND measurement =Test1")
+        .expects("DELETE WHERE time = 1 AND measurement =Test1", *)
       (mockDB.query _)
-        .expects("DELETE WHERE time=2 AND measurement =Test1")
+        .expects("DELETE WHERE time = 2 AND measurement =Test1", *)
     }
-    InfluxDBHandler.clearDB(data)
+    InfluxDBHandler.clearDB(mockDB)(data)
   }
 
 
   it should "accept an sequence consisting of two series, where the content will be cleared from the database" in {
     val data = IndexedSeq(Data("Test1", 0, 0), Data("Test1", 1, 0), Data("Test1", 2, 0),
-      Data("Test2", 0, 0), Data("Test2", 0, 0), Data("Test2", 0, 0))
+      Data("Test2", 0, 0), Data("Test2", 1, 0), Data("Test2", 2, 0))
     val mockDB = mock[Database]
 
     inSequence {
       (mockDB.query _)
-        .expects("DELETE WHERE time=0 AND measurement =Test1")
+        .expects("DELETE WHERE time = 0 AND measurement =Test1", *)
       (mockDB.query _)
-        .expects("DELETE WHERE time=1 AND measurement =Test1")
+        .expects("DELETE WHERE time = 1 AND measurement =Test1", *)
       (mockDB.query _)
-        .expects("DELETE WHERE time=2 AND measurement =Test1")
+        .expects("DELETE WHERE time = 2 AND measurement =Test1", *)
       (mockDB.query _)
-        .expects("DELETE WHERE time=0 AND measurement =Test2")
+        .expects("DELETE WHERE time = 0 AND measurement =Test2", *)
       (mockDB.query _)
-        .expects("DELETE WHERE time=1 AND measurement =Test2")
+        .expects("DELETE WHERE time = 1 AND measurement =Test2", *)
       (mockDB.query _)
-        .expects("DELETE WHERE time=2 AND measurement =Test2")
+        .expects("DELETE WHERE time = 2 AND measurement =Test2", *)
     }
-    InfluxDBHandler.clearDB(data)
+    InfluxDBHandler.clearDB(mockDB)(data)
   }
 }
