@@ -32,9 +32,9 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
 
     val result = InfluxDBHandler.readData(mockDB)
     result.size should be (3)
-    result.contains(Data("Test1", 0, 0)) should be (true)
-    result.contains(Data("Test1", 1, 0)) should be (true)
-    result.contains(Data("Test1", 2, 0)) should be (true)
+    result contains Data("Test1", "0", "0") should be (true)
+    result contains Data("Test1", "1", "0") should be (true)
+    result contains Data("Test1", "2", "0") should be (true)
   }
 
   it should "return an sequence with two series when the database contains two series" in {
@@ -46,12 +46,12 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
 
     val result = InfluxDBHandler.readData(mockDB)
     result.size should be (6)
-    result.contains(Data("Test1", 0, 0)) should be (true)
-    result.contains(Data("Test1", 1, 0)) should be (true)
-    result.contains(Data("Test1", 2, 0)) should be (true)
-    result.contains(Data("Test2", 0, 0)) should be (true)
-    result.contains(Data("Test2", 1, 0)) should be (true)
-    result.contains(Data("Test2", 2, 0)) should be (true)
+    result contains Data("Test1", "0", "0") should be (true)
+    result contains Data("Test1", "1", "0") should be (true)
+    result contains Data("Test1", "2", "0") should be (true)
+    result contains Data("Test2", "0", "0") should be (true)
+    result contains Data("Test2", "1", "0") should be (true)
+    result contains Data("Test2", "2", "0") should be (true)
   }
 
   it should "accept an empty sequence, which will not change the database" in {
