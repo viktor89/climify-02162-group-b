@@ -27,7 +27,7 @@ class Api
         if(!$this->isValidTimeStamp($measurement->time)){throw new \Exception('Timestamp not valid');}
     }
 
-    public function isValidTimeStamp($timestamp)
+    private function isValidTimeStamp($timestamp)
     {
         return ((string) (int) $timestamp === $timestamp)
             && ($timestamp <= PHP_INT_MAX)
