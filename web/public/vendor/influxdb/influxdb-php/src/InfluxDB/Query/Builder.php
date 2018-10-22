@@ -66,6 +66,11 @@ class Builder
     protected $limitClause = '';
 
     /**
+     * @var string
+     */
+    protected $offsetClause = '';
+
+    /**
      * @var array
      */
     protected $groupBy;
@@ -249,6 +254,20 @@ class Builder
     }
 
     /**
+     * Offset the ResultSet to n records
+     *
+     * @param int $count
+     *
+     * @return $this
+     */
+    public function offset($count)
+    {
+        $this->offsetClause = sprintf(' OFFSET %s', (int) $count);
+
+        return $this;
+    }
+
+    /**
      * Add retention policy to query
      *
      * @param string $rp
@@ -274,6 +293,7 @@ class Builder
      * Gets the result from the database (builds the query)
      *
      * @return ResultSet
+     * @throws \Exception
      */
     public function getResultSet()
     {
@@ -297,7 +317,7 @@ class Builder
             throw new \InvalidArgumentException('No metric provided to from()');
         }
 
-        for ($i = 0; $i < count($this->where); $i++) {
+        for ($i = 0, $iMax = count($this->where); $i < $iMax; $i++) {
             $selection = 'WHERE';
 
             if ($i > 0) {
@@ -319,6 +339,10 @@ class Builder
 
         if ($this->limitClause) {
             $query .= $this->limitClause;
+        }
+
+        if ($this->offsetClause) {
+            $query .= $this->offsetClause;
         }
 
         return $query;

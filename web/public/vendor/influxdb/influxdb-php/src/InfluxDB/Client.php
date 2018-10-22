@@ -49,6 +49,11 @@ class Client
     protected $timeout = 0;
 
     /**
+     * @var float
+     */
+    protected $connectTimeout = 0;
+
+    /**
      * @var bool
      */
     protected $scheme = 'http';
@@ -76,7 +81,7 @@ class Client
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @var DriverInterface
@@ -98,7 +103,8 @@ class Client
      * @param string $password
      * @param bool   $ssl
      * @param bool   $verifySSL
-     * @param int    $timeout
+     * @param float  $timeout
+     * @param float  $connectTimeout
      */
     public function __construct(
         $host,
@@ -107,13 +113,15 @@ class Client
         $password = '',
         $ssl = false,
         $verifySSL = false,
-        $timeout = 0
+        $timeout = 0,
+        $connectTimeout = 0
     ) {
         $this->host = (string) $host;
         $this->port = (int) $port;
         $this->username = (string) $username;
         $this->password = (string) $password;
         $this->timeout = (float) $timeout;
+        $this->connectTimeout = (float) $connectTimeout;
         $this->verifySSL = (bool) $verifySSL;
 
         if ($ssl) {
@@ -135,6 +143,7 @@ class Client
      *
      * @param  string $name
      * @return Database
+     * @throws \InvalidArgumentException
      */
     public function selectDB($name)
     {
@@ -183,7 +192,7 @@ class Client
             // perform the query and return the resultset
             return $driver->query();
 
-        } catch (DriverException $e) {
+        } catch (\Exception $e) {
             throw new Exception('Query has failed', $e->getCode(), $e);
         }
     }
@@ -221,6 +230,7 @@ class Client
 
     /**
      * List all the databases
+     * @throws Exception
      */
     public function listDatabases()
     {
@@ -250,13 +260,14 @@ class Client
      * udp+influxdb://username:pass@localhost:4444/databasename
      *
      * @param  string $dsn
-     * @param  int    $timeout
+     * @param  float  $timeout
      * @param  bool   $verifySSL
+     * @param  float  $connectTimeout
      *
      * @return Client|Database
      * @throws ClientException
      */
-    public static function fromDSN($dsn, $timeout = 0, $verifySSL = false)
+    public static function fromDSN($dsn, $timeout = 0, $verifySSL = false, $connectTimeout = 0)
     {
         $connParams = parse_url($dsn);
         $schemeInfo = explode('+', $connParams['scheme']);
@@ -269,11 +280,11 @@ class Client
             $scheme = $schemeInfo[1];
         }
 
-        if ($scheme != 'influxdb') {
+        if ($scheme !== 'influxdb') {
             throw new ClientException($scheme . ' is not a valid scheme');
         }
 
-        $ssl = $modifier === 'https' ? true : false;
+        $ssl = $modifier === 'https';
         $dbName = isset($connParams['path']) ? substr($connParams['path'], 1) : null;
 
         $client = new self(
@@ -283,11 +294,12 @@ class Client
             isset($connParams['pass']) ? $connParams['pass'] : '',
             $ssl,
             $verifySSL,
-            $timeout
+            $timeout,
+            $connectTimeout
         );
 
         // set the UDP driver when the DSN specifies UDP
-        if ($modifier == 'udp') {
+        if ($modifier === 'udp') {
             $client->setDriver(new UDP($connParams['host'], $connParams['port']));
         }
 
@@ -308,6 +320,14 @@ class Client
     public function getTimeout()
     {
         return $this->timeout;
+    }
+
+    /**
+     * @return float
+     */
+    public function getConnectTimeout()
+    {
+        return $this->connectTimeout;
     }
 
     /**
@@ -339,6 +359,7 @@ class Client
         $this->driver = new Guzzle(
             new \GuzzleHttp\Client(
                 [
+                    'connect_timeout' => $this->connectTimeout,
                     'timeout' => $this->timeout,
                     'base_uri' => $this->baseURI,
                     'verify' => $this->verifySSL

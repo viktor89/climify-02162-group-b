@@ -20,7 +20,6 @@ class ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8
         array (
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\Translation\\' => 30,
-            'Symfony\\Component\\EventDispatcher\\' => 34,
         ),
         'P' => 
         array (
@@ -51,10 +50,6 @@ class ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8
         array (
             'Doctrine\\Common\\Inflector\\' => 26,
         ),
-        'C' => 
-        array (
-            'Carbon\\' => 7,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -65,10 +60,6 @@ class ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8
         'Symfony\\Component\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
-        ),
-        'Symfony\\Component\\EventDispatcher\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
         ),
         'Psr\\SimpleCache\\' => 
         array (
@@ -126,10 +117,10 @@ class ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
         ),
-        'Carbon\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
-        ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static $prefixesPsr0 = array (
@@ -147,6 +138,7 @@ class ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInit6ba6fd3cd80de130910592cd53f75ae8::$prefixesPsr0;
 
         }, null, ClassLoader::class);

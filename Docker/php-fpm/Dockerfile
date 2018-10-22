@@ -18,5 +18,7 @@ RUN apt-get update && apt-get upgrade -y \
     && pecl install  Mosquitto-alpha \
     && apt-get autoremove -y --purge \
     && echo "extension=mosquitto.so" > /usr/local/etc/php/conf.d/mosquitto.ini \
+    && pecl install mongodb \
+    && echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/ext-mongodb.ini \
     && apt-get clean \
     && rm -Rf /tmp/*
