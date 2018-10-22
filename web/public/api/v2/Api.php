@@ -13,7 +13,7 @@ class Api
     public function __construct()
     {
         try {
-            $this->client = new Client(getenv('INFLUXDB_HOST'), '8086', getenv('MYSQL_USER'), getenv('MYSQL_USER_PASSWORD'));
+            $this->client = new Client(getenv('INFLUXDB_HOST'), '8086', urlencode(getenv('MYSQL_USER')), urlencode(getenv('MYSQL_USER_PASSWORD')));
             //$this->client = Client::fromDSN('influxdb://' . getenv('MYSQL_USER') . ':' . getenv('MYSQL_USER_PASSWORD') . '@'.getenv('INFLUXDB_HOST').':8086/' . getenv('MYSQL_DATABASE') . '&precision=s', 5)->getClient();
             $this->database = $this->client->selectDB('skoleklima');
         } catch (Client\Exception $e) {
