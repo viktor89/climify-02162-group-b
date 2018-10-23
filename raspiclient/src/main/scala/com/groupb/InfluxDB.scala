@@ -20,6 +20,6 @@ object InfluxDBHandler {
   }
 
   def clearDB(db : Database)(data : Seq[Data]) = {
-    data.foreach(d => db.exec("DELETE WHERE time = " + d.time + " AND measurement =" + d.sensorName))
+    data.foreach(d => db.exec("DELETE FROM " + d.sensorName + " WHERE time = " + d.time))
   }
 }
