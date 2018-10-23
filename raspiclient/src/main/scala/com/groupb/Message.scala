@@ -33,3 +33,9 @@ object HttpHandler extends HttpConnection {
   def getRequest(url : String) = Http(url).asString
   def postRequest(url : String, data : String) = Http(url).postData(data).asString
 }
+
+object PipeHandler {
+  implicit class Pipe[A](private val a : A ) extends AnyVal {
+    def |>[B](f : A => B) = f(a)
+  }
+}
