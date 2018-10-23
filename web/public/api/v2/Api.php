@@ -13,7 +13,8 @@ class Api
     public function __construct()
     {
         try {
-            $this->client = Client::fromDSN('influxdb://' . getenv('MYSQL_USER') . ':' . getenv('MYSQL_USER_PASSWORD') . '@influx-db:8086/' . getenv('MYSQL_DATABASE') . '&precision=s', 5)->getClient();
+            $this->client = new Client(getenv('INFLUXDB_HOST'), '8086', getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'));
+            //$this->client = Client::fromDSN('influxdb://' . getenv('MYSQL_USER') . ':' . getenv('MYSQL_USER_PASSWORD') . '@'.getenv('INFLUXDB_HOST').':8086/' . getenv('MYSQL_DATABASE') . '&precision=s', 5)->getClient();
             $this->database = $this->client->selectDB('skoleklima');
         } catch (Client\Exception $e) {
             http_response_code(500);
@@ -27,7 +28,7 @@ class Api
         if(!$this->isValidTimeStamp($measurement->time)){throw new \Exception('Timestamp not valid');}
     }
 
-    public function isValidTimeStamp($timestamp)
+    private function isValidTimeStamp($timestamp)
     {
         return ((string) (int) $timestamp === $timestamp)
             && ($timestamp <= PHP_INT_MAX)

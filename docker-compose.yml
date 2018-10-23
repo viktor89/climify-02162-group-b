@@ -29,6 +29,7 @@ services:
       - 'INFLUXDB_ADMIN_USER=root'
       - 'INFLUXDB_ADMIN_PASSWORD=${MYSQL_ROOT_PASSWORD}'
       - 'INFLUXDB_USER=${MYSQL_USER}'
+      - 'INFLUXDB_HOST=influx-db'
       - 'INFLUXDB_USER_PASSWORD=${MYSQL_PASSWORD}'
     volumes:
       - './etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini'
