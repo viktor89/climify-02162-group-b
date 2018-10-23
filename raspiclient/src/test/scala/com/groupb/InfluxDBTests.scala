@@ -16,7 +16,7 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
     val jsonResult = """{"results":[{"series":[]}]}"""
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/", *)
+      .expects("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
       .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
@@ -27,7 +27,7 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}""" 
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/", *)
+      .expects("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
       .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
@@ -41,7 +41,7 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}, {"name":"Test2","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/", *)
+      .expects("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
       .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
@@ -64,12 +64,12 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
     val mockDB = mock[Database]
 
     inSequence {
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 0 AND measurement =Test1", *)
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 1 AND measurement =Test1", *)
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 2 AND measurement =Test1", *)
+      (mockDB.exec _)
+        .expects("DELETE FROM Test1 WHERE time = 0")
+      (mockDB.exec _)
+        .expects("DELETE FROM Test1 WHERE time = 1")
+      (mockDB.exec _)
+        .expects("DELETE FROM Test1 WHERE time = 2")
     }
     InfluxDBHandler.clearDB(mockDB)(data)
   }
@@ -81,18 +81,18 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
     val mockDB = mock[Database]
 
     inSequence {
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 0 AND measurement =Test1", *)
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 1 AND measurement =Test1", *)
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 2 AND measurement =Test1", *)
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 0 AND measurement =Test2", *)
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 1 AND measurement =Test2", *)
-      (mockDB.query _)
-        .expects("DELETE WHERE time = 2 AND measurement =Test2", *)
+      (mockDB.exec _)
+        .expects("DELETE FROM Test1 WHERE time = 0")
+      (mockDB.exec _)
+        .expects("DELETE FROM Test1 WHERE time = 1")
+      (mockDB.exec _)
+        .expects("DELETE FROM Test1 WHERE time = 2")
+      (mockDB.exec _)
+        .expects("DELETE FROM Test2 WHERE time = 0")
+      (mockDB.exec _)
+        .expects("DELETE FROM Test2 WHERE time = 1")
+      (mockDB.exec _)
+        .expects("DELETE FROM Test2 WHERE time = 2")
     }
     InfluxDBHandler.clearDB(mockDB)(data)
   }

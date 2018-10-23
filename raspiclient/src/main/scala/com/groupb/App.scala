@@ -31,7 +31,7 @@ object App extends App {
     client.setCallback(callback)
   }
 
-  HttpHandler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/register/",
+  HttpHandler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/register.php",
     JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]"))
   val future = executor.scheduleAtFixedRate(task, 2, 5, TimeUnit.SECONDS)
 
