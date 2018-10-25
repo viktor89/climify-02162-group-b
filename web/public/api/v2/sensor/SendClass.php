@@ -5,6 +5,7 @@ use InfluxDB\Point;
 
 class SendClass extends API\V2\Api
 {
+    // Todo: Validate room and sensors before writing data
     public function writeDataAsPoints($data){
         $points = [];
 
