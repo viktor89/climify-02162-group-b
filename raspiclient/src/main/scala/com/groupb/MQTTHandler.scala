@@ -13,7 +13,7 @@ class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
       case ViewInbox() =>
         handler.postRequest("http://localhost:8080/rest/discovery/bindings/zwave/scan", "")
         val response = handler.getRequest("http://localhost:8080/rest/inbox")
-        handler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox/",
+        handler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox.php",
           JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(response.body)))
     }
   }

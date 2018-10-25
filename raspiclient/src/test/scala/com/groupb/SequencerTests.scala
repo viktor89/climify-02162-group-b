@@ -13,7 +13,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
 
     val mockHandler = mock[HttpConnection]
     (mockHandler.postRequest _)
-      .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send/", json)
+      .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send.php", json)
       .returns(new HttpResponse[String]("", 200, responseMap))
 
     val result = Sequencer.transmitData(mockHandler)(data)
@@ -26,7 +26,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
 
     val mockHandler = mock[HttpConnection]
     (mockHandler.postRequest _)
-      .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send/", json)
+      .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send.php", json)
       .returns(new HttpResponse[String]("", 200, responseMap))
 
     val result = Sequencer.transmitData(mockHandler)(data)
@@ -39,7 +39,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
 
     val mockHandler = mock[HttpConnection]
     (mockHandler.postRequest _)
-      .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send/", json)
+      .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send.php", json)
       .returns(new HttpResponse[String]("", 404, responseMap))
 
     val result = Sequencer.transmitData(mockHandler)(data)
