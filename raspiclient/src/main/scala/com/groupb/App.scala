@@ -21,7 +21,7 @@ object App extends App {
   }
 
   def subscribeToMQTT() = {
-    val brokerURL = s"tcp://broker.mqttdashboard.com:8000"
+    val brokerURL = s"tcp://broker.mqttdashboard.com:1883"
     val topic = "qwe123"
     val persistance = new MemoryPersistence
     val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)

@@ -16,7 +16,7 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
     val jsonResult = """{"results":[{"series":[]}]}"""
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
+      .expects("SELECT * FROM /^*/ LIMIT 1000", *)
       .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
@@ -27,7 +27,7 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}""" 
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
+      .expects("SELECT * FROM /^*/ LIMIT 1000", *)
       .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
@@ -41,7 +41,7 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}, {"name":"Test2","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
     val mockDB = mock[Database]
     (mockDB.query _)
-      .expects("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
+      .expects("SELECT * FROM /^*/ LIMIT 1000", *)
       .returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)

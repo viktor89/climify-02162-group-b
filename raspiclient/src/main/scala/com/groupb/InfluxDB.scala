@@ -7,7 +7,7 @@ import com.paulgoldbaum.influxdbclient.Parameter.Precision.Precision
 
 object InfluxDBHandler {
   def readData(db : Database) = {
-    val seriesQuery = db.query("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
+    val seriesQuery = db.query("SELECT * FROM /^*/ LIMIT 1000", Parameter.Precision.SECONDS)
     val result = Await.result(seriesQuery, Duration.Inf)
     result.series.flatMap(serie =>
       serie.records.map(record =>
