@@ -23,6 +23,7 @@ class Api
     }
 
     public function validateMeasurement($measurement) {
+        $measurement->value = floatval($measurement->value, 2);
         if(!is_float($measurement->value)){throw new \Exception('Measurement value was not a float');}
         if(empty($measurement->sensorName)){throw new \Exception('Sensor name wasn\'t a string');}
         if(!$this->isValidTimeStamp($measurement->time)){throw new \Exception('Timestamp not valid');}
