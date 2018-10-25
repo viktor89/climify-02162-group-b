@@ -16,7 +16,7 @@ class SendClass extends API\V2\Api
             $points[] =
                 new Point(
                     'sensor_measurements', // name of the table
-                    $measurement->value, // the measurement value
+                    (float) sprintf("%.2f", $measurement->value), // the measurement value
                     ['sensor_name' => $measurement->sensorName, 'raspberry_id' => $data->mac],
                     [],
                     $measurement->time // Time precision has to be set to seconds!
