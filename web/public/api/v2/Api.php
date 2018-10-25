@@ -30,8 +30,9 @@ class Api
 
     private function isValidTimeStamp($timestamp)
     {
-        return ((string) (int) $timestamp === $timestamp)
-            && ($timestamp <= PHP_INT_MAX)
-            && ($timestamp >= ~PHP_INT_MAX);
+        if(is_string($timestamp)){
+            $timestamp = intval($timestamp);
+        }
+        return ($timestamp <= PHP_INT_MAX) && ($timestamp >= ~PHP_INT_MAX);
     }
 }

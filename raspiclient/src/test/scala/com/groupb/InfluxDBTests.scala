@@ -65,11 +65,11 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
 
     inSequence {
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 0 AND measurement =Test1")
+        .expects("DELETE FROM Test1 WHERE time = 0")
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 1 AND measurement =Test1")
+        .expects("DELETE FROM Test1 WHERE time = 1")
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 2 AND measurement =Test1")
+        .expects("DELETE FROM Test1 WHERE time = 2")
     }
     InfluxDBHandler.clearDB(mockDB)(data)
   }
@@ -82,17 +82,17 @@ class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
 
     inSequence {
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 0 AND measurement =Test1")
+        .expects("DELETE FROM Test1 WHERE time = 0")
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 1 AND measurement =Test1")
+        .expects("DELETE FROM Test1 WHERE time = 1")
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 2 AND measurement =Test1")
+        .expects("DELETE FROM Test1 WHERE time = 2")
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 0 AND measurement =Test2")
+        .expects("DELETE FROM Test2 WHERE time = 0")
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 1 AND measurement =Test2")
+        .expects("DELETE FROM Test2 WHERE time = 1")
       (mockDB.exec _)
-        .expects("DELETE WHERE time = 2 AND measurement =Test2")
+        .expects("DELETE FROM Test2 WHERE time = 2")
     }
     InfluxDBHandler.clearDB(mockDB)(data)
   }

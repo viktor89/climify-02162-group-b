@@ -59,7 +59,7 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
         .expects("http://localhost:8080/rest/inbox")
         .returns(new HttpResponse[String]("", 200, responseMap))
       (mockHandler.postRequest _)
-        .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox/", JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\""))
+        .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox.php", JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\""))
         .returns(new HttpResponse[String]("", 200, responseMap))
 
     }
@@ -104,7 +104,7 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
         .expects("http://localhost:8080/rest/inbox")
         .returns(new HttpResponse[String]("", 200, responseMap))
       (mockHandler.postRequest _)
-        .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox/", JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\""))
+        .expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox.php", JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\""))
         .returns(new HttpResponse[String]("", 200, responseMap))
 
     }
