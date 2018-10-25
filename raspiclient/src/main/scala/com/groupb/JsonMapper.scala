@@ -18,6 +18,6 @@ object JsonMapper {
   }
 
   def wrapForTransport(mac : String, data : String) = {
-    "{ \"mac\":"+ mac +",\"data\":"+data +" }"
+    "{ \"mac\":\""+ mac +"\",\"data\":"+data +" }"
   }
 }
