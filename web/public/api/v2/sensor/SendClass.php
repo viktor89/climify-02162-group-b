@@ -1,5 +1,7 @@
 <?php
 require_once '../Api.php';
+
+use API\V2\ValidationException;
 use InfluxDB\Point;
 
 class SendClass extends API\V2\Api
@@ -9,7 +11,7 @@ class SendClass extends API\V2\Api
         $points = [];
 
         if(empty($data->mac)){
-            throw new Exception('No mac address provided!');
+            throw new ValidationException('No mac address provided!');
         }
 
         foreach($data->data as $measurement){

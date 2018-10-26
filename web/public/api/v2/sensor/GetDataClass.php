@@ -3,7 +3,6 @@ require_once '../Api.php';
 
 class GetDataClass extends API\V2\Api
 {
-    // Todo: Validate room and sensors before writing data
     public function getSensorData($data){
         $points = [];
 

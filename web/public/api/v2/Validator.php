@@ -1,19 +1,20 @@
 <?php
-
 namespace API\V2;
+require '../../../vendor/autoload.php';
 
+use API\V2\ValidationException;
 
 class Validator
 {
     public static function validateMeasurement($measurement) {
         if(!is_float((float) sprintf("%.2f", $measurement->value))){
-            throw new \Exception('Measurement value not a float');
+            throw new ValidationException('Measurement value not a float');
         };
         if(empty($measurement->sensorName)){
-            throw new \Exception('Sensor name wasn\'t a string');
+            throw new ValidationException('Sensor name wasn\'t a string');
         }
         if(!self::isValidTimeStamp($measurement->time)){
-            throw new \Exception('Timestamp not valid');
+            throw new ValidationException('Timestamp not valid');
         }
     }
 
