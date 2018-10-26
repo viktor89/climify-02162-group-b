@@ -22,7 +22,7 @@ class InfluxDBClient
     }
 
     public function getDataSeries(){
-        $result = $this->database->query('SELECT last("value") AS "value" FROM "sensor_measurements" WHERE time > now() - 1h GROUP BY time(10s), "sensor_name", "raspberry_id" FILL(previous)');
+        $result = $this->database->query('SELECT last("value") AS "value" FROM "sensor_measurements" WHERE time > now() - 1h GROUP BY time(30s), "sensor_name", "raspberry_id" FILL(previous)');
         return $result->getSeries();
     }
 }
