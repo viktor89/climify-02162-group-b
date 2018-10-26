@@ -7,20 +7,22 @@ use InfluxDB\Point;
 class SendClass extends API\V2\Api
 {
     // Todo: Validate room and sensors before writing data
-    public function writeDataAsPoints($data){
+    public function writeDataAsPoints($json){
         $points = [];
-
-        if(empty($data->mac)){
+        if(empty($json)){
+            throw new Exception('Unable to parse json');
+        }
+        if(empty($json->mac)){
             throw new ValidationException('No mac address provided!');
         }
 
-        foreach($data->data as $measurement){
+        foreach($json->data as $measurement){
             $this->validator::validateMeasurement($measurement);
             $points[] =
                 new Point(
                     'sensor_measurements', // name of the table
                     (float) sprintf("%.2f", $measurement->value), // the measurement value
-                    ['sensor_name' => $measurement->sensorName, 'raspberry_id' => $data->mac],
+                    ['sensor_name' => $measurement->sensorName, 'raspberry_id' => $json->mac],
                     [],
                     $measurement->time // Time precision has to be set to seconds!
                 );

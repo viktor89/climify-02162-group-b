@@ -2,8 +2,6 @@
 namespace API\V2;
 require '../../../vendor/autoload.php';
 
-use API\V2\ValidationException;
-
 class Validator
 {
     public static function validateMeasurement($measurement) {

@@ -1,5 +1,7 @@
 <?php
 namespace API\V2;
+use Exception;
+
 require '../../../vendor/autoload.php';
 require 'InfluxDBClient.php';
 require 'exceptions/ValidationException.php';
