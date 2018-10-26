@@ -1,6 +1,5 @@
 <?php
 require_once '../Api.php';
-use InfluxDB\Database;
 use InfluxDB\Point;
 
 class SendClass extends API\V2\Api
@@ -9,10 +8,12 @@ class SendClass extends API\V2\Api
     public function writeDataAsPoints($data){
         $points = [];
 
-        if(empty($data->mac)){throw new Exception('No mac address provided!');}
+        if(empty($data->mac)){
+            throw new Exception('No mac address provided!');
+        }
 
         foreach($data->data as $measurement){
-            $this->validateMeasurement($measurement);
+            $this->validator::validateMeasurement($measurement);
             $points[] =
                 new Point(
                     'sensor_measurements', // name of the table
@@ -23,6 +24,8 @@ class SendClass extends API\V2\Api
                 );
         }
 
-        if(!$this->database->writePoints($points, Database::PRECISION_SECONDS)){throw new Exception('Unexpected error while writing data points');}
+        if(!$this->influxDb->writePoints($points)){
+            throw new Exception('Unexpected error while writing data points');
+        }
     }
 }
