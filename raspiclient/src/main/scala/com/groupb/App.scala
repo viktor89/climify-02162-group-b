@@ -4,8 +4,8 @@ import org.eclipse.paho.client.mqttv3._
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import com.paulgoldbaum.influxdbclient._
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration._
 import akka.actor.{Actor, ActorSystem, ActorRef, Props}
+import com.typesafe.akka.extension.quartz.QuartzSchedulerExtension
 
 /**
   * @author pll
@@ -27,14 +27,13 @@ object App extends App {
 
   val system = ActorSystem()
   val transmissionActor = system.actorOf(Props(new TransmissionActor(database, HttpHandler)), name = "TransmissionActor")
-  val taskControl = system.scheduler.schedule(2 seconds, 5 minutes) {
-    transmissionActor ! "send"
-  }
+  val scheduler = QuartzSchedulerExtension(system)
+  scheduler.schedule("Every5Minutes", transmissionActor, "send")
 
   sys.addShutdownHook({
     println("Shutdown")
     client.disconnect
-    taskControl.cancel
+    scheduler.shutdown(_)
     influxdb.close
     System.exit(0)
   })
