@@ -7,11 +7,7 @@ import org.scalamock.scalatest.MockFactory
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class InfluxDBTests extends FlatSpec with Matchers with MockFactory {
-  def simulation(json : String) = Future {
-    QueryResult.fromJson(json)
-  }
-
+class InfluxDBTests extends DBFramework {
   "InfluxDBHandler" should "return an empty sequence when the database is empty" in {
     val jsonResult = """{"results":[{"series":[]}]}"""
     val mockDB = mock[Database]

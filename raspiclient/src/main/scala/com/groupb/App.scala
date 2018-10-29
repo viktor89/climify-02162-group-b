@@ -25,8 +25,9 @@ object App extends App {
   HttpHandler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/register.php",
     JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]"))
 
+  val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem()
-  val transmissionActor = system.actorOf(Props(new TransmissionActor(database, HttpHandler)), name = "TransmissionActor")
+  val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
   val scheduler = QuartzSchedulerExtension(system)
   scheduler.schedule("Every5Minutes", transmissionActor, "send")
 
