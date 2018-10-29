@@ -1,8 +1,5 @@
 <?php
-
-use API\V2\ValidationException;
-
-require_once './SendClass.php';
+require_once './RegisterClass.php';
 require '../../../vendor/autoload.php';
 
 date_default_timezone_set('UTC');
@@ -19,14 +16,10 @@ try {
     # Get as an object
     $data = json_decode($json_str);
 
-    $sendClass = new SendClass();
-    $sendClass->writeDataAsPoints($data);
-    header('Content-Type: application/json');
+    $registerClass = new RegisterClass();
+    $registerClass->registerDevice($data);
 }
-catch (ValidationException $e){
-    http_response_code(400);
-    die($e->getMessage());
-}
+// This is very bad practice
 catch (Exception $e) {
     http_response_code(500);
     die($e->getMessage());
