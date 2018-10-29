@@ -43,9 +43,9 @@ class TransmissionTests extends DBFramework {
     inSequence {
       (mockDB.query _) expects ("SELECT * FROM /^*/ LIMIT 1000", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects ("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send.php", json) returns (new HttpResponse[String]("", 200, responseMap))
-      (mockDB.exec _) expects ("DELETE FROM test WHERE time = 1")
-      (mockDB.exec _) expects ("DELETE FROM test WHERE time = 2")
-      (mockDB.exec _) expects ("DELETE FROM test WHERE time = 3")
+      (mockDB.exec _) expects ("DELETE FROM test WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects ("DELETE FROM test WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects ("DELETE FROM test WHERE time = 3") returns (simulation("""{"results":[{"series":[]}]}"""))
     }
     val transmitter = Transmission(mockDB, mockHandler)
     transmitter.transmit

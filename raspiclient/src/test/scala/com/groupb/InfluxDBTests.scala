@@ -11,9 +11,7 @@ class InfluxDBTests extends DBFramework {
   "InfluxDBHandler" should "return an empty sequence when the database is empty" in {
     val jsonResult = """{"results":[{"series":[]}]}"""
     val mockDB = mock[Database]
-    (mockDB.query _)
-      .expects("SELECT * FROM /^*/ LIMIT 1000", *)
-      .returns(simulation(jsonResult))
+    (mockDB.query _) expects("SELECT * FROM /^*/ LIMIT 1000", *) returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
     result.size should be (0)
@@ -22,9 +20,7 @@ class InfluxDBTests extends DBFramework {
   it should "return an sequence with one series when the database contains one series" in {
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}""" 
     val mockDB = mock[Database]
-    (mockDB.query _)
-      .expects("SELECT * FROM /^*/ LIMIT 1000", *)
-      .returns(simulation(jsonResult))
+    (mockDB.query _) expects("SELECT * FROM /^*/ LIMIT 1000", *) returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
     result.size should be (3)
@@ -36,9 +32,7 @@ class InfluxDBTests extends DBFramework {
   it should "return an sequence with two series when the database contains two series" in {
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}, {"name":"Test2","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
     val mockDB = mock[Database]
-    (mockDB.query _)
-      .expects("SELECT * FROM /^*/ LIMIT 1000", *)
-      .returns(simulation(jsonResult))
+    (mockDB.query _) expects("SELECT * FROM /^*/ LIMIT 1000", *) returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)
     result.size should be (6)
@@ -60,12 +54,9 @@ class InfluxDBTests extends DBFramework {
     val mockDB = mock[Database]
 
     inSequence {
-      (mockDB.exec _)
-        .expects("DELETE FROM Test1 WHERE time = 0")
-      (mockDB.exec _)
-        .expects("DELETE FROM Test1 WHERE time = 1")
-      (mockDB.exec _)
-        .expects("DELETE FROM Test1 WHERE time = 2")
+      (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
     }
     InfluxDBHandler.clearDB(mockDB)(data)
   }
@@ -77,18 +68,12 @@ class InfluxDBTests extends DBFramework {
     val mockDB = mock[Database]
 
     inSequence {
-      (mockDB.exec _)
-        .expects("DELETE FROM Test1 WHERE time = 0")
-      (mockDB.exec _)
-        .expects("DELETE FROM Test1 WHERE time = 1")
-      (mockDB.exec _)
-        .expects("DELETE FROM Test1 WHERE time = 2")
-      (mockDB.exec _)
-        .expects("DELETE FROM Test2 WHERE time = 0")
-      (mockDB.exec _)
-        .expects("DELETE FROM Test2 WHERE time = 1")
-      (mockDB.exec _)
-        .expects("DELETE FROM Test2 WHERE time = 2")
+      (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
+      (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
     }
     InfluxDBHandler.clearDB(mockDB)(data)
   }
