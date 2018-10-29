@@ -6,14 +6,17 @@ import com.paulgoldbaum.influxdbclient._
 import scala.concurrent.ExecutionContext.Implicits.global
 import akka.actor.{Actor, ActorSystem, ActorRef, Props}
 import com.typesafe.akka.extension.quartz.QuartzSchedulerExtension
+import com.typesafe.config.ConfigFactory
 
 /**
   * @author pll
   */
 object App extends App {
+  val registerURL = ConfigFactory.load("endpoints").getString("endpoints.register")
+
   val influxdb = InfluxDB.connect("localhost", 8086, "openhab", "AnotherSuperbPassword456-")
   val database = influxdb.selectDatabase("openhab_db")
-  val brokerURL = s"tcp://broker.mqttdashboard.com:1883"
+  val brokerURL = ConfigFactory.load("endpoints").getString("endpoints.mqtt")
   val topic = "qwe123"
   val persistance = new MemoryPersistence
   val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
@@ -22,8 +25,7 @@ object App extends App {
   val callback = new MQTTHandler(HttpHandler)
   client.setCallback(callback)
 
-  HttpHandler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/register.php",
-    JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]"))
+  HttpHandler.postRequest(registerURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]"))
 
   val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem()

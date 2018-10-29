@@ -1,6 +1,7 @@
 package com.groupb
 
-import scalaj.http._
+import scalaj.http.HttpResponse
+import com.typesafe.config.ConfigFactory
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonMappingException
 import org.eclipse.paho.client.mqttv3.{MqttDeliveryToken, MqttMessage}
@@ -46,11 +47,11 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
 
   it should "act upon a ViewInbox message" in {
     val mockHandler = mock[HttpConnection]
-
+    val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
     inSequence {
       (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(new HttpResponse[String]("", 200, responseMap))
       (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(new HttpResponse[String]("", 200, responseMap))
-      (mockHandler.postRequest _) expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox.php", JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\"")) returns(new HttpResponse[String]("", 200, responseMap))
+      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\"")) returns(new HttpResponse[String]("", 200, responseMap))
 
     }
     val handler = new MQTTHandler(mockHandler)
@@ -81,11 +82,11 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
 
   it should "handle a MQTTMessage consisting of ViewInbox" in {
     val mockHandler = mock[HttpConnection]
-
+    val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
     inSequence {
       (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(new HttpResponse[String]("", 200, responseMap))
       (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(new HttpResponse[String]("", 200, responseMap))
-      (mockHandler.postRequest _) expects("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox.php", JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\"")) returns(new HttpResponse[String]("", 200, responseMap))
+      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\"")) returns(new HttpResponse[String]("", 200, responseMap))
     }
     val handler = new MQTTHandler(mockHandler)
     val viewInbox = ViewInbox()
