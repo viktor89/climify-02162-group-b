@@ -4,9 +4,13 @@ require_once '../Api.php';
 use API\V2\ValidationException;
 use InfluxDB\Point;
 
-class SendClass extends API\V2\Api
+class SensorDAO extends API\V2\Api
 {
-    // Todo: Validate room and sensors before writing data
+    /**
+     * @param $json
+     * @throws ValidationException
+     * @throws Exception
+     */
     public function writeDataAsPoints($json){
         $points = [];
         if(empty($json)){
@@ -22,7 +26,7 @@ class SendClass extends API\V2\Api
                 new Point(
                     'sensor_measurements', // name of the table
                     (float) sprintf("%.2f", $measurement->value), // the measurement value
-                    ['sensor_name' => $measurement->sensorName, 'raspberry_id' => $json->mac],
+                    ['sensor_name' => $measurement->sensorName, 'raspberry_id' => $json->mac, "sensor_type" => $measurement->sensorType],
                     [],
                     $measurement->time // Time precision has to be set to seconds!
                 );
@@ -31,5 +35,13 @@ class SendClass extends API\V2\Api
         if(!$this->influxDb->writePoints($points)){
             throw new Exception('Unexpected error while writing data points');
         }
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function getSensorData(){
+        return $this->influxDb->getDataSeries();
     }
 }

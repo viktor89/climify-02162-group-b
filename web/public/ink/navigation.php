@@ -1,6 +1,6 @@
 <!-- Navigation -->
 <div class="element" id="side-navigation">
-	<?php 
+	<?php
 		if(	$currentUserRole == 1 ) {
 			$currentUserRights = "System administrator";
 		} else if(	$currentUserRole == 15 ) {
@@ -46,6 +46,12 @@
 						<p class="menu-link-text" id="menu-link-text-other-users">Other Users</p>
 					</a>
 				</li>
+                <li class="menu-link menu-link-permissions" data-go-to="permissions">
+                    <a href="#/Permissions">
+                        <i class="menu-link-ico nav-icon fa fa-address-card" aria-hidden="true"></i>
+                        <p class="menu-link-text">Permissions</p>
+                    </a>
+                </li>
 				<li class="menu-link menu-link-own-user" data-go-to="own-user">
 					<a href="#/your-profile">
 						<i class="menu-link-ico nav-icon fa fa-user" aria-hidden="true"></i>

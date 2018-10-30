@@ -1,6 +1,6 @@
 <?php
 namespace API\V2;
-use Exception;
+use mysqli;
 
 require '../../../vendor/autoload.php';
 require 'InfluxDBClient.php';
@@ -11,16 +11,22 @@ class Api
 {
     protected $influxDb;
     protected $validator;
+    protected $database;
 
     public function __construct()
     {
-        try {
-            $this->validator = new Validator();
-            $this->influxDb = new InfluxDBClient();
-        }
-        catch (Exception $e) {
-            http_response_code(500);
-            die($e->getMessage());
-        }
+        // Cache Headers
+        $ts = gmdate("D, d M Y H:i:s") . " GMT";
+        header("Expires: $ts");
+        header("Last-Modified: $ts");
+        header("Pragma: no-cache");
+        header("Cache-Control: no-cache, must-revalidate");
+        // Regular headers
+        header('Content-Type: application/json');
+        // Class objects instantiate
+        $this->validator = new Validator();
+        $this->influxDb = new InfluxDBClient();
+        $this->database = new mysqli(getenv('MYSQL_HOST').':3306', getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'), getenv('MYSQL_DATABASE'));
+
     }
 }
