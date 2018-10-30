@@ -1,6 +1,5 @@
 <?php
 namespace API\V2;
-require '../../../vendor/autoload.php';
 
 class Validator
 {
@@ -25,5 +24,20 @@ class Validator
             return true;
         };
         return false;
+    }
+
+    /**
+     * @param $message
+     * @throws \Exception
+     */
+    public static function validateMQTTMessage($message){
+        if(is_null($message["payload"])) throw new \Exception("Invalid MQTT Message - a payload is required");
+        if(empty($message["payload"])) throw new \Exception("Invalid MQTT Message - a payload value is required");
+        json_encode($message);
+        if(json_last_error() !== 0) throw new \Exception("unable to parse json");
+    }
+
+    public static function validateMQTTTopic($topic) {
+        if(empty($topic)) throw new \Exception("No topic supplied!");
     }
 }
