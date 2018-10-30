@@ -1,5 +1,6 @@
 package com.groupb
 
+import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, Future }
 import com.paulgoldbaum.influxdbclient._
 import com.paulgoldbaum.influxdbclient.Parameter.Precision.Precision

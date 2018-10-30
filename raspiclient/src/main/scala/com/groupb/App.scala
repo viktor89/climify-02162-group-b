@@ -13,10 +13,14 @@ import com.typesafe.config.ConfigFactory
   * @author pll
   */
 object App extends App {
+  val influxdbConfig = ConfigFactory.load("influxdb")
   val endpointConfig = ConfigFactory.load("endpoints")
   val registerURL = endpointConfig.getString("endpoints.register")
 
-  val influxdb = InfluxDB.connect("localhost", 8086, "openhab", "AnotherSuperbPassword456-")
+  val influxdb = InfluxDB.connect(influxdbConfig.getString("influxdb.address"),
+    influxdbConfig.getInt("influxdb.port"),
+    influxdbConfig.getString("influxdb.user"),
+    influxdbConfig.getString("influxdb.password"))
   val database = influxdb.selectDatabase("openhab_db")
   val brokerURL = endpointConfig.getString("endpoints.mqtt")
   val topic = "qwe123"
