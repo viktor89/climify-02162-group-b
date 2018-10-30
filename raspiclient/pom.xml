@@ -30,12 +30,6 @@
       <version>${scala.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.7.25</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.paho</groupId>
       <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
       <version>1.2.0</version>
@@ -59,6 +53,11 @@
       <groupId>com.paulgoldbaum</groupId>
       <artifactId>scala-influxdb-client_2.12</artifactId>
       <version>0.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.typesafe.akka</groupId>
+      <artifactId>akka-actor_2.12</artifactId>
+      <version>2.5.17</version>
     </dependency>
 
     <!-- Test -->
@@ -121,6 +120,8 @@
               <args>
                 <arg>-dependencyfile</arg>
                 <arg>${project.build.directory}/.scala_dependencies</arg>
+                <arg>-deprecation</arg>
+                <arg>-feature</arg>
               </args>
             </configuration>
           </execution>

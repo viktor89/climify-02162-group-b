@@ -2,6 +2,7 @@ package com.groupb
 
 import org.eclipse.paho.client.mqttv3._
 import scalaj.http._
+import com.typesafe.config.ConfigFactory
 
 class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
   def act(msg : Message) = {
@@ -11,9 +12,10 @@ class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
       case TState(uuid, temp) =>
         handler.postRequest("http://localhost:8080/rest/items/" + uuid, Integer.toString(temp))
       case ViewInbox() =>
+        val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
         handler.postRequest("http://localhost:8080/rest/discovery/bindings/zwave/scan", "")
         val response = handler.getRequest("http://localhost:8080/rest/inbox")
-        handler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/inbox.php",
+        handler.postRequest(inboxURL,
           JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(response.body)))
     }
   }
