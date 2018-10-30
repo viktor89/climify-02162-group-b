@@ -7,7 +7,8 @@ object Sequencer {
   def transmitData(handler : HttpConnection)(data : Seq[Data]) = {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val response = handler.postRequest(sendURL,
-      JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(data)))
+      JsonMapper.toJson(DataMessage(MACAddress.computeMAC,
+        JsonMapper.toJson(data))))
 
     if (response.code == 200) {
       data

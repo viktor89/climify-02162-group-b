@@ -23,15 +23,15 @@ object App extends App {
     influxdbConfig.getString("influxdb.password"))
   val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
   val brokerURL = endpointConfig.getString("endpoints.mqtt")
-  val topic = "qwe123"
+  val mac = MACAddress.computeMAC
   val persistance = new MemoryPersistence
   val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
   client.connect
-  client.subscribe(topic)
+  client.subscribe(mac)
   val callback = new MQTTHandler(HttpHandler)
   client.setCallback(callback)
 
-  HttpHandler.postRequest(registerURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]"))
+  HttpHandler.postRequest(registerURL, JsonMapper.toJson(mac))
 
   val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem()
