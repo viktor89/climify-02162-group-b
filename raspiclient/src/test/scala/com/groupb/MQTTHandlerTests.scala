@@ -16,7 +16,7 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
     handler.connectionLost(new Throwable())
   }
 
-  it should "handle recieving a delivery token" in {
+  it should "handle receiving a delivery token" in {
     val handler = new MQTTHandler(HttpHandler)
     handler.deliveryComplete(new MqttDeliveryToken("test"))
   }

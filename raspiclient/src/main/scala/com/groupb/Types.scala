@@ -33,3 +33,5 @@ object HttpHandler extends HttpConnection {
   def getRequest(url : String) = Http(url).asString
   def postRequest(url : String, data : String) = Http(url).postData(data).asString
 }
+
+case class OpenHABItems(val name : String, val label : String)
