@@ -5,12 +5,11 @@ import org.scalatest.prop.Checkers
 import org.scalacheck.Arbitrary
 
 class JsonMapperTests extends FlatSpec with Checkers {
-  "A JsonMapper" should "return a string in the form { \"mac\":*, \"data\":*}" in {
-    check((mac : String, data : String) =>
-      "{ \"mac\":\"" + mac + "\",\"data\":" + data + " }" == JsonMapper.wrapForTransport(mac, data))
+  "A JsonMapper" should "be able to convert strings to and from JSON" in {
+    check((obj : String) => JsonMapper.convert[String](JsonMapper.toJson(obj)) == obj)
   }
 
-  it should "be able to convert objects to and from JSON" in {
-    check((obj : String) => JsonMapper.convert[String](JsonMapper.toJson(obj)) == obj)
+  it should "be able to convert integers to and from JSON" in {
+    check((obj : Int) => JsonMapper.convert[Int](JsonMapper.toJson(obj)) == obj)
   }
 }

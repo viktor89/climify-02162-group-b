@@ -31,7 +31,7 @@ object App extends App {
   val callback = new MQTTHandler(HttpHandler)
   client.setCallback(callback)
 
-  HttpHandler.postRequest(registerURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]"))
+  HttpHandler.postRequest(registerURL, JsonMapper.toJson(MacMessage(MACAddress.computeMAC)))
 
   val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem()

@@ -11,7 +11,8 @@ class TransmissionTests extends DBFramework {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val jsonResult = """{"results":[{"series":[]}]}"""
     val data = IndexedSeq[Data]()
-    val json = JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(data))
+    val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
+    val json = JsonMapper.toJson(dataMsg)
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
@@ -26,7 +27,8 @@ class TransmissionTests extends DBFramework {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val jsonResult = """{"results":[{"series":[]}]}"""
     val data = IndexedSeq[Data]()
-    val json = JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(data))
+    val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
+    val json = JsonMapper.toJson(dataMsg)
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
@@ -41,7 +43,8 @@ class TransmissionTests extends DBFramework {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val jsonResult = """{"results":[{"series":[{"name":"test","columns":["time", "value"],"values":[[1, 0], [2, 0], [3, 0]],"tags":{"tag": "value"}}]}]}"""
     val data = IndexedSeq(Data("test", 1, 0), Data("test", 2, 0), Data("test", 3, 0))
-    val json = JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(data))
+    val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
+    val json = JsonMapper.toJson(dataMsg)
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
@@ -59,7 +62,8 @@ class TransmissionTests extends DBFramework {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val jsonResult = """{"results":[{"series":[{"name":"test","columns":["time", "value"],"values":[[1, 0], [2, 0], [3, 0]],"tags":{"tag": "value"}}]}]}"""
     val data = IndexedSeq(Data("test", 1, 0), Data("test", 2, 0), Data("test", 3, 0))
-    val json = JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(data))
+    val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
+    val json = JsonMapper.toJson(dataMsg)
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {

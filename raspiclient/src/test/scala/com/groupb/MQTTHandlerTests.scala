@@ -47,11 +47,12 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
 
   it should "act upon a ViewInbox message" in {
     val mockHandler = mock[HttpConnection]
+    val dataMsg = DataMessage(MACAddress.computeMAC, "\"\"")
     val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
     inSequence {
       (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(new HttpResponse[String]("", 200, responseMap))
       (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(new HttpResponse[String]("", 200, responseMap))
-      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\"")) returns(new HttpResponse[String]("", 200, responseMap))
+      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns(new HttpResponse[String]("", 200, responseMap))
 
     }
     val handler = new MQTTHandler(mockHandler)
@@ -82,11 +83,12 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
 
   it should "handle a MQTTMessage consisting of ViewInbox" in {
     val mockHandler = mock[HttpConnection]
+    val dataMsg = DataMessage(MACAddress.computeMAC, "\"\"")
     val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
     inSequence {
       (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(new HttpResponse[String]("", 200, responseMap))
       (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(new HttpResponse[String]("", 200, responseMap))
-      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, "\"\"")) returns(new HttpResponse[String]("", 200, responseMap))
+      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns (new HttpResponse[String]("", 200, responseMap))
     }
     val handler = new MQTTHandler(mockHandler)
     val viewInbox = ViewInbox()
