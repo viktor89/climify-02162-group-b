@@ -3,20 +3,22 @@ package com.groupb
 import org.eclipse.paho.client.mqttv3._
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import com.paulgoldbaum.influxdbclient._
+import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 import akka.actor.{Actor, ActorSystem, ActorRef, Props}
-import com.typesafe.akka.extension.quartz.QuartzSchedulerExtension
 import com.typesafe.config.ConfigFactory
 
 /**
   * @author pll
   */
 object App extends App {
-  val registerURL = ConfigFactory.load("endpoints").getString("endpoints.register")
+  val endpointConfig = ConfigFactory.load("endpoints")
+  val registerURL = endpointConfig.getString("endpoints.register")
 
   val influxdb = InfluxDB.connect("localhost", 8086, "openhab", "AnotherSuperbPassword456-")
   val database = influxdb.selectDatabase("openhab_db")
-  val brokerURL = ConfigFactory.load("endpoints").getString("endpoints.mqtt")
+  val brokerURL = endpointConfig.getString("endpoints.mqtt")
   val topic = "qwe123"
   val persistance = new MemoryPersistence
   val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
@@ -30,13 +32,12 @@ object App extends App {
   val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem()
   val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
-  val scheduler = QuartzSchedulerExtension(system)
-  scheduler.schedule("Every5Minutes", transmissionActor, "send")
+  val scheduler = system.scheduler.schedule(2 seconds, 5 minutes, transmissionActor, "send") 
 
   sys.addShutdownHook({
     println("Shutdown")
     client.disconnect
-    scheduler.shutdown(_)
+    scheduler.cancel
     influxdb.close
     System.exit(0)
   })

@@ -1,6 +1,5 @@
 package com.groupb
 
-import scala.concurrent.duration.Duration
 import scala.concurrent.{ Await, Future }
 import com.paulgoldbaum.influxdbclient._
 import com.paulgoldbaum.influxdbclient.Parameter.Precision.Precision
@@ -16,7 +15,7 @@ object InfluxDBHandler {
 
   def clearDB(db : Database)(data : Seq[Data]) = {
     data.foreach(d => {
-      Await.result(db.exec("DELETE FROM " + d.sensorName + " WHERE time = " + d.time), Duration.Inf)
+      db.exec("DELETE FROM " + d.sensorName + " WHERE time = " + d.time)
     })
   }
 }

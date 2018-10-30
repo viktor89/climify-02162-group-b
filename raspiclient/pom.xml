@@ -59,11 +59,6 @@
       <artifactId>akka-actor_2.12</artifactId>
       <version>2.5.17</version>
     </dependency>
-    <dependency>
-      <groupId>com.enragedginger</groupId>
-      <artifactId>akka-quartz-scheduler_2.12</artifactId>
-      <version>1.7.0-akka-2.5.x</version>
-    </dependency>
 
     <!-- Test -->
     <dependency>
@@ -125,6 +120,8 @@
               <args>
                 <arg>-dependencyfile</arg>
                 <arg>${project.build.directory}/.scala_dependencies</arg>
+                <arg>-deprecation</arg>
+                <arg>-feature</arg>
               </args>
             </configuration>
           </execution>
