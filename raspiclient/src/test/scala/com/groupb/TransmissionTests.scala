@@ -16,7 +16,8 @@ class TransmissionTests extends DBFramework {
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
-      (mockDB.query _) expects ("SELECT * FROM /^*/ LIMIT 1000", *) returns (simulation(jsonResult))
+      (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[]", 200, responseMap))
+      (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects (sendURL, json) returns (new HttpResponse[String]("", 200, responseMap))
     }
     val transmitter = Transmission(mockDB, mockHandler)
@@ -32,7 +33,8 @@ class TransmissionTests extends DBFramework {
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
-      (mockDB.query _) expects ("SELECT * FROM /^*/ LIMIT 1000", *) returns (simulation(jsonResult))
+      (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[]", 200, responseMap))
+      (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects (sendURL, json) returns (new HttpResponse[String]("", 404, responseMap))
     }
     val transmitter = Transmission(mockDB, mockHandler)
@@ -42,13 +44,16 @@ class TransmissionTests extends DBFramework {
   it should "handle a transmission that succeeds with data in db" in {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val jsonResult = """{"results":[{"series":[{"name":"test","columns":["time", "value"],"values":[[1, 0], [2, 0], [3, 0]],"tags":{"tag": "value"}}]}]}"""
-    val data = IndexedSeq(Data("test", 1, 0), Data("test", 2, 0), Data("test", 3, 0))
+    val data = IndexedSeq(Data("test", "test", 1, 0),
+      Data("test", "test", 2, 0),
+      Data("test", "test", 3, 0))
     val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
     val json = JsonMapper.toJson(dataMsg)
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
-      (mockDB.query _) expects ("SELECT * FROM /^*/ LIMIT 1000", *) returns (simulation(jsonResult))
+      (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap))
+      (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects (sendURL, json) returns (new HttpResponse[String]("", 200, responseMap))
       (mockDB.exec _) expects ("DELETE FROM test WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
       (mockDB.exec _) expects ("DELETE FROM test WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
@@ -61,13 +66,16 @@ class TransmissionTests extends DBFramework {
   it should "handle a transmission that fails with data in db" in {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val jsonResult = """{"results":[{"series":[{"name":"test","columns":["time", "value"],"values":[[1, 0], [2, 0], [3, 0]],"tags":{"tag": "value"}}]}]}"""
-    val data = IndexedSeq(Data("test", 1, 0), Data("test", 2, 0), Data("test", 3, 0))
+    val data = IndexedSeq(Data("test", "test", 1, 0),
+      Data("test", "test", 2, 0),
+      Data("test", "test", 3, 0))
     val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
     val json = JsonMapper.toJson(dataMsg)
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
-      (mockDB.query _) expects ("SELECT * FROM /^*/ LIMIT 1000", *) returns (simulation(jsonResult))
+      (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap))
+      (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects (sendURL, json) returns (new HttpResponse[String]("", 404, responseMap))
     }
     val transmitter = Transmission(mockDB, mockHandler)

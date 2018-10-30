@@ -18,7 +18,7 @@ sealed trait Message
 case class ApproveThing(val name : String) extends Message
 case class TState(val uuid: String, val temp : Int) extends Message
 case class ViewInbox() extends Message
-case class Data(val sensorName : String, val time : Any, val value : Any)
+case class Data(val sensorName : String, val sensorType : String, val time : Any, val value : Any)
 
 sealed trait TransportMessage
 case class MacMessage(val mac : String) extends TransportMessage
