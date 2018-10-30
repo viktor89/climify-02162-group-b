@@ -6,7 +6,7 @@ import com.paulgoldbaum.influxdbclient._
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import akka.actor.{Actor, ActorSystem, ActorRef, Props}
+import akka.actor.{Actor, ActorSystem, ActorRef, Props, PoisonPill}
 import com.typesafe.config.ConfigFactory
 
 /**
@@ -21,7 +21,7 @@ object App extends App {
     influxdbConfig.getInt("influxdb.port"),
     influxdbConfig.getString("influxdb.user"),
     influxdbConfig.getString("influxdb.password"))
-  val database = influxdb.selectDatabase("openhab_db")
+  val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
   val brokerURL = endpointConfig.getString("endpoints.mqtt")
   val topic = "qwe123"
   val persistance = new MemoryPersistence
@@ -42,6 +42,7 @@ object App extends App {
     println("Shutdown")
     client.disconnect
     scheduler.cancel
+    transmissionActor ! PoisonPill
     influxdb.close
     System.exit(0)
   })
