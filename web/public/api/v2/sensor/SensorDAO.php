@@ -26,7 +26,7 @@ class SensorDAO extends API\V2\Api
                 new Point(
                     'sensor_measurements', // name of the table
                     (float) sprintf("%.2f", $measurement->value), // the measurement value
-                    ['sensor_name' => $measurement->sensorName, 'raspberry_id' => $json->mac, "sensor_type" => $measurement->sensorType],
+                    ['sensor_name' => $measurement->sensorName, 'hubID' => $json->mac, "sensor_type" => $measurement->sensorType],
                     [],
                     $measurement->time // Time precision has to be set to seconds!
                 );

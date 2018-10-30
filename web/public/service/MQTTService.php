@@ -37,4 +37,4 @@ class MQTTService
         $this->connection->loopForever();
         return true;
     }
-}   
+}
