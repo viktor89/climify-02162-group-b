@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 23, 2018 at 10:15 AM
--- Server version: 8.0.12
+-- Generation Time: Oct 31, 2018 at 12:27 PM
+-- Server version: 8.0.13
 -- PHP Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -229,7 +229,8 @@ CREATE TABLE `Map` (
 --
 
 INSERT INTO `Map` (`MapID`, `InstID`, `FileName`, `MapName`) VALUES
-(1, 1, '5b3b60a2bb1ff.png', '303B');
+(1, 1, '5b3b60a2bb1ff.png', '303A'),
+(2, 1, '5b3b60a2bb1ff.png', '303B');
 
 -- --------------------------------------------------------
 
@@ -339,7 +340,7 @@ INSERT INTO `Person` (`UserID`, `UserName`, `FirstName`, `LastName`, `Email`, `R
 (2, 'bstrang', 'Bellatrix', 'LeStrange', 'test@hotmail.com', '2', 'yRzr9j/HZpY9R8DZtMQLzWtE989ZzZUhaEKL/bUYbW0=', 1, NULL),
 (3, 'jakep', 'Jake', 'Peralta', 'test@hotmail.com', '2', 'YjCGBffwnrumUMAiftix17UygDO2iNbUR9+DsbJWEEc=', 1, NULL),
 (4, 'amys', 'Amy', 'Santiago', 'test@hotmail.com', '2', '3KTehpnhvDbI5skUH7QfoCT/XsBSPmE3jfNE2aan0JU=', 1, NULL),
-(5, 'admin', 'Viktor', 'Poulsen', 'viktor@maigaard.io', '2', 'admin', 1, NULL);
+(5, 'admin', 'Viktor', 'Poulsen', 'viktor@maigaard.io', '1', 'admin', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -376,7 +377,8 @@ CREATE TABLE `ProjectManager` (
 --
 
 INSERT INTO `ProjectManager` (`UserID`, `MunID`) VALUES
-(1, 1);
+(1, 1),
+(5, 1);
 
 -- --------------------------------------------------------
 
@@ -445,6 +447,26 @@ CREATE TABLE `RolePermission` (
 
 INSERT INTO `RolePermission` (`RoleID`, `PermID`, `InstID`) VALUES
 (0, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `Room`
+--
+
+CREATE TABLE `Room` (
+  `HubID` varchar(30) NOT NULL,
+  `RoomName` varchar(30) DEFAULT NULL,
+  `BuildingID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `Room`
+--
+
+INSERT INTO `Room` (`HubID`, `RoomName`, `BuildingID`) VALUES
+('B8-27-EB-C9-FD-4A', NULL, NULL),
+('B8-27-EB-C9-FD-4B', '43', 2);
 
 -- --------------------------------------------------------
 
@@ -688,6 +710,13 @@ ALTER TABLE `RolePermission`
   ADD KEY `InstID` (`InstID`);
 
 --
+-- Indexes for table `Room`
+--
+ALTER TABLE `Room`
+  ADD PRIMARY KEY (`HubID`),
+  ADD KEY `fk_building_id` (`BuildingID`);
+
+--
 -- Indexes for table `SensorAttribute`
 --
 ALTER TABLE `SensorAttribute`
@@ -772,7 +801,7 @@ ALTER TABLE `Location`
 -- AUTO_INCREMENT for table `Map`
 --
 ALTER TABLE `Map`
-  MODIFY `MapID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `MapID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `Message`

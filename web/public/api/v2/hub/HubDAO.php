@@ -32,4 +32,21 @@ class HubDAO extends API\V2\Api
         }
         echo json_encode(["status" => "ok"]);
     }
+
+    public function getPendingHubs(){
+        $statement = $this->database->prepare("SELECT HubID FROM Room WHERE RoomName IS NULL AND BuildingID IS NULL");
+
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($hub);
+
+        $hubIds = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $hubIds[] = $hub;
+        }
+        $statement->close();
+
+        echo json_encode($hubIds);
+    }
 }

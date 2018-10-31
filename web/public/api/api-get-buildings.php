@@ -60,11 +60,11 @@ if ($result->num_rows==1){
 
 $sql = "SELECT InstID, InstName, InstDescription FROM Institution WHERE MunID = '$MunID'";
 
-//$stmt->execute();
+$stmt->execute();
 $result = mysqli_query($conn, $sql) or die("Error in Selecting " . mysqli_error($conn));
 
 
-//$result = $stmt->get_result();
+$result = $stmt->get_result();
 
 if ($result->num_rows<1){
     echo '{"status":"error"}';
@@ -87,6 +87,4 @@ echo $buildings;
 
 $stmt->close();
 
-$conn->close();    	
-
-?>
+$conn->close();

@@ -8,9 +8,9 @@
         <span>
             <span>
                 <?php if ( $currentUserRole == 1 ) { ?>
-                <select class="list-schools-other-users" name="option">
+                    <select class="list-schools-other-users" name="option">
                     <option value="" selected>Choose Institution</option>
-                    <!-- Content goes here -->
+                        <!-- Content goes here -->
                 </select>
                 <?php } ?>
                 <button id="btn-show-all-decices" class="link"></button>	
@@ -64,7 +64,7 @@
                 </form>
             </div>
             <h4>Available sensors:</h4>
-            <div id="place-devices-list"> 
+            <div id="place-devices-list">
                 <!-- content goes here -->
             </div>
             <button id="btn-save-devices-placement">Save changes</button>
@@ -72,7 +72,7 @@
     </div>
     <div class="crop-img-admin">
         <div class= "progress-align">
-            
+
             <div class="header-progress-container">
                 <a href="#/" id="close-cropper" onclick="resetUpload()" ><i class="ico-close-signup link fa fa-times"></i></a>
                 <ol class="header-progress-list">
