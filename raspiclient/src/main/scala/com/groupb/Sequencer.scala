@@ -1,11 +1,14 @@
 package com.groupb
 
-import scalaj.http._
+import scalaj.http.HttpResponse
+import com.typesafe.config.ConfigFactory
 
 object Sequencer {
   def transmitData(handler : HttpConnection)(data : Seq[Data]) = {
-    val response = handler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/send.php",
-      JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(data)))
+    val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
+    val response = handler.postRequest(sendURL,
+      JsonMapper.toJson(DataMessage(MACAddress.computeMAC,
+        JsonMapper.toJson(data))))
 
     if (response.code == 200) {
       data

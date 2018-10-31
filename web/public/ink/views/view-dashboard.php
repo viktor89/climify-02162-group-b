@@ -8,6 +8,7 @@
 			require_once "view-other-users.php";
 			require_once "view-own-user.php";
 			require_once "view-system-settings.php";
+            require_once "view-permissions.php";
 		} elseif ($currentUserRole == 15) {
 			require_once "view-data.php";
 			require_once "view-data-map.php";

@@ -1,38 +1,32 @@
 <?php
 namespace API\V2;
+use mysqli;
+
 require '../../../vendor/autoload.php';
-
-use InfluxDB\Client;
-
+require 'InfluxDBClient.php';
+require 'exceptions/ValidationException.php';
+require 'Validator.php';
 
 class Api
 {
-    protected $client;
+    protected $influxDb;
+    protected $validator;
     protected $database;
 
     public function __construct()
     {
-        try {
-            $this->client = new Client(getenv('INFLUXDB_HOST'), '8086', getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'));
-            //$this->client = Client::fromDSN('influxdb://' . getenv('MYSQL_USER') . ':' . getenv('MYSQL_USER_PASSWORD') . '@'.getenv('INFLUXDB_HOST').':8086/' . getenv('MYSQL_DATABASE') . '&precision=s', 5)->getClient();
-            $this->database = $this->client->selectDB('skoleklima');
-        } catch (Client\Exception $e) {
-            http_response_code(500);
-            die($e->getMessage());
-        }
-    }
+        // Cache Headers
+        $ts = gmdate("D, d M Y H:i:s") . " GMT";
+        header("Expires: $ts");
+        header("Last-Modified: $ts");
+        header("Pragma: no-cache");
+        header("Cache-Control: no-cache, must-revalidate");
+        // Regular headers
+        header('Content-Type: application/json');
+        // Class objects instantiate
+        $this->validator = new Validator();
+        $this->influxDb = new InfluxDBClient();
+        $this->database = new mysqli(getenv('MYSQL_HOST').':3306', getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'), getenv('MYSQL_DATABASE'));
 
-    public function validateMeasurement($measurement) {
-        if(!is_float((float) sprintf("%.2f", $measurement->value))){throw new \Exception('Measurement value not a float');};
-        if(empty($measurement->sensorName)){throw new \Exception('Sensor name wasn\'t a string');}
-        if(!$this->isValidTimeStamp($measurement->time)){throw new \Exception('Timestamp not valid');}
-    }
-
-    private function isValidTimeStamp($timestamp)
-    {
-        if(is_string($timestamp)){
-            $timestamp = intval($timestamp);
-        }
-        return ($timestamp <= PHP_INT_MAX) && ($timestamp >= ~PHP_INT_MAX);
     }
 }

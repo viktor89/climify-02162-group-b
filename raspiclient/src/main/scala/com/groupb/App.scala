@@ -2,44 +2,48 @@ package com.groupb
 
 import org.eclipse.paho.client.mqttv3._
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
-import java.util.concurrent._
-import scalaj.http._
 import com.paulgoldbaum.influxdbclient._
+import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
+import akka.actor.{Actor, ActorSystem, ActorRef, Props, PoisonPill}
+import com.typesafe.config.ConfigFactory
 
 /**
- * @author pll
- */
+  * @author pll
+  */
 object App extends App {
-  val influxdb = InfluxDB.connect("localhost", 8086, "openhab", "AnotherSuperbPassword456-")
-  val database = influxdb.selectDatabase("openhab_db")
-  val executor = new ScheduledThreadPoolExecutor(1)
-  val task = new Runnable {
-    def run() = {
-      InfluxDBHandler.clearDB(database)(Sequencer.transmitData(HttpHandler)(InfluxDBHandler.readData(database)))
-    }
-  }
+  val influxdbConfig = ConfigFactory.load("influxdb")
+  val endpointConfig = ConfigFactory.load("endpoints")
+  val registerURL = endpointConfig.getString("endpoints.register")
 
-  def subscribeToMQTT() = {
-    val brokerURL = s"tcp://broker.mqttdashboard.com:8000"
-    val topic = "qwe123"
-    val persistance = new MemoryPersistence
-    val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
-    client.connect
-    client.subscribe(topic)
-    val callback = new MQTTHandler(HttpHandler)
-    client.setCallback(callback)
-  }
+  val influxdb = InfluxDB.connect(influxdbConfig.getString("influxdb.address"),
+    influxdbConfig.getInt("influxdb.port"),
+    influxdbConfig.getString("influxdb.user"),
+    influxdbConfig.getString("influxdb.password"))
+  val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
+  val brokerURL = endpointConfig.getString("endpoints.mqtt")
+  val mac = MACAddress.computeMAC
+  val persistance = new MemoryPersistence
+  val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
+  client.connect
+  client.subscribe(mac)
+  val callback = new MQTTHandler(HttpHandler)
+  client.setCallback(callback)
 
-  HttpHandler.postRequest("http://se2-webapp02.compute.dtu.dk/api/v2/sensor/register.php",
-    JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]"))
-  val future = executor.scheduleAtFixedRate(task, 2, 5, TimeUnit.SECONDS)
+  HttpHandler.postRequest(registerURL, JsonMapper.toJson(mac))
+
+  val transmitter = Transmission(database, HttpHandler)
+  val system = ActorSystem()
+  val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
+  val scheduler = system.scheduler.schedule(2 seconds, 5 minutes, transmissionActor, "send") 
 
   sys.addShutdownHook({
     println("Shutdown")
-    future.cancel(false)
-    influxdb.close()
+    client.disconnect
+    scheduler.cancel
+    transmissionActor ! PoisonPill
+    influxdb.close
     System.exit(0)
   })
-  subscribeToMQTT
 }

@@ -246,58 +246,48 @@ function validateLoginType () {
     }
 }
 
-if ( browserIsIE == false ) {
+function requestLoginSystem() {
 
-    function requestLoginSystem(){	
+    var typedUserName = $("#inp-login-name").val();
+    var typedPassword = $("#inp-login-pass").val();
+    // Store link to api and phase userinput
+    var sUrl = "api/api-encrypt.php?fAY2YfpdKvR="+sender_first+"&encrypt="+typedPassword;
 
-        var typedUserName = $("#inp-login-name").val();
-        var typedPassword = $("#inp-login-pass").val();	
-        // Store link to api and phase userinput
-        var sUrl = "api/api-encrypt.php?fAY2YfpdKvR="+sender_first+"&encrypt="+typedPassword;
-
-        $.get( sUrl , function( sData ){
-            var jData = JSON.parse(sData); 
-            if( jData.status == "ok" ){
-                var passEncrypt = jData.encrypt;
-                // Store link to api and phase userinput
-                var sUrl = "api/api-user-login.php?fAY2YfpdKvR="+sender_first+"&username="+typedUserName+"&password="+typedPassword;
-                // Do AJAX and pahse
-                $.get( sUrl , function( sData ){
-                  var jData = JSON.parse(sData);
-
-                  if( jData.status == "approve" ){
-                        $.cookie("username", typedUserName, { expires : 10 });
-                        $.cookie("password", typedPassword, { expires : 10 });
-                        correctLogin();	
-                    } else {
-                        wrongLogin();
-                    }
-                });
-            } else {
-                wrongLogin();
-            }
-        });	
-    }
-
-    function correctLogin(){
-        $(".login-input").val("");
-        if (window.matchMedia('(min-width: 800px)').matches) {
-            $(".img-con").animate({left: '-100vw'}, 1000, "swing");
-            $(".login-con").animate({right: '-40vw'}, 1000, "swing", function(){
-                location.reload();
+    $.get( sUrl , function( sData ){
+        var jData = JSON.parse(sData);
+        if( jData.status == "ok" ){
+            var passEncrypt = jData.encrypt;
+            // Store link to api and phase userinput
+            var sUrl = "api/api-user-login.php?fAY2YfpdKvR="+sender_first+"&username="+typedUserName+"&password="+typedPassword;
+            // Do AJAX and pahse
+            $.get( sUrl , function( sData ){
+              var jData = JSON.parse(sData);
+              if( jData.status == "approve" ){
+                    $.cookie("username", typedUserName, { expires : 10 });
+                    $.cookie("password", typedPassword, { expires : 10 });
+                    correctLogin();
+                } else {
+                    wrongLogin();
+                }
             });
         } else {
-            location.reload();
+            wrongLogin();
         }
-    }
-} else if ( browserIsIE == true ) {
-    if (currentUserID !== "") {
-        signOut();
-    }
-    setTimeout(function(){
-        unsupportedBrowser();
-    }, 4000);
+    });
 }
+
+function correctLogin(){
+    $(".login-input").val("");
+    if (window.matchMedia('(min-width: 800px)').matches) {
+        $(".img-con").animate({left: '-100vw'}, 1000, "swing");
+        $(".login-con").animate({right: '-40vw'}, 1000, "swing", function(){
+            location.reload();
+        });
+    } else {
+        location.reload();
+    }
+}
+
 
 function wrongLogin(){
     $(".login-input").addClass("wrong-login");
@@ -356,7 +346,7 @@ function requestAutoLoginSystem(){
     var sUrl = "api/api-user-login.php?fAY2YfpdKvR="+sender_first+"&username="+cookieUserName+"&password="+cookiePassword;
 
     $.get( sUrl , function( sData ){
-        var jData = JSON.parse(sData); 
+        var jData = JSON.parse(sData);
         if( jData.status == "approve" ){
 
             showSchool = jData.school;

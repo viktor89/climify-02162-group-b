@@ -34,8 +34,21 @@ services:
     volumes:
       - './etc/php/php.ini:/usr/local/etc/php/conf.d/php.ini'
       - './web:/var/www/html'
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - '3030:3000'
+    environment:
+      - 'GF_INSTALL_PLUGINS=grafana-clock-panel,briangann-gauge-panel,natel-plotly-panel,grafana-simple-json-datasource'
+    links:
+      - influx-db
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/grafana/data; chown 472:472 /srv/docker/grafana/data
+      - './grafana/data:/var/lib/grafana'
   chronograf:
-    image: chronograf:1.3.8
+    image: chronograf:latest
     environment:
       INFLUXDB_URL: http://influx-db:8086
     ports:
