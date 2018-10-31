@@ -1,5 +1,6 @@
 {
-    "globals": {
-        "requestAnimationFrame": true
-    }
+  "globals": {
+    "requestAnimationFrame": true
+  },
+  "esversion": 6
 }
