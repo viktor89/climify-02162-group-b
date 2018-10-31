@@ -10,7 +10,7 @@ class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
       case ApproveThing(name) =>
         handler.postRequest("http://localhost:8080/rest/inbox/" + name + "/approve", name)
       case TState(uuid, temp) =>
-        handler.postRequest("http://localhost:8080/rest/items/" + uuid, Integer.toString(temp))
+        handler.postRequest("http://localhost:8080/rest/items/" + uuid, temp)
       case ViewInbox() =>
         val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
         handler.postRequest("http://localhost:8080/rest/discovery/bindings/zwave/scan", "")

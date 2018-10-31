@@ -38,7 +38,7 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
     (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(new HttpResponse[String]("", 200, responseMap))
 
     val handler = new MQTTHandler(mockHandler)
-    val tstate = TState("test", 20)
+    val tstate = TState("test", "20")
     val response = handler.act(tstate)
     response.body should be ("")
     response.code should be (200)
@@ -77,8 +77,8 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
     (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(new HttpResponse[String]("", 200, responseMap))
 
     val handler = new MQTTHandler(mockHandler)
-    val tstate = TState("test", 20)
-    handler.messageArrived("topic", new MqttMessage(JsonMapper.toJson(tstate).getBytes))
+    val tstate = TState("test", "20")
+    handler.messageArrived("topic", new MqttMessage(JsonMapper.toJson(tstate).getBytes()))
   }
 
   it should "handle a MQTTMessage consisting of ViewInbox" in {
