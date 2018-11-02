@@ -36,4 +36,25 @@ class ItemFetcherTests extends FlatSpec with Matchers with MockFactory {
     result("device2") should be ("device2")
     result("device3") should be ("device3")
   }
+
+  it should "handle an non-JSON response from OpenHAB and return an empty map" in {
+    val mockHandler = mock[HttpConnection]
+    (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("...", 200, responseMap))
+    val result = ItemFetcher.getOpenHABItems(mockHandler)
+    result.size should be (0)
+  }
+
+  it should "handle an incorrect JSON response from OpenHAB and return an empty map (not a list)" in {
+    val mockHandler = mock[HttpConnection]
+    (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("{ \"test\" : \"data\"}", 200, responseMap))
+    val result = ItemFetcher.getOpenHABItems(mockHandler)
+    result.size should be (0)
+  }
+
+  it should "handle an incorrect JSON response from OpenHAB and return an empty map (invalid list)" in {
+    val mockHandler = mock[HttpConnection]
+    (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[{ \"test\"}]", 200, responseMap))
+    val result = ItemFetcher.getOpenHABItems(mockHandler)
+    result.size should be (0)
+  }
 }

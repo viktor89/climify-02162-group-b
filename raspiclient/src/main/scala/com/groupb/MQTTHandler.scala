@@ -21,8 +21,10 @@ class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
   }
 
   override def messageArrived(topic: String, message: MqttMessage) = {
-    val msg = JsonMapper.convert[Message](message.toString)
-    act(msg)
+    JsonMapper.convert[Message](message.toString) match {
+      case Some(msg) => act(msg)
+      case None => println("Invalid message")
+    }
   }
 
   override def connectionLost(cause: Throwable) = {
