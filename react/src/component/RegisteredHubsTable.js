@@ -5,15 +5,14 @@ import classNames from 'classnames';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
+import Switch from '@material-ui/core/Switch';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
 import FormControl from "@material-ui/core/FormControl/FormControl";
+import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/ExpansionPanelActions";
 
 const styles = theme => ({
   root: {
@@ -70,10 +69,11 @@ function DetailedExpansionPanel(props) {
           </div>
           <div className={classes.column}>
             <Typography className={classes.secondaryHeading}>Receive mode:</Typography>
-            <Typography className={classes.secondaryHeading}>Yes</Typography>
+            <Typography className={classes.secondaryHeading}>Off</Typography>
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
+          <div className={classes.column} />
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Building</InputLabel>
@@ -86,10 +86,15 @@ function DetailedExpansionPanel(props) {
               <Input value={hub.room} />
             </FormControl>
           </div>
-          <div className={classNames(classes.column, classes.helper)}>
-            <Button fullWidth size="small" color="primary">Save</Button>
+          <div className={classes.column}>
+            <FormControl className={classes.formControl}>
+              <Switch color="primary" />
+            </FormControl>
           </div>
         </ExpansionPanelDetails>
+        <ExpansionPanelActions>
+          <Button fullWidth size="small" color="primary">Save</Button>
+        </ExpansionPanelActions>
       </ExpansionPanel>
     </div>
   ));
