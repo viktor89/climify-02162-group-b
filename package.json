@@ -10,7 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "parcel": "parcel watch react/src/index.js --out-dir web/public/js --target browser  --no-hmr --no-cache --out-file react",
-    "parcel:build": "parcel build react/src/index.js --out-dir web/public/js --target browser  --no-hmr --no-cache --out-file react"
+    "parcel:build": "parcel build react/src/index.js --out-dir web/public/js --target browser --no-cache --out-file react"
   },
   "repository": {
     "type": "git",
