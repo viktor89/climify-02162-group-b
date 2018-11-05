@@ -6,6 +6,7 @@ class HelloMessage extends React.Component {
   render() {
     return <div>
       <h2>Manage Institution</h2>
+      <hr />
       <ManageInstitution />
     </div>
   }

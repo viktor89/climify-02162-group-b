@@ -38,15 +38,15 @@ class HubDAO extends API\V2\Api
 
         $statement->execute();
         $statement->store_result();
-        $statement->bind_result($hub);
+        $statement->bind_result($hubMac);
 
-        $hubIds = [];
+        $hubs = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $hubIds[] = $hub;
+            $hubs[] = ["mac" => $hubMac, "ip" => "127.127.127.127"];
         }
         $statement->close();
 
-        echo json_encode($hubIds);
+        echo json_encode($hubs);
     }
 }
