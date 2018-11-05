@@ -43,31 +43,9 @@
             </div>
         </div>
         <div class="map-settings">
-            <select class="map-selection map-selection-edit" name="option">
-                <!-- Content goes here -->
-            </select>
-            <div class="add-remove-map-wrapper">
-                <button class="btn-show-upload-new-map">Add new floor plan</button>
-                <button class="btn-delete-selected-map">Delete chosen map</button>
+            <div id="root">
+                <!-- REACT Root -->
             </div>
-            <div class="upload-map-selection">
-                <p>For the best result, use a picture of at least 800px x 500px.<br>You can use pictures in the format jpg, png og gif.</p>
-                <form id="frm-map-upload" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="inp-map-user-role" id="inp-map-user-role" value="<?php echo $currentUserRole ?>">
-                    <input type="hidden" name="inp-map-school" id="inp-map-school" value="<?php  ?>">
-                    <input type="text" name="inp-map-name" id="inp-map-name" placeholder="Navngiv kort">
-                    <div class="upload-map-label-wrapper">
-                        <label for="upload-map-file" class="upload-map-label">Choose floor plan from drive
-                            <input type="file" name="upload-map-file" id="upload-map-file" accept="image/x-png,image/gif,image/jpeg" >
-                        </label>
-                    </div>
-                </form>
-            </div>
-            <h4>Available sensors:</h4>
-            <div id="place-devices-list">
-                <!-- content goes here -->
-            </div>
-            <button id="btn-save-devices-placement">Save changes</button>
         </div>
     </div>
     <div class="crop-img-admin">

@@ -2,3 +2,7 @@
 data/db/
 raspiclient/target
 grafana/
+
+node_modules/
+
+*.iml

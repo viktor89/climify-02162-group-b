@@ -101,5 +101,7 @@
 			</script>
 		<?php } ?>
 
+<script src="js/react.js"></script>
+
 </body>
 </html>
