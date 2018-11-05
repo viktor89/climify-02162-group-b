@@ -1,15 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Button from '@material-ui/core/Button';
+import ManageInstitution from './container/ManageInstitution';
 
 class HelloMessage extends React.Component {
   render() {
-    return <Button variant="contained">
-      New Text 2
-    </Button>
+    return <div>
+      <h2>Manage Institution</h2>
+      <ManageInstitution />
+    </div>
   }
 }
 
-let App = document.getElementById("root");
+let DeviceList = document.getElementById("deviceList");
 
-ReactDOM.render(<HelloMessage name="test" />, App);
+ReactDOM.render(<HelloMessage name="test" />, DeviceList);
