@@ -13,29 +13,45 @@ The generalized setup for openHAB can be found in the following links:
 
 The Linux installation has been tested with Raspbian 9 Stretch using the installation steps described in the Apt section, which is given here again for the sake of brewity. 
 - The openHAB2 repository should be added on Raspbian 9 Stretch, which is done by executing the following commands on the Raspberry Pi (This will add the repository for the stable version of openHAB):
+```bash
 wget -qO - 'https://bintray.com/user/downloadSubjectPublicKey?username=openhab' | sudo apt-key add -
 sudo apt-get install apt-transport-https
 echo 'deb https://dl.bintray.com/openhab/apt-repo2 stable main' | sudo tee /etc/apt/sources.list.d/openhab2.list
+```
 - The local repository should be resynchronized using the following command
+```bash
 sudo apt update
+```
 - openHAB can then be installed by executing the following command
+```bash
 sudo apt install openHAB2 openHAB2-addons
+```
 - Since Raspbian 9 uses SystemD openHAB can be started automatically by executing the following commands
+```bash
 sudo systemctl enable openHAB2
 sudo systemctl start openHAB2
+```
 
 The InfluxDB installation and setup within openHAB follows the steps given in the link without any additional steps. But as with the setup of openHAB the required steps will be given here as well:
 - The repository for InfluxDB can be added by executing the following commands
+```bash
 curl -sL https://repos.influxdata.com/influxdb.key | sudo apt-key add -
 echo "deb https://repos.influxdata.com/debian stretch stable" | sudo tee /etc/apt/sources.list.d/influxdb.list
+```
 This will add the InfluxDB specifically for the Debian 9 Stretch on which Raspbian 9 is based on.
 - The local repository should be resynchronized using the following command
+```bash
 sudo apt update
+```
 - InfluxDB can then be installed by executing the following command
+```bash
 sudo apt install influxdb
+```
 - Since Raspbian 9 uses SystemD openHAB can be started automatically by executing the following commands
+```bash
 sudo systemctl enable influxdb
 sudo systemctl start influxdb
+```
 - The final steps for setting up the InfluxDB and connecting it to openHAB is given in the following sections on https://community.openhab.org/t/influxdb-grafana-persistence-and-graphing/13761
   - InfluxDB Installation and Setup
   - Connecting openHAB to InfluxDB (use the default address 127.0.0.1:8086 in the /etc/openhab2/services/influxdb.cfg file)
