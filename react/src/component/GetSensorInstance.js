@@ -56,8 +56,8 @@ function DetailedExpansionPanel(props) {
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
-            <Typography className={classes.heading}>MAC Addres:</Typography>
-            <Typography className={classes.heading}>{hub.mac}</Typography>
+            <Typography className={classes.heading}>MAC Address:</Typography>
+            <Typography className={classes.heading}>{hub.HubID}</Typography>
           </div>
 
           <div className={classes.column}>
@@ -79,13 +79,13 @@ function DetailedExpansionPanel(props) {
               Building:
             </Typography>
             <Typography className={classes.secondaryHeading}>
-              {hub.building}
+              {hub.BuildingID}
             </Typography>
           </div>
           <div className={classes.column}>
             <Typography className={classes.secondaryHeading}>Room:</Typography>
             <Typography className={classes.secondaryHeading}>
-              {hub.room}
+              {hub.RoomName}
             </Typography>
           </div>
         </ExpansionPanelSummary>
@@ -94,13 +94,7 @@ function DetailedExpansionPanel(props) {
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Building</InputLabel>
-              <Input value={hub.building} />
-            </FormControl>
-          </div>
-          <div className={classes.column}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="component-simple">Room</InputLabel>
-              <Input value={hub.room} />
+              <Input value={hub.BuildingID} />
             </FormControl>
           </div>
         </ExpansionPanelDetails>

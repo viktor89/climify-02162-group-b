@@ -42397,9 +42397,9 @@ function DetailedExpansionPanel(props) {
       className: classes.column
     }, _react.default.createElement(_Typography.default, {
       className: classes.heading
-    }, "MAC Addres:"), _react.default.createElement(_Typography.default, {
+    }, "MAC Address:"), _react.default.createElement(_Typography.default, {
       className: classes.heading
-    }, hub.mac)), _react.default.createElement("div", {
+    }, hub.HubID)), _react.default.createElement("div", {
       className: classes.column
     }, _react.default.createElement(_Typography.default, {
       className: classes.secondaryHeading
@@ -42417,13 +42417,13 @@ function DetailedExpansionPanel(props) {
       className: classes.secondaryHeading
     }, "Building:"), _react.default.createElement(_Typography.default, {
       className: classes.secondaryHeading
-    }, hub.building)), _react.default.createElement("div", {
+    }, hub.BuildingID)), _react.default.createElement("div", {
       className: classes.column
     }, _react.default.createElement(_Typography.default, {
       className: classes.secondaryHeading
     }, "Room:"), _react.default.createElement(_Typography.default, {
       className: classes.secondaryHeading
-    }, hub.room))), _react.default.createElement(_ExpansionPanelDetails.default, {
+    }, hub.RoomName))), _react.default.createElement(_ExpansionPanelDetails.default, {
       className: classes.details
     }, _react.default.createElement("div", {
       className: classes.column
@@ -42434,15 +42434,7 @@ function DetailedExpansionPanel(props) {
     }, _react.default.createElement(_InputLabel.default, {
       htmlFor: "component-simple"
     }, "Building"), _react.default.createElement(_Input.default, {
-      value: hub.building
-    }))), _react.default.createElement("div", {
-      className: classes.column
-    }, _react.default.createElement(_FormControl.default, {
-      className: classes.formControl
-    }, _react.default.createElement(_InputLabel.default, {
-      htmlFor: "component-simple"
-    }, "Room"), _react.default.createElement(_Input.default, {
-      value: hub.room
+      value: hub.BuildingID
     })))), _react.default.createElement(_Divider.default, null), _react.default.createElement(_ExpansionPanelActions.default, null, _react.default.createElement(_Button.default, {
       fullWidth: true,
       size: "small",
