@@ -2,7 +2,7 @@
 
 use API\V2\ValidationException;
 
-require_once './SendClass.php';
+require_once './SensorDAO.php';
 require '../../../vendor/autoload.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {

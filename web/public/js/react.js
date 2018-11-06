@@ -59436,13 +59436,7 @@ function DetailedExpansionPanel(props) {
       className: classes.secondaryHeading
     }, "Room:"), _react.default.createElement(_Typography.default, {
       className: classes.secondaryHeading
-    }, hub.room)), _react.default.createElement("div", {
-      className: classes.column
-    }, _react.default.createElement(_Typography.default, {
-      className: classes.secondaryHeading
-    }, "Receive mode:"), _react.default.createElement(_Typography.default, {
-      className: classes.secondaryHeading
-    }, "Off"))), _react.default.createElement(_ExpansionPanelDetails.default, {
+    }, hub.room))), _react.default.createElement(_ExpansionPanelDetails.default, {
       className: classes.details
     }, _react.default.createElement("div", {
       className: classes.column
@@ -59462,12 +59456,6 @@ function DetailedExpansionPanel(props) {
       htmlFor: "component-simple"
     }, "Room"), _react.default.createElement(_Input.default, {
       value: hub.room
-    }))), _react.default.createElement("div", {
-      className: classes.column
-    }, _react.default.createElement(_FormControl.default, {
-      className: classes.formControl
-    }, _react.default.createElement(_Switch.default, {
-      color: "primary"
     })))), _react.default.createElement(_Divider.default, null), _react.default.createElement(_ExpansionPanelActions.default, null, _react.default.createElement(_Button.default, {
       fullWidth: true,
       size: "small",

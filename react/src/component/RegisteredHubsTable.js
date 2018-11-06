@@ -67,10 +67,6 @@ function DetailedExpansionPanel(props) {
             <Typography className={classes.secondaryHeading}>Room:</Typography>
             <Typography className={classes.secondaryHeading}>{hub.room}</Typography>
           </div>
-          <div className={classes.column}>
-            <Typography className={classes.secondaryHeading}>Receive mode:</Typography>
-            <Typography className={classes.secondaryHeading}>Off</Typography>
-          </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
           <div className={classes.column} />
@@ -84,11 +80,6 @@ function DetailedExpansionPanel(props) {
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Room</InputLabel>
               <Input value={hub.room} />
-            </FormControl>
-          </div>
-          <div className={classes.column}>
-            <FormControl className={classes.formControl}>
-              <Switch color="primary" />
             </FormControl>
           </div>
         </ExpansionPanelDetails>

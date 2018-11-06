@@ -1,5 +1,5 @@
 <?php
-require_once './GetDataClass.php';
+require_once './SensorDAO.php';
 require '../../../vendor/autoload.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
