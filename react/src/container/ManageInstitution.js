@@ -29,35 +29,14 @@ const styles = theme => ({
 class ManageInstitution extends Component {
   constructor(props) {
     super(props);
-    this.state = {pendingHubs: [], registeredHubs: [], institutions: [], selectedInstitution: 1}
+    this.state = {
+      pendingHubs: [],
+      registeredHubs: [],
+      institutions: [],
+      selectedInstitution: 1,
+    };
     this.handleChange = this.handleChange.bind(this);
     this.getHubs = this.getHubs.bind(this);
-  }
-
-  getHubs(institutionID) {
-    console.log(institutionID);
-    axios.get('/api/v2/hub/getPendingHubs.php')
-      .then((response) => {
-        this.setState(() => {
-          return { pendingHubs: response.data };
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    axios
-      .post("/api/v2/hub/getRegisteredHubs.php", {
-        institutionID: institutionID
-      })
-      .then(response => {
-        console.log(response);
-        this.setState(() => {
-          return { registeredHubs: response.data };
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
   }
 
   componentWillMount() {
@@ -73,7 +52,31 @@ class ManageInstitution extends Component {
       });
   }
 
-  handleChange(event) {
+  getHubs = (institutionID) => {
+    axios.get('/api/v2/hub/getPendingHubs.php')
+      .then((response) => {
+        this.setState(() => {
+          return { pendingHubs: response.data };
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    axios
+      .post("/api/v2/hub/getRegisteredHubs.php", {
+        institutionID: institutionID
+      })
+      .then(response => {
+        this.setState(() => {
+          return { registeredHubs: response.data };
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
     this.getHubs(event.target.value);
   };
