@@ -2,7 +2,7 @@
 
 use API\V2\ValidationException;
 
-require_once './HubDAO.php';
+require_once './InstitutionDAO.php';
 require '../../../vendor/autoload.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
@@ -11,8 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 try {
     date_default_timezone_set('UTC');
-    $registerClass = new HubDAO();
-    $registerClass->getRegisteredHubsByInstitution(1);
+    $institutionDAO = new InstitutionDAO();
+    $institutionDAO->getInstitutions();
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());
