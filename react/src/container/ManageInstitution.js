@@ -1,45 +1,47 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid/Grid";
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import PendingHubsTable from "../component/PendingHubsTable";
 import RegisteredHubsTable from "../component/RegisteredHubsTable";
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   paper: {
     height: 140,
-    width: 100,
+    width: 100
   },
   control: {
-    padding: theme.spacing.unit * 2,
-  },
+    padding: theme.spacing.unit * 2
+  }
 });
 
 class ManageInstitution extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state = {pendingHubs: [], registeredHubs: []}
+    this.state = { pendingHubs: [], registeredHubs: [] };
   }
   componentWillMount() {
-    axios.get('/api/v2/hub/getPendingHubs.php')
-      .then((response) => {
+    axios
+      .get("/api/v2/hub/getPendingHubs.php")
+      .then(response => {
         this.setState(() => {
-          return {pendingHubs: response.data};
+          return { pendingHubs: response.data };
         });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
-    axios.get('/api/v2/hub/getRegisteredHubs.php')
-      .then((response) => {
+    axios
+      .get("/api/v2/hub/getRegisteredHubs.php")
+      .then(response => {
         this.setState(() => {
-          return {registeredHubs: response.data};
+          return { registeredHubs: response.data };
         });
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   }
@@ -51,11 +53,11 @@ class ManageInstitution extends Component {
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={6}>
           <h3>Registered Hubs</h3>
-          <RegisteredHubsTable hubs={registeredHubs}/>
+          <RegisteredHubsTable hubs={registeredHubs} />
         </Grid>
         <Grid item xs={6}>
           <h3>Unregistered Hubs</h3>
-          <PendingHubsTable hubs={pendingHubs}/>
+          <PendingHubsTable hubs={pendingHubs} />
         </Grid>
       </Grid>
     );
