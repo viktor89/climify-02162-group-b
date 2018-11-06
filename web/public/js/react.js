@@ -64474,7 +64474,438 @@ var _default = (0, _withStyles.default)(styles, {
 })(MenuItem);
 
 exports.default = _default;
-},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/defineProperty":"../../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js","../ListItem":"../../node_modules/@material-ui/core/ListItem/index.js"}],"container/ManageInstitution.js":[function(require,module,exports) {
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/defineProperty":"../../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js","../ListItem":"../../node_modules/@material-ui/core/ListItem/index.js"}],"../../node_modules/@material-ui/core/OutlinedInput/NotchedOutline.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
+var _extends3 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _styles = require("../styles");
+
+var _helpers = require("../utils/helpers");
+
+var styles = function styles(theme) {
+  var light = theme.palette.type === 'light';
+  var align = theme.direction === 'rtl' ? 'right' : 'left';
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      top: -5,
+      left: 0,
+      margin: 0,
+      padding: 0,
+      pointerEvents: 'none',
+      borderRadius: theme.shape.borderRadius,
+      borderStyle: 'solid',
+      borderWidth: 1,
+      borderColor: light ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)',
+      // Match the Input Label
+      transition: theme.transitions.create(["padding-".concat(align), 'border-color', 'border-width'], {
+        duration: theme.transitions.duration.shorter,
+        easing: theme.transitions.easing.easeOut
+      })
+    },
+
+    /* Styles applied to the legend element. */
+    legend: {
+      textAlign: 'left',
+      padding: 0,
+      lineHeight: '10px',
+      transition: theme.transitions.create('width', {
+        duration: theme.transitions.duration.shorter,
+        easing: theme.transitions.easing.easeOut
+      }),
+      // Firefox workaround. Firefox will only obscure the
+      // rendered height of the legend and, unlike other browsers,
+      // will not push fieldset contents.
+      '@supports (-moz-appearance:none)': {
+        height: 2
+      }
+    }
+  };
+};
+/**
+ * @ignore - internal component.
+ */
+
+
+exports.styles = styles;
+
+function NotchedOutline(props) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      labelWidthProp = props.labelWidth,
+      notched = props.notched,
+      style = props.style,
+      theme = props.theme,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "labelWidth", "notched", "style", "theme"]);
+  var align = theme.direction === 'rtl' ? 'right' : 'left';
+  var labelWidth = labelWidthProp > 0 ? labelWidthProp * 0.75 + 8 : 0;
+  return _react.default.createElement("fieldset", (0, _extends3.default)({
+    "aria-hidden": true,
+    style: (0, _extends3.default)((0, _defineProperty2.default)({}, "padding".concat((0, _helpers.capitalize)(align)), 8 + (notched ? 0 : labelWidth / 2)), style),
+    className: (0, _classnames.default)(classes.root, className)
+  }, other), _react.default.createElement("legend", {
+    className: classes.legend,
+    style: {
+      // IE 11: fieldset with legend does not render
+      // a border radius. This maintains consistency
+      // by always having a legend rendered
+      width: notched ? labelWidth : 0.01
+    }
+  }, _react.default.createElement("span", {
+    dangerouslySetInnerHTML: {
+      __html: '&#8203;'
+    }
+  })));
+}
+
+NotchedOutline.propTypes = "development" !== "production" ? {
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css-api) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The width of the legend.
+   */
+  labelWidth: _propTypes.default.number.isRequired,
+
+  /**
+   * If `true`, the outline is notched to accommodate the label.
+   */
+  notched: _propTypes.default.bool.isRequired,
+
+  /**
+   * @ignore
+   */
+  style: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  theme: _propTypes.default.object
+} : {};
+
+var _default = (0, _styles.withStyles)(styles, {
+  name: 'MuiPrivateNotchedOutline',
+  withTheme: true
+})(NotchedOutline);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/defineProperty":"../../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles":"../../node_modules/@material-ui/core/styles/index.js","../utils/helpers":"../../node_modules/@material-ui/core/utils/helpers.js"}],"../../node_modules/@material-ui/core/OutlinedInput/OutlinedInput.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _InputBase = _interopRequireDefault(require("../InputBase"));
+
+var _NotchedOutline = _interopRequireDefault(require("./NotchedOutline"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles")); // @inheritedComponent InputBase
+
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'relative',
+      '&:hover:not($disabled):not($focused):not($error) $notchedOutline': {
+        borderColor: theme.palette.text.primary
+      },
+      '&$focused $notchedOutline': {
+        borderColor: theme.palette.primary.main,
+        borderWidth: 2
+      },
+      '&$error $notchedOutline': {
+        borderColor: theme.palette.error.main
+      },
+      '&$disabled $notchedOutline': {
+        borderColor: theme.palette.action.disabled
+      }
+    },
+
+    /* Styles applied to the root element if the component is focused. */
+    focused: {},
+
+    /* Styles applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if `startAdornment` is provided. */
+    adornedStart: {
+      paddingLeft: 14
+    },
+
+    /* Styles applied to the root element if `endAdornment` is provided. */
+    adornedEnd: {
+      paddingRight: 14
+    },
+
+    /* Styles applied to the root element if `error={true}`. */
+    error: {},
+
+    /* Styles applied to the root element if `multiline={true}`. */
+    multiline: {
+      padding: '18.5px 14px',
+      boxSizing: 'border-box' // Prevent padding issue with fullWidth.
+
+    },
+
+    /* Styles applied to the `NotchedOutline` element. */
+    notchedOutline: {},
+
+    /* Styles applied to the `input` element. */
+    input: {
+      padding: '18.5px 14px'
+    },
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    inputMarginDense: {
+      paddingTop: 15,
+      paddingBottom: 15
+    },
+
+    /* Styles applied to the `input` element if `multiline={true}`. */
+    inputMultiline: {
+      padding: 0
+    },
+
+    /* Styles applied to the `input` element if `startAdornment` is provided. */
+    inputAdornedStart: {
+      paddingLeft: 0
+    },
+
+    /* Styles applied to the `input` element if `endAdornment` is provided. */
+    inputAdornedEnd: {
+      paddingRight: 0
+    }
+  };
+};
+
+exports.styles = styles;
+
+function OutlinedInput(props) {
+  var classes = props.classes,
+      labelWidth = props.labelWidth,
+      notched = props.notched,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "labelWidth", "notched"]);
+  return _react.default.createElement(_InputBase.default, (0, _extends2.default)({
+    renderPrefix: function renderPrefix(state) {
+      return _react.default.createElement(_NotchedOutline.default, {
+        className: classes.notchedOutline,
+        labelWidth: labelWidth,
+        notched: typeof notched !== 'undefined' ? notched : Boolean(state.startAdornment || state.filled || state.focused)
+      });
+    },
+    classes: (0, _extends2.default)({}, classes, {
+      root: (0, _classnames.default)(classes.root, classes.underline, {}),
+      notchedOutline: null
+    })
+  }, other));
+}
+
+OutlinedInput.propTypes = "development" !== "production" ? {
+  /**
+   * This property helps users to fill forms faster, especially on mobile devices.
+   * The name can be confusing, as it's more like an autofill.
+   * You can learn more about it here:
+   * https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill
+   */
+  autoComplete: _propTypes.default.string,
+
+  /**
+   * If `true`, the input will be focused during the first mount.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css-api) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * The CSS class name of the wrapper element.
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The default input value, useful when not controlling the component.
+   */
+  defaultValue: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * If `true`, the input will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * End `InputAdornment` for this component.
+   */
+  endAdornment: _propTypes.default.node,
+
+  /**
+   * If `true`, the input will indicate an error. This is normally obtained via context from
+   * FormControl.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input will take up the full width of its container.
+   */
+  fullWidth: _propTypes.default.bool,
+
+  /**
+   * The id of the `input` element.
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * The component used for the native input.
+   * Either a string to use a DOM element or a component.
+   */
+  inputComponent: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.object]),
+
+  /**
+   * Attributes applied to the `input` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Use that property to pass a ref callback to the native input component.
+   */
+  inputRef: _propTypes.default.oneOfType([_propTypes.default.func, _propTypes.default.object]),
+
+  /**
+   * The width of the legend.
+   */
+  labelWidth: _propTypes.default.number.isRequired,
+
+  /**
+   * If `dense`, will adjust vertical spacing. This is normally obtained via context from
+   * FormControl.
+   */
+  margin: _propTypes.default.oneOf(['dense', 'none']),
+
+  /**
+   * If `true`, a textarea element will be rendered.
+   */
+  multiline: _propTypes.default.bool,
+
+  /**
+   * Name attribute of the `input` element.
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * If `true`, the outline is notched to accommodate the label.
+   */
+  notched: _propTypes.default.bool,
+
+  /**
+   * Callback fired when the value is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value`.
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * The short hint displayed in the input before the user enters a value.
+   */
+  placeholder: _propTypes.default.string,
+
+  /**
+   * It prevents the user from changing the value of the field
+   * (not from interacting with the field).
+   */
+  readOnly: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input will be required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * Number of rows to display when multiline option is set to true.
+   */
+  rows: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Maximum number of rows to display when multiline option is set to true.
+   */
+  rowsMax: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Start `InputAdornment` for this component.
+   */
+  startAdornment: _propTypes.default.node,
+
+  /**
+   * Type of the input element. It should be a valid HTML5 input type.
+   */
+  type: _propTypes.default.string,
+
+  /**
+   * The input value, required for a controlled component.
+   */
+  value: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number, _propTypes.default.bool, _propTypes.default.arrayOf(_propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number, _propTypes.default.bool]))])
+} : {};
+_InputBase.default.defaultProps = {
+  fullWidth: false,
+  inputComponent: 'input',
+  multiline: false,
+  type: 'text'
+};
+OutlinedInput.muiName = 'Input';
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiOutlinedInput'
+})(OutlinedInput);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../InputBase":"../../node_modules/@material-ui/core/InputBase/index.js","./NotchedOutline":"../../node_modules/@material-ui/core/OutlinedInput/NotchedOutline.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js"}],"container/ManageInstitution.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64501,6 +64932,10 @@ var _InputLabel = _interopRequireDefault(require("@material-ui/core/InputLabel/I
 var _Select = _interopRequireDefault(require("@material-ui/core/Select/Select"));
 
 var _MenuItem = _interopRequireDefault(require("@material-ui/core/MenuItem/MenuItem"));
+
+var _OutlinedInput = _interopRequireDefault(require("@material-ui/core/OutlinedInput/OutlinedInput"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64560,7 +64995,8 @@ function (_Component) {
       pendingHubs: [],
       registeredHubs: [],
       institutions: [],
-      selectedInstitution: 1
+      selectedInstitution: 1,
+      labelWidth: 65
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.getHubs = _this.getHubs.bind(_assertThisInitialized(_assertThisInitialized(_this)));
@@ -64568,14 +65004,29 @@ function (_Component) {
   }
 
   _createClass(ManageInstitution, [{
-    key: "getHubs",
-    value: function getHubs(institutionID) {
+    key: "componentWillMount",
+    value: function componentWillMount() {
       var _this2 = this;
 
-      console.log(institutionID);
+      _axios.default.get('/api/v2/institution/getInstitutions.php').then(function (response) {
+        _this2.setState(function () {
+          return {
+            institutions: response.data
+          };
+        });
+
+        _this2.getHubs(response.data[0].id);
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }, {
+    key: "getHubs",
+    value: function getHubs(institutionID) {
+      var _this3 = this;
 
       _axios.default.get('/api/v2/hub/getPendingHubs.php').then(function (response) {
-        _this2.setState(function () {
+        _this3.setState(function () {
           return {
             pendingHubs: response.data
           };
@@ -64587,30 +65038,11 @@ function (_Component) {
       _axios.default.post("/api/v2/hub/getRegisteredHubs.php", {
         institutionID: institutionID
       }).then(function (response) {
-        console.log(response);
-
-        _this2.setState(function () {
+        _this3.setState(function () {
           return {
             registeredHubs: response.data
           };
         });
-      }).catch(function (error) {
-        console.log(error);
-      });
-    }
-  }, {
-    key: "componentWillMount",
-    value: function componentWillMount() {
-      var _this3 = this;
-
-      _axios.default.get('/api/v2/institution/getInstitutions.php').then(function (response) {
-        _this3.setState(function () {
-          return {
-            institutions: response.data
-          };
-        });
-
-        _this3.getHubs(response.data[0].id);
       }).catch(function (error) {
         console.log(error);
       });
@@ -64648,16 +65080,18 @@ function (_Component) {
         item: true,
         xs: 2
       }, _react.default.createElement(_FormControl.default, {
+        variant: "outlined",
         className: classes.formControl
       }, _react.default.createElement(_InputLabel.default, {
-        htmlFor: "institution-name"
+        htmlFor: "institution-id"
       }, "Institution"), _react.default.createElement(_Select.default, {
-        onChange: this.handleChange.bind(this),
         value: this.state.selectedInstitution,
-        inputProps: {
-          name: 'selectedInstitution',
-          id: 'institution-id'
-        }
+        onChange: this.handleChange.bind(this),
+        input: _react.default.createElement(_OutlinedInput.default, {
+          labelWidth: this.state.labelWidth,
+          name: "selectedInstitution",
+          id: "institution-id"
+        })
       }, institutions.map(function (institution) {
         return _react.default.createElement(_MenuItem.default, {
           key: institution.id,
@@ -64685,7 +65119,7 @@ function (_Component) {
 var _default = (0, _styles.withStyles)(styles)(ManageInstitution);
 
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","@material-ui/core/Grid/Grid":"../../node_modules/@material-ui/core/Grid/Grid.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","axios":"../../node_modules/axios/index.js","../component/PendingHubsTable":"component/PendingHubsTable.js","../component/RegisteredHubsTable":"component/RegisteredHubsTable.js","@material-ui/core/FormControl/FormControl":"../../node_modules/@material-ui/core/FormControl/FormControl.js","@material-ui/core/InputLabel/InputLabel":"../../node_modules/@material-ui/core/InputLabel/InputLabel.js","@material-ui/core/Select/Select":"../../node_modules/@material-ui/core/Select/Select.js","@material-ui/core/MenuItem/MenuItem":"../../node_modules/@material-ui/core/MenuItem/MenuItem.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","@material-ui/core/Grid/Grid":"../../node_modules/@material-ui/core/Grid/Grid.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","axios":"../../node_modules/axios/index.js","../component/PendingHubsTable":"component/PendingHubsTable.js","../component/RegisteredHubsTable":"component/RegisteredHubsTable.js","@material-ui/core/FormControl/FormControl":"../../node_modules/@material-ui/core/FormControl/FormControl.js","@material-ui/core/InputLabel/InputLabel":"../../node_modules/@material-ui/core/InputLabel/InputLabel.js","@material-ui/core/Select/Select":"../../node_modules/@material-ui/core/Select/Select.js","@material-ui/core/MenuItem/MenuItem":"../../node_modules/@material-ui/core/MenuItem/MenuItem.js","@material-ui/core/OutlinedInput/OutlinedInput":"../../node_modules/@material-ui/core/OutlinedInput/OutlinedInput.js","react-dom":"../../node_modules/react-dom/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));

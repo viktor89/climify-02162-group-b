@@ -8,6 +8,8 @@ import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
+import * as ReactDOM from "react-dom";
 
 const styles = theme => ({
   root: {
@@ -34,6 +36,7 @@ class ManageInstitution extends Component {
       registeredHubs: [],
       institutions: [],
       selectedInstitution: 1,
+      labelWidth: 65,
     };
     this.handleChange = this.handleChange.bind(this);
     this.getHubs = this.getHubs.bind(this);
@@ -52,7 +55,7 @@ class ManageInstitution extends Component {
       });
   }
 
-  getHubs = (institutionID) => {
+  getHubs(institutionID) {
     axios.get('/api/v2/hub/getPendingHubs.php')
       .then((response) => {
         this.setState(() => {
@@ -76,7 +79,7 @@ class ManageInstitution extends Component {
       });
   };
 
-  handleChange = (event) => {
+  handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
     this.getHubs(event.target.value);
   };
@@ -93,15 +96,22 @@ class ManageInstitution extends Component {
               <h2>Manage Institution</h2>
             </Grid>
             <Grid item xs={2}>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="institution-name">Institution</InputLabel>
+              <FormControl variant="outlined" className={classes.formControl}>
+                <InputLabel
+                  htmlFor="institution-id"
+                >
+                  Institution
+                </InputLabel>
                 <Select
-                  onChange={this.handleChange.bind(this)}
                   value={this.state.selectedInstitution}
-                  inputProps={{
-                    name: 'selectedInstitution',
-                    id: 'institution-id',
-                  }}
+                  onChange={this.handleChange.bind(this)}
+                  input={
+                    <OutlinedInput
+                      labelWidth={this.state.labelWidth}
+                      name="selectedInstitution"
+                      id="institution-id"
+                    />
+                  }
                 >
                   {institutions.map((institution) => {
                     return <MenuItem key={institution.id} value={institution.id}>{institution.name}</MenuItem>
