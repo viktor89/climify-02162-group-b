@@ -64518,13 +64518,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 var styles = function styles(theme) {
   return {
@@ -64562,15 +64562,17 @@ function (_Component) {
       institutions: [],
       selectedInstitution: 1
     };
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.getHubs = _this.getHubs.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
   _createClass(ManageInstitution, [{
     key: "getHubs",
-    value: function getHubs() {
+    value: function getHubs(institutionID) {
       var _this2 = this;
 
-      var institutions = this.state.institutions;
+      console.log(institutionID);
 
       _axios.default.get('/api/v2/hub/getPendingHubs.php').then(function (response) {
         _this2.setState(function () {
@@ -64582,7 +64584,11 @@ function (_Component) {
         console.log(error);
       });
 
-      _axios.default.get("/api/v2/hub/getRegisteredHubs.php").then(function (response) {
+      _axios.default.post("/api/v2/hub/getRegisteredHubs.php", {
+        institutionID: institutionID
+      }).then(function (response) {
+        console.log(response);
+
         _this2.setState(function () {
           return {
             registeredHubs: response.data
@@ -64604,7 +64610,7 @@ function (_Component) {
           };
         });
 
-        _this3.getHubs();
+        _this3.getHubs(response.data[0].id);
       }).catch(function (error) {
         console.log(error);
       });
@@ -64613,6 +64619,7 @@ function (_Component) {
     key: "handleChange",
     value: function handleChange(event) {
       this.setState(_defineProperty({}, event.target.name, event.target.value));
+      this.getHubs(event.target.value);
     }
   }, {
     key: "render",
@@ -64645,10 +64652,10 @@ function (_Component) {
       }, _react.default.createElement(_InputLabel.default, {
         htmlFor: "institution-name"
       }, "Institution"), _react.default.createElement(_Select.default, {
-        onChange: this.handleChange,
+        onChange: this.handleChange.bind(this),
         value: this.state.selectedInstitution,
         inputProps: {
-          name: 'institution-name',
+          name: 'selectedInstitution',
           id: 'institution-id'
         }
       }, institutions.map(function (institution) {

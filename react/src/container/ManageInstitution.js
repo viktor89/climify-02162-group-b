@@ -30,10 +30,12 @@ class ManageInstitution extends Component {
   constructor(props) {
     super(props);
     this.state = {pendingHubs: [], registeredHubs: [], institutions: [], selectedInstitution: 1}
+    this.handleChange = this.handleChange.bind(this);
+    this.getHubs = this.getHubs.bind(this);
   }
 
-  getHubs() {
-    const { institutions } = this.state;
+  getHubs(institutionID) {
+    console.log(institutionID);
     axios.get('/api/v2/hub/getPendingHubs.php')
       .then((response) => {
         this.setState(() => {
@@ -44,8 +46,11 @@ class ManageInstitution extends Component {
         console.log(error);
       });
     axios
-      .get("/api/v2/hub/getRegisteredHubs.php")
+      .post("/api/v2/hub/getRegisteredHubs.php", {
+        institutionID: institutionID
+      })
       .then(response => {
+        console.log(response);
         this.setState(() => {
           return { registeredHubs: response.data };
         });
@@ -61,7 +66,7 @@ class ManageInstitution extends Component {
         this.setState(() => {
           return {institutions: response.data};
         });
-        this.getHubs();
+        this.getHubs(response.data[0].id);
       })
       .catch((error) => {
         console.log(error);
@@ -70,6 +75,7 @@ class ManageInstitution extends Component {
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
+    this.getHubs(event.target.value);
   };
 
   render() {
@@ -87,10 +93,10 @@ class ManageInstitution extends Component {
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="institution-name">Institution</InputLabel>
                 <Select
-                  onChange={this.handleChange}
+                  onChange={this.handleChange.bind(this)}
                   value={this.state.selectedInstitution}
                   inputProps={{
-                    name: 'institution-name',
+                    name: 'selectedInstitution',
                     id: 'institution-id',
                   }}
                 >
