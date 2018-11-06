@@ -36,7 +36,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     result should be (data)
   }
 
-  it should "return a empty sequence when the response is different from 200" in {
+  it should "return a empty sequence when the response code is different from 200" in {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val data = IndexedSeq(Data("test", "test", 1, 0),
       Data("test", "test", 2, 0),
