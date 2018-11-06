@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ManageInstitution from './container/ManageInstitution';
+import Counter from './container/Counter';
 
-class HelloMessage extends React.Component {
+class DeviceListComponent extends React.Component {
   render() {
     return <div>
       <h2>Manage Institution</h2>
@@ -12,6 +13,18 @@ class HelloMessage extends React.Component {
   }
 }
 
-let DeviceList = document.getElementById("deviceList");
+class CounterComponent extends React.Component {
+  render () {
+    return <div>
+      <h2>Manage Devices</h2>
+      <hr />
+      <Counter />
+    </div>
+  }
+}
 
-ReactDOM.render(<HelloMessage name="test" />, DeviceList);
+let DeviceListEntrypoint = document.getElementById("deviceList");
+let ManageDevicesEntrypoint = document.getElementById("manageDevices");
+
+ReactDOM.render(<DeviceListComponent name="test" />, DeviceListEntrypoint);
+ReactDOM.render(<CounterComponent name="test" />, ManageDevicesEntrypoint);

@@ -59346,8 +59346,6 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _styles = require("@material-ui/core/styles");
 
-var _classnames = _interopRequireDefault(require("classnames"));
-
 var _ExpansionPanel = _interopRequireDefault(require("@material-ui/core/ExpansionPanel"));
 
 var _ExpansionPanelDetails = _interopRequireDefault(require("@material-ui/core/ExpansionPanelDetails"));
@@ -59369,6 +59367,8 @@ var _Input = _interopRequireDefault(require("@material-ui/core/Input/Input"));
 var _FormControl = _interopRequireDefault(require("@material-ui/core/FormControl/FormControl"));
 
 var _ExpansionPanelActions = _interopRequireDefault(require("@material-ui/core/ExpansionPanelActions/ExpansionPanelActions"));
+
+var _Divider = _interopRequireDefault(require("@material-ui/core/Divider/Divider"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59468,7 +59468,7 @@ function DetailedExpansionPanel(props) {
       className: classes.formControl
     }, _react.default.createElement(_Switch.default, {
       color: "primary"
-    })))), _react.default.createElement(_ExpansionPanelActions.default, null, _react.default.createElement(_Button.default, {
+    })))), _react.default.createElement(_Divider.default, null), _react.default.createElement(_ExpansionPanelActions.default, null, _react.default.createElement(_Button.default, {
       fullWidth: true,
       size: "small",
       color: "primary"
@@ -59483,7 +59483,7 @@ DetailedExpansionPanel.propTypes = {
 var _default = (0, _styles.withStyles)(styles)(DetailedExpansionPanel);
 
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","classnames":"../../node_modules/classnames/index.js","@material-ui/core/ExpansionPanel":"../../node_modules/@material-ui/core/ExpansionPanel/index.js","@material-ui/core/ExpansionPanelDetails":"../../node_modules/@material-ui/core/ExpansionPanelDetails/index.js","@material-ui/core/ExpansionPanelSummary":"../../node_modules/@material-ui/core/ExpansionPanelSummary/index.js","@material-ui/core/Typography":"../../node_modules/@material-ui/core/Typography/index.js","@material-ui/core/Switch":"../../node_modules/@material-ui/core/Switch/index.js","@material-ui/icons/ExpandMore":"../../node_modules/@material-ui/icons/ExpandMore.js","@material-ui/core/Button":"../../node_modules/@material-ui/core/Button/index.js","@material-ui/core/InputLabel/InputLabel":"../../node_modules/@material-ui/core/InputLabel/InputLabel.js","@material-ui/core/Input/Input":"../../node_modules/@material-ui/core/Input/Input.js","@material-ui/core/FormControl/FormControl":"../../node_modules/@material-ui/core/FormControl/FormControl.js","@material-ui/core/ExpansionPanelActions/ExpansionPanelActions":"../../node_modules/@material-ui/core/ExpansionPanelActions/ExpansionPanelActions.js"}],"container/ManageInstitution.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","@material-ui/core/ExpansionPanel":"../../node_modules/@material-ui/core/ExpansionPanel/index.js","@material-ui/core/ExpansionPanelDetails":"../../node_modules/@material-ui/core/ExpansionPanelDetails/index.js","@material-ui/core/ExpansionPanelSummary":"../../node_modules/@material-ui/core/ExpansionPanelSummary/index.js","@material-ui/core/Typography":"../../node_modules/@material-ui/core/Typography/index.js","@material-ui/core/Switch":"../../node_modules/@material-ui/core/Switch/index.js","@material-ui/icons/ExpandMore":"../../node_modules/@material-ui/icons/ExpandMore.js","@material-ui/core/Button":"../../node_modules/@material-ui/core/Button/index.js","@material-ui/core/InputLabel/InputLabel":"../../node_modules/@material-ui/core/InputLabel/InputLabel.js","@material-ui/core/Input/Input":"../../node_modules/@material-ui/core/Input/Input.js","@material-ui/core/FormControl/FormControl":"../../node_modules/@material-ui/core/FormControl/FormControl.js","@material-ui/core/ExpansionPanelActions/ExpansionPanelActions":"../../node_modules/@material-ui/core/ExpansionPanelActions/ExpansionPanelActions.js","@material-ui/core/Divider/Divider":"../../node_modules/@material-ui/core/Divider/Divider.js"}],"container/ManageInstitution.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59553,11 +59553,7 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ManageInstitution).call(this, props));
     _this.state = {
       pendingHubs: [],
-      registeredHubs: [{
-        mac: "test",
-        building: "303A",
-        room: "45"
-      }]
+      registeredHubs: []
     };
     return _this;
   }
@@ -59573,8 +59569,16 @@ function (_Component) {
             pendingHubs: response.data
           };
         });
+      }).catch(function (error) {
+        console.log(error);
+      });
 
-        console.log(response);
+      _axios.default.get('/api/v2/hub/getRegisteredHubs.php').then(function (response) {
+        _this2.setState(function () {
+          return {
+            registeredHubs: response.data
+          };
+        });
       }).catch(function (error) {
         console.log(error);
       });
@@ -59610,7 +59614,911 @@ function (_Component) {
 var _default = (0, _styles.withStyles)(styles)(ManageInstitution);
 
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","@material-ui/core/Grid/Grid":"../../node_modules/@material-ui/core/Grid/Grid.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","axios":"../../node_modules/axios/index.js","../component/PendingHubsTable":"component/PendingHubsTable.js","../component/RegisteredHubsTable":"component/RegisteredHubsTable.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","@material-ui/core/Grid/Grid":"../../node_modules/@material-ui/core/Grid/Grid.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","axios":"../../node_modules/axios/index.js","../component/PendingHubsTable":"component/PendingHubsTable.js","../component/RegisteredHubsTable":"component/RegisteredHubsTable.js"}],"../../node_modules/@material-ui/core/Table/Table.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      display: 'table',
+      fontFamily: theme.typography.fontFamily,
+      width: '100%',
+      borderCollapse: 'collapse',
+      borderSpacing: 0
+    }
+  };
+};
+
+exports.styles = styles;
+
+var Table =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(Table, _React$Component);
+
+  function Table() {
+    (0, _classCallCheck2.default)(this, Table);
+    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Table).apply(this, arguments));
+  }
+
+  (0, _createClass2.default)(Table, [{
+    key: "getChildContext",
+    value: function getChildContext() {
+      // eslint-disable-line class-methods-use-this
+      return {
+        table: {
+          padding: this.props.padding
+        }
+      };
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          classes = _this$props.classes,
+          className = _this$props.className,
+          Component = _this$props.component,
+          padding = _this$props.padding,
+          other = (0, _objectWithoutProperties2.default)(_this$props, ["classes", "className", "component", "padding"]);
+      return _react.default.createElement(Component, (0, _extends2.default)({
+        className: (0, _classnames.default)(classes.root, className)
+      }, other));
+    }
+  }]);
+  return Table;
+}(_react.default.Component);
+
+Table.propTypes = "development" !== "production" ? {
+  /**
+   * The content of the table, normally `TableHead` and `TableBody`.
+   */
+  children: _propTypes.default.node.isRequired,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css-api) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.object]),
+
+  /**
+   * Allows TableCells to inherit padding of the Table.
+   */
+  padding: _propTypes.default.oneOf(['default', 'checkbox', 'dense', 'none'])
+} : {};
+Table.defaultProps = {
+  component: 'table',
+  padding: 'default'
+};
+Table.childContextTypes = {
+  table: _propTypes.default.object
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTable'
+})(Table);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","@babel/runtime/helpers/classCallCheck":"../../node_modules/@babel/runtime/helpers/classCallCheck.js","@babel/runtime/helpers/createClass":"../../node_modules/@babel/runtime/helpers/createClass.js","@babel/runtime/helpers/possibleConstructorReturn":"../../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js","@babel/runtime/helpers/getPrototypeOf":"../../node_modules/@babel/runtime/helpers/getPrototypeOf.js","@babel/runtime/helpers/inherits":"../../node_modules/@babel/runtime/helpers/inherits.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js"}],"../../node_modules/@material-ui/core/Table/index.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _Table.default;
+  }
+});
+
+var _Table = _interopRequireDefault(require("./Table"));
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","./Table":"../../node_modules/@material-ui/core/Table/Table.js"}],"../../node_modules/@material-ui/core/TableBody/TableBody.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    display: 'table-row-group'
+  }
+};
+exports.styles = styles;
+
+var TableBody =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(TableBody, _React$Component);
+
+  function TableBody() {
+    (0, _classCallCheck2.default)(this, TableBody);
+    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TableBody).apply(this, arguments));
+  }
+
+  (0, _createClass2.default)(TableBody, [{
+    key: "getChildContext",
+    value: function getChildContext() {
+      // eslint-disable-line class-methods-use-this
+      return {
+        tablelvl2: {
+          variant: 'body'
+        }
+      };
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          classes = _this$props.classes,
+          className = _this$props.className,
+          Component = _this$props.component,
+          other = (0, _objectWithoutProperties2.default)(_this$props, ["classes", "className", "component"]);
+      return _react.default.createElement(Component, (0, _extends2.default)({
+        className: (0, _classnames.default)(classes.root, className)
+      }, other));
+    }
+  }]);
+  return TableBody;
+}(_react.default.Component);
+
+TableBody.propTypes = "development" !== "production" ? {
+  /**
+   * The content of the component, normally `TableRow`.
+   */
+  children: _propTypes.default.node.isRequired,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css-api) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.object])
+} : {};
+TableBody.defaultProps = {
+  component: 'tbody'
+};
+TableBody.childContextTypes = {
+  tablelvl2: _propTypes.default.object
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTableBody'
+})(TableBody);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","@babel/runtime/helpers/classCallCheck":"../../node_modules/@babel/runtime/helpers/classCallCheck.js","@babel/runtime/helpers/createClass":"../../node_modules/@babel/runtime/helpers/createClass.js","@babel/runtime/helpers/possibleConstructorReturn":"../../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js","@babel/runtime/helpers/getPrototypeOf":"../../node_modules/@babel/runtime/helpers/getPrototypeOf.js","@babel/runtime/helpers/inherits":"../../node_modules/@babel/runtime/helpers/inherits.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js"}],"../../node_modules/@material-ui/core/TableBody/index.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _TableBody.default;
+  }
+});
+
+var _TableBody = _interopRequireDefault(require("./TableBody"));
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","./TableBody":"../../node_modules/@material-ui/core/TableBody/TableBody.js"}],"../../node_modules/@material-ui/core/TableCell/TableCell.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _helpers = require("../utils/helpers");
+
+var _colorManipulator = require("../styles/colorManipulator");
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      display: 'table-cell',
+      verticalAlign: 'inherit',
+      // Workaround for a rendering bug with spanned columns in Chrome 62.0.
+      // Removes the alpha (sets it to 1), and lightens or darkens the theme color.
+      borderBottom: "1px solid\n    ".concat(theme.palette.type === 'light' ? (0, _colorManipulator.lighten)((0, _colorManipulator.fade)(theme.palette.divider, 1), 0.88) : (0, _colorManipulator.darken)((0, _colorManipulator.fade)(theme.palette.divider, 1), 0.68)),
+      textAlign: 'left',
+      padding: '4px 56px 4px 24px',
+      '&:last-child': {
+        paddingRight: 24
+      }
+    },
+
+    /* Styles applied to the root element if `variant="head"` or `context.table.head`. */
+    head: {
+      color: theme.palette.text.secondary,
+      fontSize: theme.typography.pxToRem(12),
+      fontWeight: theme.typography.fontWeightMedium
+    },
+
+    /* Styles applied to the root element if `variant="body"` or `context.table.body`. */
+    body: {
+      color: theme.palette.text.primary,
+      fontSize: theme.typography.pxToRem(13),
+      fontWeight: theme.typography.fontWeightRegular
+    },
+
+    /* Styles applied to the root element if `variant="footer"` or `context.table.footer`. */
+    footer: {
+      borderBottom: 0,
+      color: theme.palette.text.secondary,
+      fontSize: theme.typography.pxToRem(12)
+    },
+
+    /* Styles applied to the root element if `numeric={true}`. */
+    numeric: {
+      textAlign: 'right',
+      flexDirection: 'row-reverse' // can be dynamically inherited at runtime by contents
+
+    },
+
+    /* Styles applied to the root element if `padding="dense"`. */
+    paddingDense: {
+      paddingRight: 24
+    },
+
+    /* Styles applied to the root element if `padding="checkbox"`. */
+    paddingCheckbox: {
+      padding: '0 12px',
+      '&:last-child': {
+        paddingRight: 12
+      }
+    },
+
+    /* Styles applied to the root element if `padding="none"`. */
+    paddingNone: {
+      padding: 0,
+      '&:last-child': {
+        padding: 0
+      }
+    }
+  };
+};
+
+exports.styles = styles;
+
+function TableCell(props, context) {
+  var _classNames;
+
+  var children = props.children,
+      classes = props.classes,
+      classNameProp = props.className,
+      component = props.component,
+      sortDirection = props.sortDirection,
+      numeric = props.numeric,
+      paddingProp = props.padding,
+      scopeProp = props.scope,
+      variant = props.variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "component", "sortDirection", "numeric", "padding", "scope", "variant"]);
+  var table = context.table,
+      tablelvl2 = context.tablelvl2;
+  var Component;
+
+  if (component) {
+    Component = component;
+  } else {
+    Component = tablelvl2 && tablelvl2.variant === 'head' ? 'th' : 'td';
+  }
+
+  var scope = scopeProp;
+
+  if (!scope && tablelvl2 && tablelvl2.variant === 'head') {
+    scope = 'col';
+  }
+
+  var padding = paddingProp || (table && table.padding ? table.padding : 'default');
+  var className = (0, _classnames.default)(classes.root, (_classNames = {}, (0, _defineProperty2.default)(_classNames, classes.head, variant ? variant === 'head' : tablelvl2 && tablelvl2.variant === 'head'), (0, _defineProperty2.default)(_classNames, classes.body, variant ? variant === 'body' : tablelvl2 && tablelvl2.variant === 'body'), (0, _defineProperty2.default)(_classNames, classes.footer, variant ? variant === 'footer' : tablelvl2 && tablelvl2.variant === 'footer'), (0, _defineProperty2.default)(_classNames, classes.numeric, numeric), (0, _defineProperty2.default)(_classNames, classes["padding".concat((0, _helpers.capitalize)(padding))], padding !== 'default'), _classNames), classNameProp);
+  var ariaSort = null;
+
+  if (sortDirection) {
+    ariaSort = sortDirection === 'asc' ? 'ascending' : 'descending';
+  }
+
+  return _react.default.createElement(Component, (0, _extends2.default)({
+    className: className,
+    "aria-sort": ariaSort,
+    scope: scope
+  }, other), children);
+}
+
+TableCell.propTypes = "development" !== "production" ? {
+  /**
+   * The table cell contents.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css-api) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.object]),
+
+  /**
+   * If `true`, content will align to the right.
+   *
+   * Monetary or generally number fields should be right aligned as that allows
+   * you to add them up quickly in your head without having to worry about decimals.
+   */
+  numeric: _propTypes.default.bool,
+
+  /**
+   * Sets the padding applied to the cell.
+   * By default, the Table parent component set the value.
+   */
+  padding: _propTypes.default.oneOf(['default', 'checkbox', 'dense', 'none']),
+
+  /**
+   * Set scope attribute.
+   */
+  scope: _propTypes.default.string,
+
+  /**
+   * Set aria-sort direction.
+   */
+  sortDirection: _propTypes.default.oneOf(['asc', 'desc', false]),
+
+  /**
+   * Specify the cell type.
+   * By default, the TableHead, TableBody or TableFooter parent component set the value.
+   */
+  variant: _propTypes.default.oneOf(['head', 'body', 'footer'])
+} : {};
+TableCell.defaultProps = {
+  numeric: false
+};
+TableCell.contextTypes = {
+  table: _propTypes.default.object,
+  tablelvl2: _propTypes.default.object
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTableCell'
+})(TableCell);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/defineProperty":"../../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js","../utils/helpers":"../../node_modules/@material-ui/core/utils/helpers.js","../styles/colorManipulator":"../../node_modules/@material-ui/core/styles/colorManipulator.js"}],"../../node_modules/@material-ui/core/TableCell/index.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _TableCell.default;
+  }
+});
+
+var _TableCell = _interopRequireDefault(require("./TableCell"));
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","./TableCell":"../../node_modules/@material-ui/core/TableCell/TableCell.js"}],"../../node_modules/@material-ui/core/TableHead/TableHead.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    display: 'table-header-group'
+  }
+};
+exports.styles = styles;
+
+var TableHead =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(TableHead, _React$Component);
+
+  function TableHead() {
+    (0, _classCallCheck2.default)(this, TableHead);
+    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TableHead).apply(this, arguments));
+  }
+
+  (0, _createClass2.default)(TableHead, [{
+    key: "getChildContext",
+    value: function getChildContext() {
+      // eslint-disable-line class-methods-use-this
+      return {
+        tablelvl2: {
+          variant: 'head'
+        }
+      };
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          classes = _this$props.classes,
+          className = _this$props.className,
+          Component = _this$props.component,
+          other = (0, _objectWithoutProperties2.default)(_this$props, ["classes", "className", "component"]);
+      return _react.default.createElement(Component, (0, _extends2.default)({
+        className: (0, _classnames.default)(classes.root, className)
+      }, other));
+    }
+  }]);
+  return TableHead;
+}(_react.default.Component);
+
+TableHead.propTypes = "development" !== "production" ? {
+  /**
+   * The content of the component, normally `TableRow`.
+   */
+  children: _propTypes.default.node.isRequired,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css-api) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.object])
+} : {};
+TableHead.defaultProps = {
+  component: 'thead'
+};
+TableHead.childContextTypes = {
+  tablelvl2: _propTypes.default.object
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTableHead'
+})(TableHead);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","@babel/runtime/helpers/classCallCheck":"../../node_modules/@babel/runtime/helpers/classCallCheck.js","@babel/runtime/helpers/createClass":"../../node_modules/@babel/runtime/helpers/createClass.js","@babel/runtime/helpers/possibleConstructorReturn":"../../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js","@babel/runtime/helpers/getPrototypeOf":"../../node_modules/@babel/runtime/helpers/getPrototypeOf.js","@babel/runtime/helpers/inherits":"../../node_modules/@babel/runtime/helpers/inherits.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js"}],"../../node_modules/@material-ui/core/TableHead/index.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _TableHead.default;
+  }
+});
+
+var _TableHead = _interopRequireDefault(require("./TableHead"));
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","./TableHead":"../../node_modules/@material-ui/core/TableHead/TableHead.js"}],"../../node_modules/@material-ui/core/TableRow/TableRow.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _classnames = _interopRequireDefault(require("classnames"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      color: 'inherit',
+      display: 'table-row',
+      height: 48,
+      verticalAlign: 'middle',
+      // We disable the focus ring for mouse, touch and keyboard users.
+      outline: 'none',
+      '&$selected': {
+        backgroundColor: theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.04)' // grey[100]
+        : 'rgba(255, 255, 255, 0.08)'
+      },
+      '&$hover:hover': {
+        backgroundColor: theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.07)' // grey[200]
+        : 'rgba(255, 255, 255, 0.14)'
+      }
+    },
+
+    /* Styles applied to the root element if `selected={true}`. */
+    selected: {},
+
+    /* Styles applied to the root element if `hover={true}`. */
+    hover: {},
+
+    /* Styles applied to the root element if table variant = 'head'. */
+    head: {
+      height: 56
+    },
+
+    /* Styles applied to the root element if table variant = 'footer'. */
+    footer: {
+      height: 56
+    }
+  };
+};
+/**
+ * Will automatically set dynamic row height
+ * based on the material table element parent (head, body, etc).
+ */
+
+
+exports.styles = styles;
+
+function TableRow(props, context) {
+  var _classNames;
+
+  var classes = props.classes,
+      classNameProp = props.className,
+      Component = props.component,
+      hover = props.hover,
+      selected = props.selected,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "component", "hover", "selected"]);
+  var tablelvl2 = context.tablelvl2;
+  var className = (0, _classnames.default)(classes.root, (_classNames = {}, (0, _defineProperty2.default)(_classNames, classes.head, tablelvl2 && tablelvl2.variant === 'head'), (0, _defineProperty2.default)(_classNames, classes.footer, tablelvl2 && tablelvl2.variant === 'footer'), (0, _defineProperty2.default)(_classNames, classes.hover, hover), (0, _defineProperty2.default)(_classNames, classes.selected, selected), _classNames), classNameProp);
+  return _react.default.createElement(Component, (0, _extends2.default)({
+    className: className
+  }, other));
+}
+
+TableRow.propTypes = "development" !== "production" ? {
+  /**
+   * Should be valid <tr> children such as `TableCell`.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css-api) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.func, _propTypes.default.object]),
+
+  /**
+   * If `true`, the table row will shade on hover.
+   */
+  hover: _propTypes.default.bool,
+
+  /**
+   * If `true`, the table row will have the selected shading.
+   */
+  selected: _propTypes.default.bool
+} : {};
+TableRow.defaultProps = {
+  component: 'tr',
+  hover: false,
+  selected: false
+};
+TableRow.contextTypes = {
+  tablelvl2: _propTypes.default.object
+};
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTableRow'
+})(TableRow);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/defineProperty":"../../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js"}],"../../node_modules/@material-ui/core/TableRow/index.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function get() {
+    return _TableRow.default;
+  }
+});
+
+var _TableRow = _interopRequireDefault(require("./TableRow"));
+},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","./TableRow":"../../node_modules/@material-ui/core/TableRow/TableRow.js"}],"container/Counter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _styles = require("@material-ui/core/styles");
+
+var _Table = _interopRequireDefault(require("@material-ui/core/Table"));
+
+var _TableBody = _interopRequireDefault(require("@material-ui/core/TableBody"));
+
+var _TableCell = _interopRequireDefault(require("@material-ui/core/TableCell"));
+
+var _TableHead = _interopRequireDefault(require("@material-ui/core/TableHead"));
+
+var _TableRow = _interopRequireDefault(require("@material-ui/core/TableRow"));
+
+var _Paper = _interopRequireDefault(require("@material-ui/core/Paper"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var CustomTableCell = (0, _styles.withStyles)(function (theme) {
+  return {
+    head: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white
+    },
+    body: {
+      fontSize: 14
+    }
+  };
+})(_TableCell.default);
+var id = 0;
+
+function createData(MACAdress, name, type, building, room, status) {
+  id += 1;
+  return {
+    id: id,
+    MACAdress: MACAdress,
+    name: name,
+    type: type,
+    building: building,
+    room: room,
+    status: status
+  };
+}
+
+var rows = [createData("86:90:a8:bd:3a:22", "Temp sens NW Corner", "Temperature Sensor", "303A", 46, _react.default.createElement("div", null, _react.default.createElement("button", {
+  className: "btn btn-success btn.sm"
+}, " Accept"), " ", _react.default.createElement("button", {
+  className: "btn btn-danger btn.sm"
+}, " Decline"))), createData("ca:ee:c0:ea:58:7f", "Humid Sens NW Corner", "Temperature Sensor", "303A", 46, _react.default.createElement("div", null, _react.default.createElement("button", {
+  className: "btn btn-success btn.sm"
+}, " Accept"), " ", _react.default.createElement("button", {
+  className: "btn btn-danger btn.sm"
+}, " Decline"))), createData("d2:19:34:69:25:be", "Temp sens NW Corner", "Humidity Sensor", "101", "Hall 1", _react.default.createElement("div", null, _react.default.createElement("button", {
+  className: "btn btn-success btn.sm"
+}, " "), " ", _react.default.createElement("span", null, "running"))), createData("d6:f5:fe:5e:b7:8e", "C02 Sens North", "CO2 Sensor", 101, "Hall 1", _react.default.createElement("div", null, _react.default.createElement("button", {
+  className: "btn btn-success btn.sm"
+}, " "), " ", _react.default.createElement("span", null, "running"))), createData("c2:bd:64:e3:19:ed", "Temp Sens NE Corner", "Temperature Sensor", 101, "Hall 1", _react.default.createElement("div", null, _react.default.createElement("button", {
+  className: "btn btn-danger btn.sm"
+}, " "), " ", _react.default.createElement("span", null, " not running")))];
+
+var Counter =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(Counter, _Component);
+
+  function Counter() {
+    _classCallCheck(this, Counter);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Counter).apply(this, arguments));
+  }
+
+  _createClass(Counter, [{
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("div", null, _react.default.createElement("h1", null, "Device Overview "), _react.default.createElement(_Paper.default, null, _react.default.createElement(_Table.default, null, _react.default.createElement(_TableHead.default, null, _react.default.createElement(_TableRow.default, null, _react.default.createElement(CustomTableCell, null, "MAC Adreess"), _react.default.createElement(CustomTableCell, {
+        numeric: true
+      }, "Name/ Description "), _react.default.createElement(CustomTableCell, {
+        numeric: true
+      }, "Type "), _react.default.createElement(CustomTableCell, {
+        numeric: true
+      }, "Building "), _react.default.createElement(CustomTableCell, {
+        numeric: true
+      }, "Room "), _react.default.createElement(CustomTableCell, {
+        numeric: true
+      }, "Status "))), _react.default.createElement(_TableBody.default, null, rows.map(function (row) {
+        return _react.default.createElement(_TableRow.default, {
+          key: row.id
+        }, _react.default.createElement(CustomTableCell, {
+          component: "th",
+          scope: "row"
+        }, row.MACAdress), _react.default.createElement(CustomTableCell, {
+          numeric: true
+        }, row.name), _react.default.createElement(CustomTableCell, {
+          numeric: true
+        }, row.type), _react.default.createElement(CustomTableCell, {
+          numeric: true
+        }, row.building), _react.default.createElement(CustomTableCell, {
+          numeric: true
+        }, row.room), _react.default.createElement(CustomTableCell, {
+          numeric: true
+        }, row.status));
+      })))));
+    }
+  }]);
+
+  return Counter;
+}(_react.Component);
+
+var _default = Counter;
+exports.default = _default;
+},{"react":"../../node_modules/react/index.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","@material-ui/core/Table":"../../node_modules/@material-ui/core/Table/index.js","@material-ui/core/TableBody":"../../node_modules/@material-ui/core/TableBody/index.js","@material-ui/core/TableCell":"../../node_modules/@material-ui/core/TableCell/index.js","@material-ui/core/TableHead":"../../node_modules/@material-ui/core/TableHead/index.js","@material-ui/core/TableRow":"../../node_modules/@material-ui/core/TableRow/index.js","@material-ui/core/Paper":"../../node_modules/@material-ui/core/Paper/index.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -59618,6 +60526,8 @@ var _react = _interopRequireDefault(require("react"));
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
 var _ManageInstitution = _interopRequireDefault(require("./container/ManageInstitution"));
+
+var _Counter = _interopRequireDefault(require("./container/Counter"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59639,31 +60549,57 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-var HelloMessage =
+var DeviceListComponent =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(HelloMessage, _React$Component);
+  _inherits(DeviceListComponent, _React$Component);
 
-  function HelloMessage() {
-    _classCallCheck(this, HelloMessage);
+  function DeviceListComponent() {
+    _classCallCheck(this, DeviceListComponent);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(HelloMessage).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(DeviceListComponent).apply(this, arguments));
   }
 
-  _createClass(HelloMessage, [{
+  _createClass(DeviceListComponent, [{
     key: "render",
     value: function render() {
       return _react.default.createElement("div", null, _react.default.createElement("h2", null, "Manage Institution"), _react.default.createElement("hr", null), _react.default.createElement(_ManageInstitution.default, null));
     }
   }]);
 
-  return HelloMessage;
+  return DeviceListComponent;
 }(_react.default.Component);
 
-var DeviceList = document.getElementById("deviceList");
+var CounterComponent =
+/*#__PURE__*/
+function (_React$Component2) {
+  _inherits(CounterComponent, _React$Component2);
 
-_reactDom.default.render(_react.default.createElement(HelloMessage, {
+  function CounterComponent() {
+    _classCallCheck(this, CounterComponent);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(CounterComponent).apply(this, arguments));
+  }
+
+  _createClass(CounterComponent, [{
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("div", null, _react.default.createElement("h2", null, "Manage Devices"), _react.default.createElement("hr", null), _react.default.createElement(_Counter.default, null));
+    }
+  }]);
+
+  return CounterComponent;
+}(_react.default.Component);
+
+var DeviceListEntrypoint = document.getElementById("deviceList");
+var ManageDevicesEntrypoint = document.getElementById("manageDevices");
+
+_reactDom.default.render(_react.default.createElement(DeviceListComponent, {
   name: "test"
-}), DeviceList);
-},{"react":"../../node_modules/react/index.js","react-dom":"../../node_modules/react-dom/index.js","./container/ManageInstitution":"container/ManageInstitution.js"}]},{},["index.js"], null)
+}), DeviceListEntrypoint);
+
+_reactDom.default.render(_react.default.createElement(CounterComponent, {
+  name: "test"
+}), ManageDevicesEntrypoint);
+},{"react":"../../node_modules/react/index.js","react-dom":"../../node_modules/react-dom/index.js","./container/ManageInstitution":"container/ManageInstitution.js","./container/Counter":"container/Counter.js"}]},{},["index.js"], null)
 //# sourceMappingURL=/react.map

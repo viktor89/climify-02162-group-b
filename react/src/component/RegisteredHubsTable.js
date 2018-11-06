@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -13,6 +12,7 @@ import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/ExpansionPanelActions";
+import Divider from "@material-ui/core/Divider/Divider";
 
 const styles = theme => ({
   root: {
@@ -92,6 +92,7 @@ function DetailedExpansionPanel(props) {
             </FormControl>
           </div>
         </ExpansionPanelDetails>
+        <Divider />
         <ExpansionPanelActions>
           <Button fullWidth size="small" color="primary">Save</Button>
         </ExpansionPanelActions>

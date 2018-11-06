@@ -21,7 +21,7 @@ const styles = theme => ({
 class ManageInstitution extends Component {
   constructor(props){
     super(props);
-    this.state = {pendingHubs: [], registeredHubs: [{mac: "test", building: "303A", room: "45"}]}
+    this.state = {pendingHubs: [], registeredHubs: []}
   }
   componentWillMount() {
     axios.get('/api/v2/hub/getPendingHubs.php')
@@ -29,7 +29,15 @@ class ManageInstitution extends Component {
         this.setState(() => {
           return {pendingHubs: response.data};
         });
-        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios.get('/api/v2/hub/getRegisteredHubs.php')
+      .then((response) => {
+        this.setState(() => {
+          return {registeredHubs: response.data};
+        });
       })
       .catch((error) => {
         console.log(error);

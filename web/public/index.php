@@ -101,7 +101,8 @@
 			</script>
 		<?php } ?>
 
-<script src="js/react.js"></script>
-
+<?php if ( $currentUserID ) { ?>
+    <script src="js/react.js"></script>
+<?php } ?>
 </body>
 </html>
