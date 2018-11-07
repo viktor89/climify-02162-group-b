@@ -50,7 +50,7 @@ const styles = theme => ({
 });
 
 function DetailedExpansionPanel(props) {
-  const { classes, hubs } = props;
+  const { classes, hubs, onHubChange, onSavehub } = props;
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root}>
       <ExpansionPanel>
@@ -68,16 +68,16 @@ function DetailedExpansionPanel(props) {
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Room</InputLabel>
-              <Input/>
+              <Input name="room" onChange={(e) => onHubChange(hub, e)} />
             </FormControl>
           </div>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Building</InputLabel>
-              <Input/>
+              <Input name="building" onChange={(e) => onHubChange(hub, e)} />
             </FormControl>          </div>
           <div className={classNames(classes.column, classes.helper)}>
-            <Button fullWidth size="small" color="primary">Register</Button>
+            <Button fullWidth size="small" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
           </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>

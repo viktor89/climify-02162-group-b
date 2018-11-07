@@ -58704,7 +58704,9 @@ var styles = function styles(theme) {
 
 function DetailedExpansionPanel(props) {
   var classes = props.classes,
-      hubs = props.hubs;
+      hubs = props.hubs,
+      onHubChange = props.onHubChange,
+      onSavehub = props.onSavehub;
   return hubs.map(function (hub) {
     return _react.default.createElement("div", {
       key: hub.mac,
@@ -58731,18 +58733,31 @@ function DetailedExpansionPanel(props) {
       className: classes.formControl
     }, _react.default.createElement(_InputLabel.default, {
       htmlFor: "component-simple"
-    }, "Room"), _react.default.createElement(_Input.default, null))), _react.default.createElement("div", {
+    }, "Room"), _react.default.createElement(_Input.default, {
+      name: "room",
+      onChange: function onChange(e) {
+        return onHubChange(hub, e);
+      }
+    }))), _react.default.createElement("div", {
       className: classes.column
     }, _react.default.createElement(_FormControl.default, {
       className: classes.formControl
     }, _react.default.createElement(_InputLabel.default, {
       htmlFor: "component-simple"
-    }, "Building"), _react.default.createElement(_Input.default, null)), "          "), _react.default.createElement("div", {
+    }, "Building"), _react.default.createElement(_Input.default, {
+      name: "building",
+      onChange: function onChange(e) {
+        return onHubChange(hub, e);
+      }
+    })), "          "), _react.default.createElement("div", {
       className: (0, _classnames.default)(classes.column, classes.helper)
     }, _react.default.createElement(_Button.default, {
       fullWidth: true,
       size: "small",
-      color: "primary"
+      color: "primary",
+      onClick: function onClick() {
+        return onSavehub(hub.mac);
+      }
     }, "Register")))));
   });
 }
@@ -58792,6 +58807,8 @@ var _Divider = _interopRequireDefault(require("@material-ui/core/Divider/Divider
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var styles = function styles(theme) {
   return {
     root: {
@@ -58829,10 +58846,16 @@ var styles = function styles(theme) {
   };
 };
 
+var handleHubChanged = function handleHubChanged(hub, event) {
+  console.log('local change');
+  console.log(hub, _defineProperty({}, event.target.name, event.target.value));
+};
+
 function DetailedExpansionPanel(props) {
   var classes = props.classes,
       hubs = props.hubs,
-      onHubChange = props.onHubChange;
+      onHubChange = props.onHubChange,
+      onSavehub = props.onSavehub;
   return hubs.map(function (hub) {
     return _react.default.createElement("div", {
       key: hub.mac,
@@ -58868,9 +58891,10 @@ function DetailedExpansionPanel(props) {
     }, _react.default.createElement(_InputLabel.default, {
       htmlFor: "component-simple"
     }, "Building"), _react.default.createElement(_Input.default, {
+      name: "building",
       defaultValue: hub.building,
       onChange: function onChange(e) {
-        return onHubChange(e);
+        return onHubChange(hub, e);
       }
     }))), _react.default.createElement("div", {
       className: classes.column
@@ -58879,14 +58903,19 @@ function DetailedExpansionPanel(props) {
     }, _react.default.createElement(_InputLabel.default, {
       htmlFor: "component-simple"
     }, "Room"), _react.default.createElement(_Input.default, {
+      name: "room",
       defaultValue: hub.room,
       onChange: function onChange(e) {
-        return onHubChange(e);
+        return onHubChange(hub, e);
       }
     })))), _react.default.createElement(_Divider.default, null), _react.default.createElement(_ExpansionPanelActions.default, null, _react.default.createElement(_Button.default, {
+      name: "saveHub",
       fullWidth: true,
       size: "small",
-      color: "primary"
+      color: "primary",
+      onClick: function onClick() {
+        return onSavehub(hub.mac);
+      }
     }, "Save"))));
   });
 }
@@ -64423,11 +64452,15 @@ function (_Component) {
       registeredHubs: [],
       institutions: [],
       selectedInstitution: 1,
+      buildings: [],
       labelWidth: 65
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.getHubs = _this.getHubs.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.handleHubChanged = _this.handleHubChanged.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleRegisteredHubChanged = _this.handleRegisteredHubChanged.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleSaveRegisteredHub = _this.handleSaveRegisteredHub.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handlePendingHubChanged = _this.handlePendingHubChanged.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handlePendingHubChanged = _this.handlePendingHubChanged.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -64436,14 +64469,23 @@ function (_Component) {
     value: function componentWillMount() {
       var _this2 = this;
 
-      _axios.default.get('/api/v2/institution/getInstitutions.php').then(function (response) {
+      var promises = [];
+      promises.push(_axios.default.get('/api/v2/institution/getInstitutions.php'));
+      promises.push(_axios.default.get('/api/v2/room/getRooms.php'));
+      Promise.all(promises).then(function (response) {
         _this2.setState(function () {
           return {
-            institutions: response.data
+            institutions: response[0].data
           };
         });
 
-        _this2.getHubs(response.data[0].id);
+        _this2.setState(function () {
+          return {
+            buildings: response[1].data
+          };
+        });
+
+        _this2.getHubs(response[0].data[0].id);
       }).catch(function (error) {
         console.log(error);
       });
@@ -64482,18 +64524,87 @@ function (_Component) {
       this.getHubs(event.target.value);
     }
   }, {
-    key: "handleHubChanged",
-    value: function handleHubChanged(hub) {
-      console.log(hub);
+    key: "handleRegisteredHubChanged",
+    value: function handleRegisteredHubChanged(hub, event) {
+      var registeredHubs = this.state.registeredHubs;
+      var newHub = Object.assign(hub, _defineProperty({}, event.target.name, event.target.value));
+      console.log(Object.assign(registeredHubs, registeredHubs.map(function (el) {
+        return el.mac === newHub.mac ? newHub : el;
+      })));
+    }
+  }, {
+    key: "handleSaveRegisteredHub",
+    value: function handleSaveRegisteredHub(mac) {
+      var _this4 = this;
+
+      var _this$state = this.state,
+          registeredHubs = _this$state.registeredHubs,
+          selectedInstitution = _this$state.selectedInstitution,
+          buildings = _this$state.buildings;
+      var hub = registeredHubs.filter(function (hub) {
+        return hub.mac === mac;
+      }).shift();
+      console.log(buildings.filter(function (building) {
+        return building.name === hub.building;
+      }).shift().id);
+
+      _axios.default.post("/api/v2/hub/register.php", {
+        mac: hub.mac,
+        room: hub.room,
+        building: buildings.filter(function (building) {
+          return building.name === hub.building;
+        }).shift().id
+      }).then(function () {
+        _this4.getHubs(selectedInstitution);
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }, {
+    key: "handlePendingHubChanged",
+    value: function handlePendingHubChanged(hub, event) {
+      var registeredHubs = this.state.registeredHubs;
+      var newHub = Object.assign(hub, _defineProperty({}, event.target.name, event.target.value));
+      console.log(Object.assign(registeredHubs, registeredHubs.map(function (el) {
+        return el.mac === newHub.mac ? newHub : el;
+      })));
+    }
+  }, {
+    key: "handleSavePendingHub",
+    value: function handleSavePendingHub(mac) {
+      var _this5 = this;
+
+      var _this$state2 = this.state,
+          pendingHubs = _this$state2.pendingHubs,
+          selectedInstitution = _this$state2.selectedInstitution,
+          buildings = _this$state2.buildings;
+      var hub = pendingHubs.filter(function (hub) {
+        return hub.mac === mac;
+      }).shift();
+      console.log(buildings.filter(function (building) {
+        return building.name === hub.building;
+      }).shift().id);
+
+      _axios.default.post("/api/v2/hub/register.php", {
+        mac: hub.mac,
+        room: hub.room,
+        building: buildings.filter(function (building) {
+          return building.name === hub.building;
+        }).shift().id
+      }).then(function () {
+        _this5.getHubs(selectedInstitution);
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
   }, {
     key: "render",
     value: function render() {
       var classes = this.props.classes;
-      var _this$state = this.state,
-          pendingHubs = _this$state.pendingHubs,
-          registeredHubs = _this$state.registeredHubs,
-          institutions = _this$state.institutions;
+      var _this$state3 = this.state,
+          pendingHubs = _this$state3.pendingHubs,
+          registeredHubs = _this$state3.registeredHubs,
+          institutions = _this$state3.institutions;
       return _react.default.createElement(_Grid.default, {
         container: true,
         className: classes.root,
@@ -64534,15 +64645,18 @@ function (_Component) {
         item: true,
         md: 6,
         xs: 12
-      }, _react.default.createElement("h3", null, "Registered Hubs"), _react.default.createElement(_RegisteredHubsTable.default, {
-        hubs: registeredHubs
+      }, _react.default.createElement("h3", null, "Registered Hubs"), registeredHubs && _react.default.createElement(_RegisteredHubsTable.default, {
+        hubs: registeredHubs,
+        onSavehub: this.handleSaveRegisteredHub.bind(this),
+        onHubChange: this.handleRegisteredHubChanged.bind(this)
       })), _react.default.createElement(_Grid.default, {
         item: true,
         md: 6,
         xs: 12
       }, _react.default.createElement("h3", null, "Unregistered Hubs"), _react.default.createElement(_PendingHubsTable.default, {
         hubs: pendingHubs,
-        onHubChange: this.handleHubChanged.bind(this)
+        onSavehub: this.handleSavePendingHub.bind(this),
+        onHubChange: this.handlePendingHubChanged.bind(this)
       })));
     }
   }]);

@@ -36,22 +36,30 @@ class ManageInstitution extends Component {
       registeredHubs: [],
       institutions: [],
       selectedInstitution: 1,
+      buildings: [],
       labelWidth: 65,
     };
     this.handleChange = this.handleChange.bind(this);
     this.getHubs = this.getHubs.bind(this);
-    this.handleHubChanged = this.handleHubChanged.bind(this);
+    this.handleRegisteredHubChanged = this.handleRegisteredHubChanged.bind(this);
+    this.handleSaveRegisteredHub = this.handleSaveRegisteredHub.bind(this);
+    this.handlePendingHubChanged = this.handlePendingHubChanged.bind(this);
+    this.handlePendingHubChanged = this.handlePendingHubChanged.bind(this);
   }
 
   componentWillMount() {
-    axios.get('/api/v2/institution/getInstitutions.php')
-      .then((response) => {
-        this.setState(() => {
-          return {institutions: response.data};
-        });
-        this.getHubs(response.data[0].id);
-      })
-      .catch((error) => {
+    const promises = [];
+    promises.push(axios.get('/api/v2/institution/getInstitutions.php'));
+    promises.push(axios.get('/api/v2/room/getRooms.php'));
+    Promise.all(promises).then((response) => {
+      this.setState(() => {
+        return {institutions: response[0].data};
+      });
+      this.setState(() => {
+        return {buildings: response[1].data}
+      });
+      this.getHubs(response[0].data[0].id);
+    }).catch((error) => {
         console.log(error);
       });
   }
@@ -85,8 +93,52 @@ class ManageInstitution extends Component {
     this.getHubs(event.target.value);
   };
 
-  handleHubChanged(hub) {
-    console.log(hub);
+  handleRegisteredHubChanged(hub, event) {
+    const { registeredHubs } = this.state;
+    const newHub = Object.assign(hub, { [event.target.name]: event.target.value });
+    console.log(Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el)))
+  }
+
+  handleSaveRegisteredHub(mac){
+    const { registeredHubs, selectedInstitution, buildings } = this.state;
+    const hub = registeredHubs.filter((hub) => (hub.mac === mac)).shift();
+    console.log(buildings.filter((building) => (building.name === hub.building)).shift().id);
+    axios
+      .post("/api/v2/hub/register.php", {
+        mac: hub.mac,
+        room: hub.room,
+        building: buildings.filter((building) => (building.name === hub.building)).shift().id
+      })
+      .then(() => {
+        this.getHubs(selectedInstitution);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+  handlePendingHubChanged(hub, event) {
+    const { registeredHubs } = this.state;
+    const newHub = Object.assign(hub, { [event.target.name]: event.target.value });
+    console.log(Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el)))
+  }
+
+  handleSavePendingHub(mac){
+    const { pendingHubs, selectedInstitution, buildings } = this.state;
+    const hub = pendingHubs.filter((hub) => (hub.mac === mac)).shift();
+    console.log(buildings.filter((building) => (building.name === hub.building)).shift().id);
+    axios
+      .post("/api/v2/hub/register.php", {
+        mac: hub.mac,
+        room: hub.room,
+        building: buildings.filter((building) => (building.name === hub.building)).shift().id
+      })
+      .then(() => {
+        this.getHubs(selectedInstitution);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   render() {
@@ -129,11 +181,11 @@ class ManageInstitution extends Component {
         </Grid>
         <Grid item md={6} xs={12}>
           <h3>Registered Hubs</h3>
-          <RegisteredHubsTable hubs={registeredHubs} />
+          {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub.bind(this)} onHubChange={this.handleRegisteredHubChanged.bind(this)} />}
         </Grid>
         <Grid item md={6} xs={12}>
           <h3>Unregistered Hubs</h3>
-          <PendingHubsTable hubs={pendingHubs} onHubChange={this.handleHubChanged.bind(this)} />
+          <PendingHubsTable hubs={pendingHubs} onSavehub={this.handleSavePendingHub.bind(this)} onHubChange={this.handlePendingHubChanged.bind(this)} />
         </Grid>
       </Grid>
     );

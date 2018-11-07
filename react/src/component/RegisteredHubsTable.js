@@ -48,8 +48,13 @@ const styles = theme => ({
   },
 });
 
+const handleHubChanged = (hub, event) => {
+  console.log('local change');
+  console.log(hub, { [event.target.name]: event.target.value });
+};
+
 function DetailedExpansionPanel(props) {
-  const { classes, hubs, onHubChange } = props;
+  const { classes, hubs, onHubChange, onSavehub } = props;
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root}>
       <ExpansionPanel>
@@ -72,19 +77,19 @@ function DetailedExpansionPanel(props) {
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Building</InputLabel>
-              <Input defaultValue={hub.building} onChange={(e) => onHubChange(e)} />
+              <Input name="building" defaultValue={hub.building} onChange={(e) => onHubChange(hub, e)} />
             </FormControl>
           </div>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Room</InputLabel>
-              <Input defaultValue={hub.room} onChange={(e) => onHubChange(e)} />
+              <Input name="room" defaultValue={hub.room} onChange={(e) => onHubChange(hub, e)} />
             </FormControl>
           </div>
         </ExpansionPanelDetails>
         <Divider />
         <ExpansionPanelActions>
-          <Button fullWidth size="small" color="primary">Save</Button>
+          <Button name="saveHub" fullWidth size="small" color="primary" onClick={() => onSavehub(hub.mac)}>Save</Button>
         </ExpansionPanelActions>
       </ExpansionPanel>
     </div>
