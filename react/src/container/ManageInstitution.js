@@ -96,18 +96,17 @@ class ManageInstitution extends Component {
   handleRegisteredHubChanged(hub, event) {
     const { registeredHubs } = this.state;
     const newHub = Object.assign(hub, { [event.target.name]: event.target.value });
-    console.log(Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el)))
+    Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
   }
 
   handleSaveRegisteredHub(mac){
     const { registeredHubs, selectedInstitution, buildings } = this.state;
     const hub = registeredHubs.filter((hub) => (hub.mac === mac)).shift();
-    console.log(buildings.filter((building) => (building.name === hub.building)).shift().id);
     axios
       .post("/api/v2/hub/register.php", {
         mac: hub.mac,
         room: hub.room,
-        building: buildings.filter((building) => (building.name === hub.building)).shift().id
+        building: buildings.filter((building) => (building.name === hub.building)).shift().id || ""
       })
       .then(() => {
         this.getHubs(selectedInstitution);
@@ -120,18 +119,17 @@ class ManageInstitution extends Component {
   handlePendingHubChanged(hub, event) {
     const { registeredHubs } = this.state;
     const newHub = Object.assign(hub, { [event.target.name]: event.target.value });
-    console.log(Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el)))
+    Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
   }
 
   handleSavePendingHub(mac){
     const { pendingHubs, selectedInstitution, buildings } = this.state;
     const hub = pendingHubs.filter((hub) => (hub.mac === mac)).shift();
-    console.log(buildings.filter((building) => (building.name === hub.building)).shift().id);
     axios
       .post("/api/v2/hub/register.php", {
         mac: hub.mac,
         room: hub.room,
-        building: buildings.filter((building) => (building.name === hub.building)).shift().id
+        building: buildings.filter((building) => (building.name === hub.building)).shift().id || ""
       })
       .then(() => {
         this.getHubs(selectedInstitution);
