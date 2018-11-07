@@ -72,8 +72,10 @@ class HubDAO extends API\V2\Api
         echo json_encode($hubs);
     }
 
-    public function getRegisteredHubs(){
-        $statement = $this->database->prepare("SELECT HubID, MapName, RoomName FROM Room LEFT JOIN Map ON MapID = BuildingID WHERE RoomName IS NOT NULL AND BuildingID IS NOT NULL");
+    public function getRegisteredHubsByInstitution($institutionID){
+        $statement = $this->database->prepare("SELECT HubID, MapName, RoomName FROM Room LEFT JOIN Map ON MapID = BuildingID WHERE Map.InstID = (?) AND RoomName IS NOT NULL AND BuildingID IS NOT NULL");
+        $institutionID_escaped = $this->database->real_escape_string($institutionID);
+        $statement->bind_param("i", $institutionID_escaped);
 
         $statement->execute();
         $statement->store_result();
