@@ -1,7 +1,13 @@
 # Climify
 
 ## Web service
-The files for the web service is given web/public.
+We've extendended skoleklima with React components and a new api. This approach has been chosen as it best suits a gradual re-write of the codebase into a more structured version. This way we're keeping the old stuff running alongside new features we implement.
+
+### React
+The react source code is located in the react folder. This is transpiled with babel into a single executable javascript-file which we run in the web-app.
+
+### Api V2
+The new api is located in web/public/api/v2. In here we've built a class-based api instead of the old sequential api.
 
 ## Raspberry Pi
 The following section will describe how to setup openHAB and the client software on the Raspberry Pi.
