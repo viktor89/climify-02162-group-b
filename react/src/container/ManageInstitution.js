@@ -40,6 +40,7 @@ class ManageInstitution extends Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.getHubs = this.getHubs.bind(this);
+    this.handleHubChanged = this.handleHubChanged.bind(this);
   }
 
   componentWillMount() {
@@ -83,6 +84,10 @@ class ManageInstitution extends Component {
     this.setState({ [event.target.name]: event.target.value });
     this.getHubs(event.target.value);
   };
+
+  handleHubChanged(hub) {
+    console.log(hub);
+  }
 
   render() {
     const { classes } = this.props;
@@ -128,7 +133,7 @@ class ManageInstitution extends Component {
         </Grid>
         <Grid item md={6} xs={12}>
           <h3>Unregistered Hubs</h3>
-          <PendingHubsTable hubs={pendingHubs} />
+          <PendingHubsTable hubs={pendingHubs} onHubChange={this.handleHubChanged.bind(this)} />
         </Grid>
       </Grid>
     );

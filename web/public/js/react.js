@@ -58754,585 +58754,7 @@ DetailedExpansionPanel.propTypes = {
 var _default = (0, _styles.withStyles)(styles)(DetailedExpansionPanel);
 
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","classnames":"../../node_modules/classnames/index.js","@material-ui/core/ExpansionPanel":"../../node_modules/@material-ui/core/ExpansionPanel/index.js","@material-ui/core/ExpansionPanelDetails":"../../node_modules/@material-ui/core/ExpansionPanelDetails/index.js","@material-ui/core/ExpansionPanelSummary":"../../node_modules/@material-ui/core/ExpansionPanelSummary/index.js","@material-ui/core/ExpansionPanelActions":"../../node_modules/@material-ui/core/ExpansionPanelActions/index.js","@material-ui/core/Typography":"../../node_modules/@material-ui/core/Typography/index.js","@material-ui/icons/ExpandMore":"../../node_modules/@material-ui/icons/ExpandMore.js","@material-ui/core/Button":"../../node_modules/@material-ui/core/Button/index.js","@material-ui/core/Divider":"../../node_modules/@material-ui/core/Divider/index.js","@material-ui/core/FormControl/FormControl":"../../node_modules/@material-ui/core/FormControl/FormControl.js","@material-ui/core/InputLabel/InputLabel":"../../node_modules/@material-ui/core/InputLabel/InputLabel.js","@material-ui/core/Input/Input":"../../node_modules/@material-ui/core/Input/Input.js"}],"../../node_modules/@material-ui/core/internal/SwitchBase.js":[function(require,module,exports) {
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = exports.styles = void 0;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _classnames = _interopRequireDefault(require("classnames"));
-
-var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
-
-var _IconButton = _interopRequireDefault(require("../IconButton")); // @inheritedComponent IconButton
-
-
-var styles = {
-  root: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    transition: 'none',
-    '&:hover': {
-      // Disable the hover effect for the IconButton.
-      backgroundColor: 'transparent'
-    }
-  },
-  checked: {},
-  disabled: {},
-  input: {
-    cursor: 'inherit',
-    position: 'absolute',
-    opacity: 0,
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
-    margin: 0,
-    padding: 0
-  }
-};
-/**
- * @ignore - internal component.
- */
-
-exports.styles = styles;
-
-var SwitchBase =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(SwitchBase, _React$Component);
-
-  function SwitchBase(props) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, SwitchBase);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SwitchBase).call(this));
-
-    _this.handleFocus = function (event) {
-      if (_this.props.onFocus) {
-        _this.props.onFocus(event);
-      }
-
-      var muiFormControl = _this.context.muiFormControl;
-
-      if (muiFormControl && muiFormControl.onFocus) {
-        muiFormControl.onFocus(event);
-      }
-    };
-
-    _this.handleBlur = function (event) {
-      if (_this.props.onBlur) {
-        _this.props.onBlur(event);
-      }
-
-      var muiFormControl = _this.context.muiFormControl;
-
-      if (muiFormControl && muiFormControl.onBlur) {
-        muiFormControl.onBlur(event);
-      }
-    };
-
-    _this.handleInputChange = function (event) {
-      var checked = event.target.checked;
-
-      if (!_this.isControlled) {
-        _this.setState({
-          checked: checked
-        });
-      }
-
-      if (_this.props.onChange) {
-        _this.props.onChange(event, checked);
-      }
-    };
-
-    _this.isControlled = props.checked != null;
-    _this.state = {};
-
-    if (!_this.isControlled) {
-      // not controlled, use internal state
-      _this.state.checked = props.defaultChecked !== undefined ? props.defaultChecked : false;
-    }
-
-    return _this;
-  }
-
-  (0, _createClass2.default)(SwitchBase, [{
-    key: "render",
-    value: function render() {
-      var _classNames;
-
-      var _this$props = this.props,
-          autoFocus = _this$props.autoFocus,
-          checkedProp = _this$props.checked,
-          checkedIcon = _this$props.checkedIcon,
-          classes = _this$props.classes,
-          classNameProp = _this$props.className,
-          disabledProp = _this$props.disabled,
-          icon = _this$props.icon,
-          id = _this$props.id,
-          inputProps = _this$props.inputProps,
-          inputRef = _this$props.inputRef,
-          name = _this$props.name,
-          onBlur = _this$props.onBlur,
-          onChange = _this$props.onChange,
-          onFocus = _this$props.onFocus,
-          readOnly = _this$props.readOnly,
-          required = _this$props.required,
-          tabIndex = _this$props.tabIndex,
-          type = _this$props.type,
-          value = _this$props.value,
-          other = (0, _objectWithoutProperties2.default)(_this$props, ["autoFocus", "checked", "checkedIcon", "classes", "className", "disabled", "icon", "id", "inputProps", "inputRef", "name", "onBlur", "onChange", "onFocus", "readOnly", "required", "tabIndex", "type", "value"]);
-      var muiFormControl = this.context.muiFormControl;
-      var disabled = disabledProp;
-
-      if (muiFormControl) {
-        if (typeof disabled === 'undefined') {
-          disabled = muiFormControl.disabled;
-        }
-      }
-
-      var checked = this.isControlled ? checkedProp : this.state.checked;
-      var hasLabelFor = type === 'checkbox' || type === 'radio';
-      return _react.default.createElement(_IconButton.default, (0, _extends2.default)({
-        component: "span",
-        className: (0, _classnames.default)(classes.root, (_classNames = {}, (0, _defineProperty2.default)(_classNames, classes.checked, checked), (0, _defineProperty2.default)(_classNames, classes.disabled, disabled), _classNames), classNameProp),
-        disabled: disabled,
-        tabIndex: null,
-        role: undefined,
-        onFocus: this.handleFocus,
-        onBlur: this.handleBlur
-      }, other), checked ? checkedIcon : icon, _react.default.createElement("input", (0, _extends2.default)({
-        autoFocus: autoFocus,
-        checked: checked,
-        className: classes.input,
-        disabled: disabled,
-        id: hasLabelFor && id,
-        name: name,
-        onChange: this.handleInputChange,
-        readOnly: readOnly,
-        ref: inputRef,
-        required: required,
-        tabIndex: tabIndex,
-        type: type,
-        value: value
-      }, inputProps)));
-    }
-  }]);
-  return SwitchBase;
-}(_react.default.Component); // NB: If changed, please update Checkbox, Switch and Radio
-// so that the API documentation is updated.
-
-
-SwitchBase.propTypes = "development" !== "production" ? {
-  /**
-   * If `true`, the input will be focused during the first mount.
-   */
-  autoFocus: _propTypes.default.bool,
-
-  /**
-   * If `true`, the component is checked.
-   */
-  checked: _propTypes.default.oneOfType([_propTypes.default.bool, _propTypes.default.string]),
-
-  /**
-   * The icon to display when the component is checked.
-   */
-  checkedIcon: _propTypes.default.node.isRequired,
-
-  /**
-   * Override or extend the styles applied to the component.
-   * See [CSS API](#css-api) below for more details.
-   */
-  classes: _propTypes.default.object.isRequired,
-
-  /**
-   * @ignore
-   */
-  className: _propTypes.default.string,
-
-  /**
-   * @ignore
-   */
-  defaultChecked: _propTypes.default.bool,
-
-  /**
-   * If `true`, the switch will be disabled.
-   */
-  disabled: _propTypes.default.bool,
-
-  /**
-   * If `true`, the ripple effect will be disabled.
-   */
-  disableRipple: _propTypes.default.bool,
-
-  /**
-   * The icon to display when the component is unchecked.
-   */
-  icon: _propTypes.default.node.isRequired,
-
-  /**
-   * The id of the `input` element.
-   */
-  id: _propTypes.default.string,
-
-  /**
-   * Attributes applied to the `input` element.
-   */
-  inputProps: _propTypes.default.object,
-
-  /**
-   * Use that property to pass a ref callback to the native input component.
-   */
-  inputRef: _propTypes.default.oneOfType([_propTypes.default.func, _propTypes.default.object]),
-
-  /*
-   * @ignore
-   */
-  name: _propTypes.default.string,
-
-  /**
-   * @ignore
-   */
-  onBlur: _propTypes.default.func,
-
-  /**
-   * Callback fired when the state is changed.
-   *
-   * @param {object} event The event source of the callback.
-   * You can pull out the new value by accessing `event.target.checked`.
-   * @param {boolean} checked The `checked` value of the switch
-   */
-  onChange: _propTypes.default.func,
-
-  /**
-   * @ignore
-   */
-  onFocus: _propTypes.default.func,
-
-  /**
-   * It prevents the user from changing the value of the field
-   * (not from interacting with the field).
-   */
-  readOnly: _propTypes.default.bool,
-
-  /**
-   * If `true`, the input will be required.
-   */
-  required: _propTypes.default.bool,
-
-  /**
-   * @ignore
-   */
-  tabIndex: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
-
-  /**
-   * The input component property `type`.
-   */
-  type: _propTypes.default.string.isRequired,
-
-  /**
-   * The value of the component.
-   */
-  value: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number, _propTypes.default.bool])
-} : {};
-SwitchBase.contextTypes = {
-  muiFormControl: _propTypes.default.object
-};
-
-var _default = (0, _withStyles.default)(styles, {
-  name: 'MuiPrivateSwitchBase'
-})(SwitchBase);
-
-exports.default = _default;
-},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/defineProperty":"../../node_modules/@babel/runtime/helpers/defineProperty.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","@babel/runtime/helpers/classCallCheck":"../../node_modules/@babel/runtime/helpers/classCallCheck.js","@babel/runtime/helpers/createClass":"../../node_modules/@babel/runtime/helpers/createClass.js","@babel/runtime/helpers/possibleConstructorReturn":"../../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js","@babel/runtime/helpers/getPrototypeOf":"../../node_modules/@babel/runtime/helpers/getPrototypeOf.js","@babel/runtime/helpers/inherits":"../../node_modules/@babel/runtime/helpers/inherits.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js","../IconButton":"../../node_modules/@material-ui/core/IconButton/index.js"}],"../../node_modules/@material-ui/core/Switch/Switch.js":[function(require,module,exports) {
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = exports.styles = void 0;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/extends"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/objectWithoutProperties"));
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _classnames = _interopRequireDefault(require("classnames"));
-
-var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
-
-var _helpers = require("../utils/helpers");
-
-var _SwitchBase = _interopRequireDefault(require("../internal/SwitchBase"));
-
-var styles = function styles(theme) {
-  return {
-    /* Styles applied to the root element. */
-    root: {
-      display: 'inline-flex',
-      width: 62,
-      position: 'relative',
-      flexShrink: 0,
-      zIndex: 0,
-      // Reset the stacking context.
-      // For correct alignment with the text.
-      verticalAlign: 'middle'
-    },
-
-    /* Styles used to create the `icon` passed to the internal `SwitchBase` component `icon` prop. */
-    icon: {
-      boxShadow: theme.shadows[1],
-      backgroundColor: 'currentColor',
-      width: 20,
-      height: 20,
-      borderRadius: '50%'
-    },
-
-    /* Styles applied the icon element component if `checked={true}`. */
-    iconChecked: {
-      boxShadow: theme.shadows[2]
-    },
-
-    /* Styles applied to the internal `SwitchBase` component's `root` class. */
-    switchBase: {
-      padding: 0,
-      height: 48,
-      width: 48,
-      color: theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[400],
-      transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest
-      })
-    },
-
-    /* Styles applied to the internal `SwitchBase` component's `checked` class. */
-    checked: {
-      transform: 'translateX(14px)',
-      '& + $bar': {
-        opacity: 0.5
-      }
-    },
-
-    /* Styles applied to the internal SwitchBase component's root element if `color="primary"`. */
-    colorPrimary: {
-      '&$checked': {
-        color: theme.palette.primary.main,
-        '& + $bar': {
-          backgroundColor: theme.palette.primary.main
-        }
-      }
-    },
-
-    /* Styles applied to the internal SwitchBase component's root element if `color="secondary"`. */
-    colorSecondary: {
-      '&$checked': {
-        color: theme.palette.secondary.main,
-        '& + $bar': {
-          backgroundColor: theme.palette.secondary.main
-        }
-      }
-    },
-
-    /* Styles applied to the internal SwitchBase component's disabled class. */
-    disabled: {
-      '& + $bar': {
-        opacity: theme.palette.type === 'light' ? 0.12 : 0.1
-      },
-      '& $icon': {
-        boxShadow: theme.shadows[1]
-      },
-      '&$switchBase': {
-        color: theme.palette.type === 'light' ? theme.palette.grey[400] : theme.palette.grey[800],
-        '& + $bar': {
-          backgroundColor: theme.palette.type === 'light' ? theme.palette.common.black : theme.palette.common.white
-        }
-      }
-    },
-
-    /* Styles applied to the bar element. */
-    bar: {
-      borderRadius: 14 / 2,
-      display: 'block',
-      position: 'absolute',
-      zIndex: -1,
-      width: 34,
-      height: 14,
-      top: '50%',
-      left: '50%',
-      marginTop: -7,
-      marginLeft: -17,
-      transition: theme.transitions.create(['opacity', 'background-color'], {
-        duration: theme.transitions.duration.shortest
-      }),
-      backgroundColor: theme.palette.type === 'light' ? theme.palette.common.black : theme.palette.common.white,
-      opacity: theme.palette.type === 'light' ? 0.38 : 0.3
-    }
-  };
-};
-
-exports.styles = styles;
-
-function Switch(props) {
-  var classes = props.classes,
-      className = props.className,
-      color = props.color,
-      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "color"]);
-  return _react.default.createElement("span", {
-    className: (0, _classnames.default)(classes.root, className)
-  }, _react.default.createElement(_SwitchBase.default, (0, _extends2.default)({
-    type: "checkbox",
-    icon: _react.default.createElement("span", {
-      className: classes.icon
-    }),
-    classes: {
-      root: (0, _classnames.default)(classes.switchBase, classes["color".concat((0, _helpers.capitalize)(color))]),
-      checked: classes.checked,
-      disabled: classes.disabled
-    },
-    checkedIcon: _react.default.createElement("span", {
-      className: (0, _classnames.default)(classes.icon, classes.iconChecked)
-    })
-  }, other)), _react.default.createElement("span", {
-    className: classes.bar
-  }));
-}
-
-Switch.propTypes = "development" !== "production" ? {
-  /**
-   * If `true`, the component is checked.
-   */
-  checked: _propTypes.default.oneOfType([_propTypes.default.bool, _propTypes.default.string]),
-
-  /**
-   * The icon to display when the component is checked.
-   */
-  checkedIcon: _propTypes.default.node,
-
-  /**
-   * Override or extend the styles applied to the component.
-   * See [CSS API](#css-api) below for more details.
-   */
-  classes: _propTypes.default.object.isRequired,
-
-  /**
-   * @ignore
-   */
-  className: _propTypes.default.string,
-
-  /**
-   * The color of the component. It supports those theme colors that make sense for this component.
-   */
-  color: _propTypes.default.oneOf(['primary', 'secondary', 'default']),
-
-  /**
-   * @ignore
-   */
-  defaultChecked: _propTypes.default.bool,
-
-  /**
-   * If `true`, the switch will be disabled.
-   */
-  disabled: _propTypes.default.bool,
-
-  /**
-   * If `true`, the ripple effect will be disabled.
-   */
-  disableRipple: _propTypes.default.bool,
-
-  /**
-   * The icon to display when the component is unchecked.
-   */
-  icon: _propTypes.default.node,
-
-  /**
-   * The id of the `input` element.
-   */
-  id: _propTypes.default.string,
-
-  /**
-   * Attributes applied to the `input` element.
-   */
-  inputProps: _propTypes.default.object,
-
-  /**
-   * Use that property to pass a ref callback to the native input component.
-   */
-  inputRef: _propTypes.default.oneOfType([_propTypes.default.func, _propTypes.default.object]),
-
-  /**
-   * Callback fired when the state is changed.
-   *
-   * @param {object} event The event source of the callback.
-   * You can pull out the new value by accessing `event.target.checked`.
-   * @param {boolean} checked The `checked` value of the switch
-   */
-  onChange: _propTypes.default.func,
-
-  /**
-   * The input component property `type`.
-   */
-  type: _propTypes.default.string,
-
-  /**
-   * The value of the component.
-   */
-  value: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number, _propTypes.default.bool])
-} : {};
-Switch.defaultProps = {
-  color: 'secondary'
-};
-
-var _default = (0, _withStyles.default)(styles, {
-  name: 'MuiSwitch'
-})(Switch);
-
-exports.default = _default;
-},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","@babel/runtime/helpers/extends":"../../node_modules/@babel/runtime/helpers/extends.js","@babel/runtime/helpers/objectWithoutProperties":"../../node_modules/@babel/runtime/helpers/objectWithoutProperties.js","react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","classnames":"../../node_modules/classnames/index.js","../styles/withStyles":"../../node_modules/@material-ui/core/styles/withStyles.js","../utils/helpers":"../../node_modules/@material-ui/core/utils/helpers.js","../internal/SwitchBase":"../../node_modules/@material-ui/core/internal/SwitchBase.js"}],"../../node_modules/@material-ui/core/Switch/index.js":[function(require,module,exports) {
-"use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  get: function get() {
-    return _Switch.default;
-  }
-});
-
-var _Switch = _interopRequireDefault(require("./Switch"));
-},{"@babel/runtime/helpers/interopRequireDefault":"../../node_modules/@babel/runtime/helpers/interopRequireDefault.js","./Switch":"../../node_modules/@material-ui/core/Switch/Switch.js"}],"component/RegisteredHubsTable.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","classnames":"../../node_modules/classnames/index.js","@material-ui/core/ExpansionPanel":"../../node_modules/@material-ui/core/ExpansionPanel/index.js","@material-ui/core/ExpansionPanelDetails":"../../node_modules/@material-ui/core/ExpansionPanelDetails/index.js","@material-ui/core/ExpansionPanelSummary":"../../node_modules/@material-ui/core/ExpansionPanelSummary/index.js","@material-ui/core/ExpansionPanelActions":"../../node_modules/@material-ui/core/ExpansionPanelActions/index.js","@material-ui/core/Typography":"../../node_modules/@material-ui/core/Typography/index.js","@material-ui/icons/ExpandMore":"../../node_modules/@material-ui/icons/ExpandMore.js","@material-ui/core/Button":"../../node_modules/@material-ui/core/Button/index.js","@material-ui/core/Divider":"../../node_modules/@material-ui/core/Divider/index.js","@material-ui/core/FormControl/FormControl":"../../node_modules/@material-ui/core/FormControl/FormControl.js","@material-ui/core/InputLabel/InputLabel":"../../node_modules/@material-ui/core/InputLabel/InputLabel.js","@material-ui/core/Input/Input":"../../node_modules/@material-ui/core/Input/Input.js"}],"component/RegisteredHubsTable.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59353,8 +58775,6 @@ var _ExpansionPanelDetails = _interopRequireDefault(require("@material-ui/core/E
 var _ExpansionPanelSummary = _interopRequireDefault(require("@material-ui/core/ExpansionPanelSummary"));
 
 var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
-
-var _Switch = _interopRequireDefault(require("@material-ui/core/Switch"));
 
 var _ExpandMore = _interopRequireDefault(require("@material-ui/icons/ExpandMore"));
 
@@ -59411,7 +58831,8 @@ var styles = function styles(theme) {
 
 function DetailedExpansionPanel(props) {
   var classes = props.classes,
-      hubs = props.hubs;
+      hubs = props.hubs,
+      onHubChange = props.onHubChange;
   return hubs.map(function (hub) {
     return _react.default.createElement("div", {
       key: hub.mac,
@@ -59447,7 +58868,10 @@ function DetailedExpansionPanel(props) {
     }, _react.default.createElement(_InputLabel.default, {
       htmlFor: "component-simple"
     }, "Building"), _react.default.createElement(_Input.default, {
-      value: hub.building
+      defaultValue: hub.building,
+      onChange: function onChange(e) {
+        return onHubChange(e);
+      }
     }))), _react.default.createElement("div", {
       className: classes.column
     }, _react.default.createElement(_FormControl.default, {
@@ -59455,7 +58879,10 @@ function DetailedExpansionPanel(props) {
     }, _react.default.createElement(_InputLabel.default, {
       htmlFor: "component-simple"
     }, "Room"), _react.default.createElement(_Input.default, {
-      value: hub.room
+      defaultValue: hub.room,
+      onChange: function onChange(e) {
+        return onHubChange(e);
+      }
     })))), _react.default.createElement(_Divider.default, null), _react.default.createElement(_ExpansionPanelActions.default, null, _react.default.createElement(_Button.default, {
       fullWidth: true,
       size: "small",
@@ -59471,7 +58898,7 @@ DetailedExpansionPanel.propTypes = {
 var _default = (0, _styles.withStyles)(styles)(DetailedExpansionPanel);
 
 exports.default = _default;
-},{"react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","@material-ui/core/ExpansionPanel":"../../node_modules/@material-ui/core/ExpansionPanel/index.js","@material-ui/core/ExpansionPanelDetails":"../../node_modules/@material-ui/core/ExpansionPanelDetails/index.js","@material-ui/core/ExpansionPanelSummary":"../../node_modules/@material-ui/core/ExpansionPanelSummary/index.js","@material-ui/core/Typography":"../../node_modules/@material-ui/core/Typography/index.js","@material-ui/core/Switch":"../../node_modules/@material-ui/core/Switch/index.js","@material-ui/icons/ExpandMore":"../../node_modules/@material-ui/icons/ExpandMore.js","@material-ui/core/Button":"../../node_modules/@material-ui/core/Button/index.js","@material-ui/core/InputLabel/InputLabel":"../../node_modules/@material-ui/core/InputLabel/InputLabel.js","@material-ui/core/Input/Input":"../../node_modules/@material-ui/core/Input/Input.js","@material-ui/core/FormControl/FormControl":"../../node_modules/@material-ui/core/FormControl/FormControl.js","@material-ui/core/ExpansionPanelActions/ExpansionPanelActions":"../../node_modules/@material-ui/core/ExpansionPanelActions/ExpansionPanelActions.js","@material-ui/core/Divider/Divider":"../../node_modules/@material-ui/core/Divider/Divider.js"}],"../../node_modules/dom-helpers/util/inDOM.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","prop-types":"../../node_modules/prop-types/index.js","@material-ui/core/styles":"../../node_modules/@material-ui/core/styles/index.js","@material-ui/core/ExpansionPanel":"../../node_modules/@material-ui/core/ExpansionPanel/index.js","@material-ui/core/ExpansionPanelDetails":"../../node_modules/@material-ui/core/ExpansionPanelDetails/index.js","@material-ui/core/ExpansionPanelSummary":"../../node_modules/@material-ui/core/ExpansionPanelSummary/index.js","@material-ui/core/Typography":"../../node_modules/@material-ui/core/Typography/index.js","@material-ui/icons/ExpandMore":"../../node_modules/@material-ui/icons/ExpandMore.js","@material-ui/core/Button":"../../node_modules/@material-ui/core/Button/index.js","@material-ui/core/InputLabel/InputLabel":"../../node_modules/@material-ui/core/InputLabel/InputLabel.js","@material-ui/core/Input/Input":"../../node_modules/@material-ui/core/Input/Input.js","@material-ui/core/FormControl/FormControl":"../../node_modules/@material-ui/core/FormControl/FormControl.js","@material-ui/core/ExpansionPanelActions/ExpansionPanelActions":"../../node_modules/@material-ui/core/ExpansionPanelActions/ExpansionPanelActions.js","@material-ui/core/Divider/Divider":"../../node_modules/@material-ui/core/Divider/Divider.js"}],"../../node_modules/dom-helpers/util/inDOM.js":[function(require,module,exports) {
 "use strict";
 
 exports.__esModule = true;
@@ -65000,6 +64427,7 @@ function (_Component) {
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.getHubs = _this.getHubs.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleHubChanged = _this.handleHubChanged.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -65052,6 +64480,11 @@ function (_Component) {
     value: function handleChange(event) {
       this.setState(_defineProperty({}, event.target.name, event.target.value));
       this.getHubs(event.target.value);
+    }
+  }, {
+    key: "handleHubChanged",
+    value: function handleHubChanged(hub) {
+      console.log(hub);
     }
   }, {
     key: "render",
@@ -65108,7 +64541,8 @@ function (_Component) {
         md: 6,
         xs: 12
       }, _react.default.createElement("h3", null, "Unregistered Hubs"), _react.default.createElement(_PendingHubsTable.default, {
-        hubs: pendingHubs
+        hubs: pendingHubs,
+        onHubChange: this.handleHubChanged.bind(this)
       })));
     }
   }]);
@@ -65162,7 +64596,7 @@ function (_React$Component) {
   _createClass(DeviceListComponent, [{
     key: "render",
     value: function render() {
-      return _react.default.createElement("div", null, _react.default.createElement("h2", null, "Manage Institution"), _react.default.createElement("hr", null), _react.default.createElement(_ManageInstitution.default, null));
+      return _react.default.createElement("div", null, _react.default.createElement(_ManageInstitution.default, null));
     }
   }]);
 

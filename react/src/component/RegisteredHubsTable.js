@@ -5,7 +5,6 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
-import Switch from '@material-ui/core/Switch';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
@@ -50,7 +49,7 @@ const styles = theme => ({
 });
 
 function DetailedExpansionPanel(props) {
-  const { classes, hubs } = props;
+  const { classes, hubs, onHubChange } = props;
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root}>
       <ExpansionPanel>
@@ -73,13 +72,13 @@ function DetailedExpansionPanel(props) {
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Building</InputLabel>
-              <Input value={hub.building} />
+              <Input defaultValue={hub.building} onChange={(e) => onHubChange(e)} />
             </FormControl>
           </div>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Room</InputLabel>
-              <Input value={hub.room} />
+              <Input defaultValue={hub.room} onChange={(e) => onHubChange(e)} />
             </FormControl>
           </div>
         </ExpansionPanelDetails>
