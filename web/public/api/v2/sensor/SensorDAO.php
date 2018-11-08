@@ -38,7 +38,7 @@ class SensorDAO extends API\V2\Api
      }
 
     public function getSensors(){
-        $statement = $this->database->prepare("SELECT HubID, BuildingID, RoomName, SensorTypeID, SensorID FROM Room NATURAL JOIN SensorInstance ");
+        $statement = $this->database->prepare("SELECT HubID, BuildingID, RoomName, SensorTypeID, SensorID FROM Room NATURAL JOIN SensorInstance");
         $statement->execute();
         $statement->store_result();
         $statement->bind_result($hubMac, $building, $room, $stype, $sID);
