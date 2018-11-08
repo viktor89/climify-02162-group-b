@@ -48431,13 +48431,7 @@ Zlib.prototype._reset = function () {
 };
 
 exports.Zlib = Zlib;
-},{"assert":"../../node_modules/assert/assert.js","pako/lib/zlib/zstream":"../../node_modules/browserify-zlib/node_modules/pako/lib/zlib/zstream.js","pako/lib/zlib/deflate.js":"../../node_modules/browserify-zlib/node_modules/pako/lib/zlib/deflate.js","pako/lib/zlib/inflate.js":"../../node_modules/browserify-zlib/node_modules/pako/lib/zlib/inflate.js","pako/lib/zlib/constants":"../../node_modules/browserify-zlib/node_modules/pako/lib/zlib/constants.js","buffer":"../../node_modules/buffer/index.js","process":"../../node_modules/process/browser.js"}],"../../node_modules/util/support/isBuffer.js":[function(require,module,exports) {
-var Buffer = require("buffer").Buffer;
-module.exports = function isBuffer(arg) {
-  return arg instanceof Buffer;
-}
-
-},{"buffer":"../../node_modules/buffer/index.js"}],"../../node_modules/util/util.js":[function(require,module,exports) {
+},{"assert":"../../node_modules/assert/assert.js","pako/lib/zlib/zstream":"../../node_modules/browserify-zlib/node_modules/pako/lib/zlib/zstream.js","pako/lib/zlib/deflate.js":"../../node_modules/browserify-zlib/node_modules/pako/lib/zlib/deflate.js","pako/lib/zlib/inflate.js":"../../node_modules/browserify-zlib/node_modules/pako/lib/zlib/inflate.js","pako/lib/zlib/constants":"../../node_modules/browserify-zlib/node_modules/pako/lib/zlib/constants.js","buffer":"../../node_modules/buffer/index.js","process":"../../node_modules/process/browser.js"}],"../../node_modules/util/util.js":[function(require,module,exports) {
 var global = arguments[3];
 var process = require("process");
 // Copyright Joyent, Inc. and other Node contributors.
@@ -49029,7 +49023,7 @@ exports._extend = function (origin, add) {
 function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
-},{"./support/isBuffer":"../../node_modules/util/support/isBuffer.js","inherits":"../../node_modules/inherits/inherits_browser.js","process":"../../node_modules/process/browser.js"}],"../../node_modules/browserify-zlib/lib/index.js":[function(require,module,exports) {
+},{"./support/isBuffer":"../../node_modules/assert/node_modules/util/support/isBuffer.js","inherits":"../../node_modules/inherits/inherits_browser.js","process":"../../node_modules/process/browser.js"}],"../../node_modules/browserify-zlib/lib/index.js":[function(require,module,exports) {
 
 var process = require("process");
 'use strict';
@@ -65678,7 +65672,7 @@ function DetailedExpansionPanel(props) {
       className: classes.details
     }, _react.default.createElement("div", {
       className: classes.column
-    }, _react.default.createElement(_Typography.default, null, hub.mac))), _react.default.createElement(_Divider.default, null), _react.default.createElement(_ExpansionPanelActions.default, null, _react.default.createElement(_Button.default, {
+    }, _react.default.createElement(_Typography.default, null, hub.HubID))), _react.default.createElement(_Divider.default, null), _react.default.createElement(_ExpansionPanelActions.default, null, _react.default.createElement(_Button.default, {
       fullWidth: true,
       size: "small",
       color: "primary"
