@@ -11,7 +11,8 @@ object InfluxDBHandler {
     val result = Await.result(seriesQuery, Duration.Inf)
     result.series.flatMap(serie => {
       serie.records.map(record => {
-        Data(serie.name, types(serie.name), record("time"), record("value"))
+        Data(serie.name, types.getOrElse(serie.name, "Unknown type"),
+          record("time"), record("value"))
       })
     })
   }

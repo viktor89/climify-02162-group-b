@@ -19,7 +19,7 @@ try {
 
     $registerClass = new HubDAO();
 
-    $registerClass->registerNewHub($data->mac);
+    $registerClass->registerHub($data);
 
 } catch (ValidationException $e){
     http_response_code(400);

@@ -2,8 +2,6 @@ package com.groupb
 
 import scalaj.http.HttpResponse
 import com.typesafe.config.ConfigFactory
-import com.fasterxml.jackson.core.JsonParseException
-import com.fasterxml.jackson.databind.JsonMappingException
 import org.eclipse.paho.client.mqttv3.{MqttDeliveryToken, MqttMessage}
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalamock.scalatest.MockFactory
@@ -38,7 +36,7 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
     (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(new HttpResponse[String]("", 200, responseMap))
 
     val handler = new MQTTHandler(mockHandler)
-    val tstate = TState("test", 20)
+    val tstate = TState("test", "20")
     val response = handler.act(tstate)
     response.body should be ("")
     response.code should be (200)
@@ -77,8 +75,8 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
     (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(new HttpResponse[String]("", 200, responseMap))
 
     val handler = new MQTTHandler(mockHandler)
-    val tstate = TState("test", 20)
-    handler.messageArrived("topic", new MqttMessage(JsonMapper.toJson(tstate).getBytes))
+    val tstate = TState("test", "20")
+    handler.messageArrived("topic", new MqttMessage(JsonMapper.toJson(tstate).getBytes()))
   }
 
   it should "handle a MQTTMessage consisting of ViewInbox" in {
@@ -95,17 +93,15 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
     handler.messageArrived("topic", new MqttMessage(JsonMapper.toJson(viewInbox).getBytes()))
   }
 
-  it should "throw a JsonParseException when the MQTTMessage payload is not in JSON format" in {
-    val handler = new MQTTHandler(HttpHandler)
-    a [JsonParseException] should be thrownBy {
-      handler.messageArrived("topic", new MqttMessage("...".getBytes()))
-    }
+  it should "do nothing when the MQTT payload is not in JSON" in {
+    val mockHandler = mock[HttpConnection]
+    val handler = new MQTTHandler(mockHandler)
+    handler.messageArrived("topic", new MqttMessage("...".getBytes()))
   }
 
-  it should "throw a JsonMappingException when the MQTTMessage payload does not follow the ICD actions" in {
-    val handler = new MQTTHandler(HttpHandler)
-    a [JsonMappingException] should be thrownBy {
-      handler.messageArrived("topic", new MqttMessage("{ \"test\" : \"data\"}".getBytes()))
-    }
+  it should "do nothing when the MQTTMessage payload does not follow the ICD actions" in {
+    val mockHandler = mock[HttpConnection]
+    val handler = new MQTTHandler(mockHandler)
+    handler.messageArrived("topic", new MqttMessage("{ \"test\" : \"data\"}".getBytes()))
   }
 }

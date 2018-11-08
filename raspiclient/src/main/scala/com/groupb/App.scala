@@ -24,6 +24,7 @@ object App extends App {
   val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
   val brokerURL = endpointConfig.getString("endpoints.mqtt")
   val mac = MACAddress.computeMAC
+  println(mac)
   val persistance = new MemoryPersistence
   val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
   client.connect

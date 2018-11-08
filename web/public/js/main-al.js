@@ -1,6 +1,6 @@
-/**********************************/
+/*********************************
 //		Main JS After login
-/**********************************/
+*********************************/
 
 // Variables
 var showSchool = "";
@@ -50,28 +50,16 @@ firstChange = true;
 isStart=1;
 
 $(document).ready(function() {
-
 	if (currentUserRole == 1 || currentUserRole == 15){
-
 		showSchool="";
-
 		findInstsFromInput();
-
-
-
-
         //List buildings associated with users
         getBuildingList();
         //Creates other user text 
         removeunactivated();
-
     } else {
-
-
-
-    	showSchool = currentUserSchoolName;
+		showSchool = currentUserSchoolName;
     	showSchoolID = currentUserSchool;
-
     	if (currentUserRole == 2){
     		listAllPermissions();
     	}
@@ -81,66 +69,44 @@ $(document).ready(function() {
         graphSelectMap = $(".chart-select-map");
         graphSelectLocation = $(".chart-select-location");
 
-
         //Create list of maps 
         createMapList();
-
-
         loadMessages();
-
 
         //Hide option of writing news if not build man. og project man.
         $(".list-communication-type").hide();
 
-
         //if ( currentUserRole == "1" || currentUserRole == "15" || currentUserRole == "2" || currentUserRole == "3" || currentUserRole == "4" ) {
         	if (currentUserRole!=1){
-        		loadMaps();	
-
-
+        		loadMaps();
         	}
-
-
         	if (currentUserRole == 2){
         		listAllPermissions();
         	}
-
-
         }
-
-
 
     //dateRangePicker1();
     //dateRangePicker2();
-
 
     if (showSchool == "") {
     	$("#create-message-from-user").addClass("button-disabled");
     	$(".load-more-message-user, .load-more-message-admin").hide();
     	$(".load-more-message-info-no-school").show();
     }
-})
+});
 
 
 function findInstsFromInput(){
-
 	$("#buildingResults").empty();
-
-
 	$.get("api/api-get-schools-names.php", function( sData ){
-
-		var jData = JSON.parse(sData); 
-
+		var jData = JSON.parse(sData);
 		muns = [];
 		$.each(jData, function(key,valueObj){
 			if (valueObj !== null && valueObj !=="") {
                 //we need MunID and MunName for possible creation of new building within the Municipality UPDATE: No longer the case - might be of use anyways tho
                 //var jsonValue = JSON.stringify({"InstName":valueObj.InstName,"MunID":valueObj.MunID,"MunName":valueObj.MunName});
                 $(".list-schools-other-users").append('<option id="'+ valueObj.InstID + '" value=' + valueObj.InstName + '>' + valueObj.InstName + '</option>');
-
-
                 $("#buildingResults").append('<option id="' + valueObj.InstID +'" value="' + valueObj.InstName + '"></option>');
-
             }
         });
 	});
@@ -695,8 +661,6 @@ $('#schoolOptions').val('trigger');
 $('#schoolOptions').trigger('change'); //trigger change
 */
 $(document).on('change', '.list-schools-other-users', function() { //hereyo
-
-
 	if (firstChange == false){
 		$(".chart-select-map").find('option').not(':first').remove();
 		$(".chart-select-location").find('option').not(':first').remove();
@@ -752,22 +716,15 @@ $(document).on('change', '.list-schools-other-users', function() { //hereyo
     setTimeout(function(){
         //getDataShowMap();
     }, 1000);
-
-
-
     //select1 = $(".chart-select-floor-plan");
     graphSelectMap = $(".chart-select-map");
     //select = $(".chart-select-floor-plan");
     graphSelectLocation = $(".chart-select-location");
 
-
-    //Create list of maps 
+    //Create list of maps
     createMapList();
-
-
     listAllUsers();
     //getAllSchoolUsers();
-
 });
 
 

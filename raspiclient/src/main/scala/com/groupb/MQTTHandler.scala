@@ -10,7 +10,7 @@ class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
       case ApproveThing(name) =>
         handler.postRequest("http://localhost:8080/rest/inbox/" + name + "/approve", name)
       case TState(uuid, temp) =>
-        handler.postRequest("http://localhost:8080/rest/items/" + uuid, Integer.toString(temp))
+        handler.postRequest("http://localhost:8080/rest/items/" + uuid, temp)
       case ViewInbox() =>
         val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
         handler.postRequest("http://localhost:8080/rest/discovery/bindings/zwave/scan", "")
@@ -21,8 +21,10 @@ class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
   }
 
   override def messageArrived(topic: String, message: MqttMessage) = {
-    val msg = JsonMapper.convert[Message](message.toString)
-    act(msg)
+    JsonMapper.convert[Message](message.toString) match {
+      case Some(msg) => act(msg)
+      case None => println("Invalid message")
+    }
   }
 
   override def connectionLost(cause: Throwable) = {

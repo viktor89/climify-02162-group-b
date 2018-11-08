@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 try {
     date_default_timezone_set('UTC');
     $SensorDAO = new SensorDAO();
-    $SensorDAO->getData();
+    $SensorDAO->getSensors();
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

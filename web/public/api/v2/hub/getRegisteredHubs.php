@@ -2,17 +2,23 @@
 
 use API\V2\ValidationException;
 
-require_once './SensorDAO.php';
+require_once './HubDAO.php';
 require '../../../vendor/autoload.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     die("Method not allowed!");
 }
 try {
     date_default_timezone_set('UTC');
-    $SensorDAO = new SensorDAO();
-    $SensorDAO->getData();
+    # Get JSON as a string
+    $json_str = file_get_contents('php://input');
+
+    # Get as an object
+    $data = json_decode($json_str);
+
+    $registerClass = new HubDAO();
+    $registerClass->getRegisteredHubsByInstitution($data->institutionID);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

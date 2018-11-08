@@ -16,7 +16,7 @@ import scalaj.http._
 ))
 sealed trait Message
 case class ApproveThing(val name : String) extends Message
-case class TState(val uuid: String, val temp : Int) extends Message
+case class TState(val uuid: String, val temp : String) extends Message
 case class ViewInbox() extends Message
 case class Data(val sensorName : String, val sensorType : String, val time : Any, val value : Any)
 
@@ -30,8 +30,18 @@ trait HttpConnection {
 }
 
 object HttpHandler extends HttpConnection {
-  def getRequest(url : String) = Http(url).asString
-  def postRequest(url : String, data : String) = Http(url).postData(data).asString
+  def getRequest(url : String) = {
+    Http(url)
+      .header("Accept", "application/json")
+      .asString
+  }
+  
+  def postRequest(url : String, data : String) = {
+    Http(url)
+      .header("Content-Type", "text/plain")
+      .header("Accept", "application/json")
+      .postData(data).asString
+  }
 }
 
 case class OpenHABItems(val name : String, val label : String)

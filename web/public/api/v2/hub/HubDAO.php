@@ -11,7 +11,7 @@ class HubDAO extends API\V2\Api
      * @return false|string
      * @throws ValidationException
      */
-    public function registerNewHub($mac){
+    public function addNewHub($mac){
         if(empty($mac)){
             throw new Exception("No mac address provided");
         }
@@ -33,20 +33,79 @@ class HubDAO extends API\V2\Api
         echo json_encode(["status" => "ok"]);
     }
 
+    public function registerHub($data){
+        if(empty($data->mac)){
+            throw new Exception("No mac address provided");
+        }
+
+        $mac_escaped = $this->database->real_escape_string($data->mac);
+        if(!isset($data->building) && !isset($data->room)){
+            $statement = $this->database->prepare("INSERT INTO Room (HubID, RoomName, BuildingID) VALUES (?, ?, ?)");
+            $statement->bind_param("ssd", $mac_escaped, $roomName, $locationId);
+
+            $statement->execute();
+            $affectedRows = $statement->affected_rows;
+            $statement->close();
+
+            if($affectedRows < 0) {
+                throw new ValidationException("Hub already registered!");
+            }
+        }else{
+            $building_escaped = empty($data->room) ? null : $this->database->real_escape_string($data->building);
+
+            $room_escaped = empty($data->room) ? null : $this->database->real_escape_string($data->room);
+            $statement = $this->database->prepare("UPDATE Room SET RoomName = ?, BuildingID = ? WHERE HubID LIKE ? ESCAPE '#'");
+            $statement->bind_param("iis", $room_escaped, $building_escaped, $mac_escaped);
+
+            $statement->execute();
+            $affectedRows = $statement->affected_rows;
+            $statement->close();
+
+            if($affectedRows < 0) {
+                throw new ValidationException("error!");
+            }
+        }
+
+        echo json_encode(["status" => "ok"]);
+    }
+
     public function getPendingHubs(){
         $statement = $this->database->prepare("SELECT HubID FROM Room WHERE RoomName IS NULL AND BuildingID IS NULL");
 
         $statement->execute();
         $statement->store_result();
-        $statement->bind_result($hub);
+        $statement->bind_result($hubMac);
 
-        $hubIds = [];
+        $hubs = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $hubIds[] = $hub;
+            $hubs[] = ["mac" => $hubMac, "ip" => "127.127.127.127"];
         }
         $statement->close();
 
-        echo json_encode($hubIds);
+        echo json_encode($hubs);
+    }
+
+    public function getRegisteredHubsByInstitution($institutionID){
+        $statement = $this->database->prepare("SELECT HubID, MapName, RoomName FROM Room LEFT JOIN Map ON MapID = BuildingID WHERE Map.InstID = (?) AND RoomName IS NOT NULL AND BuildingID IS NOT NULL");
+        $institutionID_escaped = $this->database->real_escape_string($institutionID);
+        $statement->bind_param("i", $institutionID_escaped);
+
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($hubMac, $building, $room);
+
+        $hubs = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $hubs[] = ["mac" => $hubMac, "building" => $building, "room" => $room, "ip" => "127.127.127"];
+        }
+        $statement->close();
+
+        echo json_encode($hubs);
+    }
+
+    public function saveHub($hub){
+
     }
 }
