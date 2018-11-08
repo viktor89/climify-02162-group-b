@@ -36,4 +36,18 @@ class SensorDAO extends API\V2\Api
              throw new Exception('Unexpected error while writing data points');
          }
      }
+
+    public function getSensors(){
+        $statement = $this->database->prepare("SELECT HubID, BuildingID, RoomName, SensorTypeID, SensorID FROM Room NATURAL JOIN SensorInstance ");
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($hubMac, $building, $room, $stype, $sID);
+        $hubs = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $hubs[] = ["HubID" => $hubMac, "BuildingID" => $building, "RoomName" => $room, "SensorTypeID"=>$stype, "SensorID" => $sID ];
+        }
+        $statement->close();
+        echo json_encode($hubs);
+    }
 }

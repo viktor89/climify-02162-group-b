@@ -13,6 +13,9 @@ import Divider from "@material-ui/core/Divider";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
+import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
+import Switch from "@material-ui/core/Switch/Switch";
+import FormGroup from "@material-ui/core/FormGroup/FormGroup";
 
 const styles = theme => ({
   root: {
@@ -52,7 +55,7 @@ const styles = theme => ({
 function DetailedExpansionPanel(props) {
   const { classes, hubs } = props;
   return hubs.map(hub => (
-    <div key={HubID.mac} className={classes.root}>
+    <div key={hub.HubID} className={classes.root}>
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
@@ -90,12 +93,13 @@ function DetailedExpansionPanel(props) {
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column} />
           <div className={classes.column}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="component-simple">Building</InputLabel>
-              <Input value={hub.BuildingID} />
-            </FormControl>
+              <FormGroup row>
+                  <FormControlLabel
+                      control={<Switch/>}
+                      label="Receive mode"
+                  />
+              </FormGroup>
           </div>
         </ExpansionPanelDetails>
         <Divider />
