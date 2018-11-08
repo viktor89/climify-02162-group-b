@@ -70,7 +70,7 @@ function DetailedExpansionPanel(props) {
           <div className={classes.column}>
             <Typography className={classes.secondaryHeading}>Type:</Typography>
             <Typography className={classes.secondaryHeading}>
-              {hub.SensorTypeID}
+              {hub.SensorType}
             </Typography>
           </div>
           <div className={classes.column}>
@@ -78,13 +78,13 @@ function DetailedExpansionPanel(props) {
               Building:
             </Typography>
             <Typography className={classes.secondaryHeading}>
-              {hub.BuildingID}
+              {hub.Building}
             </Typography>
           </div>
           <div className={classes.column}>
             <Typography className={classes.secondaryHeading}>Room:</Typography>
             <Typography className={classes.secondaryHeading}>
-              {hub.RoomName}
+              {hub.Room}
             </Typography>
           </div>
         </ExpansionPanelSummary>
