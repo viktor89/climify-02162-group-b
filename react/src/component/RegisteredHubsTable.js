@@ -12,6 +12,9 @@ import Input from "@material-ui/core/Input/Input";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/ExpansionPanelActions";
 import Divider from "@material-ui/core/Divider/Divider";
+import FormGroup from "@material-ui/core/FormGroup/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
+import Switch from "@material-ui/core/Switch/Switch";
 
 const styles = theme => ({
   root: {
@@ -73,7 +76,14 @@ function DetailedExpansionPanel(props) {
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column} />
+          <div className={classes.column}>
+            <FormGroup row>
+              <FormControlLabel
+                  control={<Switch/>}
+                  label="Receive mode"
+              />
+            </FormGroup>
+          </div>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Building</InputLabel>
