@@ -1,18 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import classNames from "classnames";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Typography from "@material-ui/core/Typography";
-import Switch from "@material-ui/core/Switch";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/ExpansionPanelActions";
-import Divider from "@material-ui/core/Divider/Divider";
 
 const styles = theme => ({
   root: {
@@ -52,7 +52,7 @@ const styles = theme => ({
 function DetailedExpansionPanel(props) {
   const { classes, hubs } = props;
   return hubs.map(hub => (
-    <div key={hub.mac} className={classes.root}>
+    <div key={HubID.mac} className={classes.root}>
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>

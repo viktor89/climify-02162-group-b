@@ -24,7 +24,7 @@ class ManageDevice extends Component {
   }
   componentWillMount() {
     axios
-      .get("/api/v2/sensor/getData.php")
+      .get("/api/v2/sensor/getSensors.php")
       .then(response => {
         this.setState(() => {
           return { getSensor: response.data };
