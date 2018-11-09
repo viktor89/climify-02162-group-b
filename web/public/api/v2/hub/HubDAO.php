@@ -30,7 +30,6 @@ class HubDAO extends API\V2\Api
         if($affectedRows < 0) {
             throw new ValidationException("Hub already registered!");
         }
-        echo json_encode(["status" => "ok"]);
     }
 
     public function registerHub($data){
@@ -68,8 +67,6 @@ class HubDAO extends API\V2\Api
                 $this->MQTTService->sendMessage($data->mac, ["payload" => ["receiveMode" => $data->receiveMode]]);
             }
         }
-
-        echo json_encode(["status" => "ok"]);
     }
 
     public function getPendingHubs(){
@@ -86,7 +83,7 @@ class HubDAO extends API\V2\Api
         }
         $statement->close();
 
-        echo json_encode($hubs);
+        return $hubs;
     }
 
     public function getRegisteredHubsByInstitution($institutionID){
@@ -105,10 +102,6 @@ class HubDAO extends API\V2\Api
         }
         $statement->close();
 
-        echo json_encode($hubs);
-    }
-
-    public function saveHub($hub){
-
+        return $hubs;
     }
 }

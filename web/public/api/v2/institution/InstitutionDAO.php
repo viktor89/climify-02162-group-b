@@ -20,6 +20,6 @@ class InstitutionDAO extends API\V2\Api
         }
         $statement->close();
 
-        echo json_encode($institutions);
+        return $institutions;
     }
 }

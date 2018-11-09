@@ -12,7 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 try {
     date_default_timezone_set('UTC');
     $institutionDAO = new InstitutionDAO();
-    $institutionDAO->getInstitutions();
+    $institutions = $institutionDAO->getInstitutions();
+    echo json_encode($institutions);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

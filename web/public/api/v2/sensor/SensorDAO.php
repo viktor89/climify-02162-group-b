@@ -42,12 +42,12 @@ class SensorDAO extends API\V2\Api
         $statement->execute();
         $statement->store_result();
         $statement->bind_result($hubMac, $building, $room, $stype, $sID);
-        $hubs = [];
+        $sensors = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $hubs[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID ];
+            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID ];
         }
         $statement->close();
-        echo json_encode($hubs);
+        return $sensors;
     }
 }

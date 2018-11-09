@@ -14,12 +14,13 @@ try {
     date_default_timezone_set('UTC');
     # Get JSON as a string
     $json_str = file_get_contents('php://input');
-
     # Get as an object
     $data = json_decode($json_str);
 
     $sendClass = new SensorDAO();
     $sendClass->writeDataAsPoints($data);
+
+    echo json_encode(["stats" => "ok"]);
 }
 catch (ValidationException $e){
     http_response_code(400);

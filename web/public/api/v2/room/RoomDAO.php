@@ -19,8 +19,7 @@ class RoomDAO extends API\V2\Api
             $buildings[] = ["id" => $buildingID, "name" => $buildingName];
         }
         $statement->close();
-
-        echo json_encode($buildings);
+        return $buildings;
     }
 
     public function getRoomByName($name) {
