@@ -8,3 +8,4 @@ node_modules/
 *.iml
 
 web/public/js/react.js
+web/public/js/react.map
