@@ -70,7 +70,7 @@ function RolesTable(props) {
           <div className={classes.column}/>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
-          <Button fullWidth size="small" color="primary">Save</Button>
+          <Button fullWidth size="small" color="primary" variant="outlined">Save</Button>
         </ExpansionPanelActions>
       </ExpansionPanel>
     </div>

@@ -73,7 +73,7 @@ function PendingSensorsTable(props) {
                 <TableCell>{hub.sensorType}</TableCell>
                 <TableCell>{hub.Building}</TableCell>
                 <TableCell numeric>{hub.Room}</TableCell>
-                <TableCell><Button className={classes.rowButton} color="primary" variant="raised">Approve</Button><Button variant="raised">Decline</Button></TableCell>
+                <TableCell><Button className={classes.rowButton} color="primary" variant="outlined">Approve</Button><Button variant="outlined" color="secondary">Decline</Button></TableCell>
               </TableRow>
             );
           })}
