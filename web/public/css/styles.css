@@ -221,7 +221,7 @@ select {
 label {
   cursor: pointer; }
 
-button {
+button.button {
   border-radius: 0% !important;
   color: #000000 !important;
   outline: none !important;

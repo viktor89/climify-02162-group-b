@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import GetSensorInstance from "../component/GetSensorInstance";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Select from "@material-ui/core/Select/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import Typography from "@material-ui/core/Typography/Typography";
+import SensorsTable from "../component/SensorsTable";
+import PendingSensorsTable from "../component/PendingSensorsTable";
 
 const styles = theme => ({
   root: {
@@ -19,10 +21,14 @@ const styles = theme => ({
   },
   control: {
     padding: theme.spacing.unit * 2
-  }
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
 });
 
-class ManageDevice extends Component {
+class ManageUsers extends Component {
   constructor(props) {
     super(props);
     this.state = { getSensor: [] };
@@ -52,7 +58,8 @@ class ManageDevice extends Component {
                 <Grid item xs={6}>
                     <h2>Manage Devices</h2>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6}>
+                  <Grid container spacing={16} justify="flex-end">
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel
                             htmlFor="institution-id"
@@ -72,8 +79,6 @@ class ManageDevice extends Component {
                                 return <MenuItem key={1} value={1}>303A</MenuItem>
                         </Select>
                     </FormControl>
-                </Grid>
-                <Grid item xs={3}>
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel
                             htmlFor="institution-id"
@@ -93,9 +98,15 @@ class ManageDevice extends Component {
                             <MenuItem key={45} value={45}>45</MenuItem>
                         </Select>
                     </FormControl>
+                  </Grid>
                 </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5">Pending  Sensors</Typography>
+                <PendingSensorsTable hubs={getSensor} />
+              </Grid>
                 <Grid item xs={12}>
-                    <GetSensorInstance hubs={getSensor} />
+                  <Typography variant="h5">Sensors</Typography>
+                    <SensorsTable hubs={getSensor} />
                 </Grid>
             </Grid>
         </Grid>
@@ -103,4 +114,4 @@ class ManageDevice extends Component {
     );
   }
 }
-export default withStyles(styles)(ManageDevice);
+export default withStyles(styles)(ManageUsers);
