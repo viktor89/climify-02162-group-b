@@ -59772,12 +59772,14 @@ function DetailedExpansionPanel(props) {
       className: classes.details
     }, _react.default.createElement("div", {
       className: classes.column
-    }, _react.default.createElement(_FormGroup.default, {
-      row: true
-    }, _react.default.createElement(_FormControlLabel.default, {
-      control: _react.default.createElement(_Switch.default, null),
-      label: "Receive mode"
-    }))), _react.default.createElement("div", {
+    }, _react.default.createElement(_InputLabel.default, {
+      htmlFor: "receiveMode"
+    }, "Receive Mode"), _react.default.createElement(_Switch.default, {
+      name: "receiveMode",
+      onChange: function onChange(e, val) {
+        return onHubChange(hub, e, val);
+      }
+    })), _react.default.createElement("div", {
       className: classes.column
     }, _react.default.createElement(_FormControl.default, {
       className: classes.formControl
@@ -65418,9 +65420,9 @@ function (_Component) {
     }
   }, {
     key: "handleRegisteredHubChanged",
-    value: function handleRegisteredHubChanged(hub, event) {
+    value: function handleRegisteredHubChanged(hub, event, val) {
       var registeredHubs = this.state.registeredHubs;
-      var newHub = Object.assign(hub, _defineProperty({}, event.target.name, event.target.value));
+      var newHub = Object.assign(hub, _defineProperty({}, event.target.name, event.target.value || val));
       Object.assign(registeredHubs, registeredHubs.map(function (el) {
         return el.mac === newHub.mac ? newHub : el;
       }));
@@ -65443,7 +65445,8 @@ function (_Component) {
         room: hub.room,
         building: buildings.filter(function (building) {
           return building.name === hub.building;
-        }).shift().id || ""
+        }).shift().id || "",
+        receiveMode: hub.receiveMode || false
       }).then(function () {
         _this4.getHubs(selectedInstitution);
       }).catch(function (error) {

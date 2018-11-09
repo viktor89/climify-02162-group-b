@@ -93,9 +93,9 @@ class ManageInstitution extends Component {
     this.getHubs(event.target.value);
   };
 
-  handleRegisteredHubChanged(hub, event) {
+  handleRegisteredHubChanged(hub, event, val) {
     const { registeredHubs } = this.state;
-    const newHub = Object.assign(hub, { [event.target.name]: event.target.value });
+    const newHub = Object.assign(hub, { [event.target.name]: event.target.value || val });
     Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
   }
 
@@ -106,7 +106,8 @@ class ManageInstitution extends Component {
       .post("/api/v2/hub/register.php", {
         mac: hub.mac,
         room: hub.room,
-        building: buildings.filter((building) => (building.name === hub.building)).shift().id || ""
+        building: buildings.filter((building) => (building.name === hub.building)).shift().id || "",
+        receiveMode: hub.receiveMode || false,
       })
       .then(() => {
         this.getHubs(selectedInstitution);

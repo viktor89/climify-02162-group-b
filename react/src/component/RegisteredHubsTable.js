@@ -77,12 +77,11 @@ function DetailedExpansionPanel(props) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
           <div className={classes.column}>
-            <FormGroup row>
-              <FormControlLabel
-                  control={<Switch/>}
-                  label="Receive mode"
-              />
-            </FormGroup>
+            <InputLabel htmlFor="receiveMode">Receive Mode</InputLabel>
+            <Switch
+              name="receiveMode"
+              onChange={(e, val) => onHubChange(hub, e, val)}
+            />
           </div>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
