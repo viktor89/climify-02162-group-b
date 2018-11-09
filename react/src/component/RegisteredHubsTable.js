@@ -15,6 +15,7 @@ import Divider from "@material-ui/core/Divider/Divider";
 import FormGroup from "@material-ui/core/FormGroup/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Switch from "@material-ui/core/Switch/Switch";
+import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
   root: {
@@ -98,7 +99,14 @@ function DetailedExpansionPanel(props) {
         </ExpansionPanelDetails>
         <Divider />
         <ExpansionPanelActions>
-          <Button name="saveHub" fullWidth size="small" color="primary" onClick={() => onSavehub(hub.mac)}>Save</Button>
+          <Grid container spacing={16}>
+            <Grid item xs={6}>
+              <Button fullWidth size="small" color="primary" variant="outlined" onClick={() => onSavehub(hub.mac)}>Save</Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button fullWidth size="small" color="secondary" variant="outlined">Unregister</Button>
+            </Grid>
+          </Grid>
         </ExpansionPanelActions>
       </ExpansionPanel>
     </div>

@@ -13,6 +13,8 @@ import Divider from '@material-ui/core/Divider';
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
+import Graphs from "../container/Graphs";
+import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
   root: {
@@ -82,7 +84,14 @@ function UsersTable(props) {
           <div className={classes.column}/>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
-          <Button fullWidth size="small" color="primary">Save</Button>
+          <Grid container spacing={16}>
+            <Grid item xs={6}>
+              <Button fullWidth size="small" color="primary" variant="outlined">Save</Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
+            </Grid>
+          </Grid>
         </ExpansionPanelActions>
       </ExpansionPanel>
     </div>

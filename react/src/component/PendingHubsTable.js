@@ -77,7 +77,7 @@ function DetailedExpansionPanel(props) {
               <Input name="building" onChange={(e) => onHubChange(hub, e)} />
             </FormControl>          </div>
           <div className={classNames(classes.column, classes.helper)}>
-            <Button fullWidth size="small" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
+            <Button fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
           </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>
