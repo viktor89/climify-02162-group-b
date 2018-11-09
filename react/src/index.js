@@ -38,7 +38,6 @@ class GraphsComponent extends React.Component {
   }
 }
 
-
 class ManageUsersComponent extends React.Component {
   render() {
     return (
@@ -53,6 +52,7 @@ let deviceListEntrypoint = document.getElementById("deviceList");
 let manageDevicesEntrypoint = document.getElementById("manageDevices");
 let GraphsEntrypoint = document.getElementById("graphs");
 let ManageUsersEntrypoint = document.getElementById("manageUsers");
+
 ReactDOM.render(<DeviceListComponent name="list-hubs" />, deviceListEntrypoint );
 ReactDOM.render(<ManageDevicesComponent  name="manage-devices" />, manageDevicesEntrypoint );
 ReactDOM.render(<GraphsComponent  name="graphs" />, GraphsEntrypoint );

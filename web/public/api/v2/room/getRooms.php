@@ -11,8 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 try {
     date_default_timezone_set('UTC');
-    $registerClass = new RoomDAO();
-    $registerClass->getRooms();
+    $roomDAO = new RoomDAO();
+    $rooms = $roomDAO->getRooms();
+    echo json_encode($rooms);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

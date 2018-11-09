@@ -17,8 +17,9 @@ try {
     # Get as an object
     $data = json_decode($json_str);
 
-    $registerClass = new HubDAO();
-    $registerClass->getRegisteredHubsByInstitution($data->institutionID);
+    $hubDAO = new HubDAO();
+    $hubs = $hubDAO->getRegisteredHubsByInstitution($data->institutionID);
+    echo json_encode($hubs);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

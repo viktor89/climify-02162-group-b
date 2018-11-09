@@ -12,7 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 try {
     date_default_timezone_set('UTC');
     $SensorDAO = new SensorDAO();
-    $SensorDAO->getSensors();
+    $sensors = $SensorDAO->getSensors();
+    echo json_encode($sensors);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());
