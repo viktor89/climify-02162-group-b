@@ -64,6 +64,9 @@ class HubDAO extends API\V2\Api
             if($affectedRows < 0) {
                 throw new ValidationException("error!");
             }
+            if(isset($data->receiveMode)){
+                $this->MQTTService->sendMessage($data->mac, ["payload" => ["receiveMode" => $data->receiveMode]]);
+            }
         }
 
         echo json_encode(["status" => "ok"]);
