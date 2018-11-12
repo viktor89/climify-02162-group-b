@@ -19,7 +19,7 @@
 				<li class="menu-link menu-link-devices" data-go-to="devices">
 					<a href="#/devices">
 						<i class="menu-link-ico nav-icon fa fa-podcast" aria-hidden="true"></i>
-						<p class="menu-link-text">Manage Building</p>
+						<p class="menu-link-text">Manage Institution</p>
 					</a>
 				</li>
 				<li class="menu-link menu-link-data-map" data-go-to="data-map">
@@ -43,7 +43,7 @@
 				<li class="menu-link menu-link-other-users" data-go-to="other-users">
 					<a href="#/other-users">
 						<i class="menu-link-ico nav-icon fa fa-users" aria-hidden="true"></i>
-						<p class="menu-link-text" id="menu-link-text-other-users">Other Users</p>
+						<p class="menu-link-text" id="menu-link-text-other-users">Manage Users</p>
 					</a>
 				</li>
                 <li class="menu-link menu-link-permissions" data-go-to="permissions">

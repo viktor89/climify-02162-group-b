@@ -1,8 +1,5 @@
 <?php
-require '../api/v2/Validator.php';
-require '../vendor/autoload.php';
-
-use API\V2\Validator;
+namespace API\V2;
 
 class MQTTService
 {
@@ -10,7 +7,7 @@ class MQTTService
     private $validator;
     public function __construct()
     {
-        $this->connection = new Mosquitto\Client;
+        $this->connection = new \Mosquitto\Client;
         $this->validator = new Validator();
     }
 
@@ -18,7 +15,7 @@ class MQTTService
      * @param $topic
      * @param $message
      * @return bool
-     * @throws Exception
+     * @throws \Exception
      */
     public function sendMessage($topic, $message) {
         $this->validator::validateMQTTMessage($message);

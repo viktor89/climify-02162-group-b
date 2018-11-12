@@ -221,7 +221,7 @@ select {
 label {
   cursor: pointer; }
 
-button {
+button.button {
   border-radius: 0% !important;
   color: #000000 !important;
   outline: none !important;
@@ -230,7 +230,7 @@ button {
   border: 1px solid #4f5567 !important;
   height: 26px;
   min-width: 140px; }
-  button:hover, button:focus {
+  button.button:hover, button.button:focus {
     cursor: pointer !important;
     background-color: #92b2c7 !important; }
 
