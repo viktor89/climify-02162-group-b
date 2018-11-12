@@ -1,4 +1,4 @@
-package com.groupb
+»package com.groupb
 
 import com.paulgoldbaum.influxdbclient.Database
 import scalaj.http.HttpResponse
