@@ -17,7 +17,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     val json = JsonMapper.toJson(dataMsg)
 
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects (sendURL, json) returns(new HttpResponse[String]("", 200, responseMap))
+    (mockHandler.postRequest _) expects (sendURL, json) returns(Some(new HttpResponse[String]("", 200, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result should be (data)
@@ -30,7 +30,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     val json = JsonMapper.toJson(dataMsg)
 
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects (sendURL, json) returns(new HttpResponse[String]("", 200, responseMap))
+    (mockHandler.postRequest _) expects (sendURL, json) returns(Some(new HttpResponse[String]("", 200, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result should be (data)
@@ -45,7 +45,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     val json = JsonMapper.toJson(dataMsg)
 
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects(sendURL, json) returns(new HttpResponse[String]("", 404, responseMap))
+    (mockHandler.postRequest _) expects(sendURL, json) returns(Some(new HttpResponse[String]("", 404, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result.size should be (0)

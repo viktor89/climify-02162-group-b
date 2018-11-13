@@ -21,26 +21,28 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
 
   it should "act upon an ApproveThing message" in {
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects("http://localhost:8080/rest/inbox/test/approve", "test") returns(new HttpResponse[String]("", 200, responseMap))
+    (mockHandler.postRequest _) expects("http://localhost:8080/rest/inbox/test/approve", "test") returns(Some(new HttpResponse[String]("", 200, responseMap)))
 
     val handler = new MQTTHandler(mockHandler)
     val approveThing = ApproveThing("test")
     val response = handler.act(approveThing)
-    response.body should be ("")
-    response.code should be (200)
-    response.headers should be (responseMap)
+    response.isEmpty should be (false)
+    response.get.body should be ("")
+    response.get.code should be (200)
+    response.get.headers should be (responseMap)
   }
 
   it should "act upon a TState message" in {
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(new HttpResponse[String]("", 200, responseMap))
+    (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(Some(new HttpResponse[String]("", 200, responseMap)))
 
     val handler = new MQTTHandler(mockHandler)
     val tstate = TState("test", "20")
     val response = handler.act(tstate)
-    response.body should be ("")
-    response.code should be (200)
-    response.headers should be (responseMap)
+    response.isEmpty should be (false)
+    response.get.body should be ("")
+    response.get.code should be (200)
+    response.get.headers should be (responseMap)
   }
 
   it should "act upon a ViewInbox message" in {
@@ -48,22 +50,22 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
     val dataMsg = DataMessage(MACAddress.computeMAC, "\"\"")
     val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
     inSequence {
-      (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(new HttpResponse[String]("", 200, responseMap))
-      (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(new HttpResponse[String]("", 200, responseMap))
-      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns(new HttpResponse[String]("", 200, responseMap))
-
+      (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(Some(new HttpResponse[String]("", 200, responseMap)))
+      (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Some(new HttpResponse[String]("", 200, responseMap)))
+      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns(Some(new HttpResponse[String]("", 200, responseMap)))
     }
     val handler = new MQTTHandler(mockHandler)
     val viewInbox = ViewInbox()
     val response = handler.act(viewInbox)
-    response.body should be ("")
-    response.code should be (200)
-    response.headers should be (responseMap)
+    response.isEmpty should be (false)
+    response.get.body should be ("")
+    response.get.code should be (200)
+    response.get.headers should be (responseMap)
   }
 
   it should "handle a MQTTMessage consisting of ApproveThing" in {
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects("http://localhost:8080/rest/inbox/test/approve", "test") returns(new HttpResponse[String]("", 200, responseMap))
+    (mockHandler.postRequest _) expects("http://localhost:8080/rest/inbox/test/approve", "test") returns(Some(new HttpResponse[String]("", 200, responseMap)))
 
     val handler = new MQTTHandler(mockHandler)
     val approveThing = ApproveThing("test")
@@ -72,7 +74,7 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
 
   it should "handle a MQTTMessage consisting of TState" in {
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(new HttpResponse[String]("", 200, responseMap))
+    (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(Some(new HttpResponse[String]("", 200, responseMap)))
 
     val handler = new MQTTHandler(mockHandler)
     val tstate = TState("test", "20")
@@ -84,9 +86,9 @@ class MQTTHandlerTests extends FlatSpec with Matchers with MockFactory {
     val dataMsg = DataMessage(MACAddress.computeMAC, "\"\"")
     val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
     inSequence {
-      (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(new HttpResponse[String]("", 200, responseMap))
-      (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(new HttpResponse[String]("", 200, responseMap))
-      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns (new HttpResponse[String]("", 200, responseMap))
+      (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(Some(new HttpResponse[String]("", 200, responseMap)))
+      (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Some(new HttpResponse[String]("", 200, responseMap)))
+      (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns (Some(new HttpResponse[String]("", 200, responseMap)))
     }
     val handler = new MQTTHandler(mockHandler)
     val viewInbox = ViewInbox()

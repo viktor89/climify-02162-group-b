@@ -10,10 +10,9 @@ object Sequencer {
       JsonMapper.toJson(DataMessage(MACAddress.computeMAC,
         JsonMapper.toJson(data))))
 
-    if (response.code == 200) {
-      data
-    } else {
-      Seq[Data]()
+    response match {
+      case Some(resp) if resp.code == 200 => data
+      case _ => Seq[Data]()
     }
   }
 }

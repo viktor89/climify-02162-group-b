@@ -1,9 +1,8 @@
 package com.groupb
 
 object ItemFetcher {
-  def getOpenHABItems(http : HttpConnection) = {
-    val response = http.getRequest("http://localhost:8080/rest/items?recursive=false")
-    JsonMapper.convert[Seq[OpenHABItems]](response.body) match {
+  private def convertToMap(body : String) = {
+    JsonMapper.convert[Seq[OpenHABItems]](body) match {
       case Some(items) => {
         items.foldLeft(Map[String, String]()) {
           (acc, item) => acc + (item.name -> item.label)
@@ -12,6 +11,14 @@ object ItemFetcher {
       case None => {
         Map[String, String]()
       }
+    }
+  }
+
+  def getOpenHABItems(http : HttpConnection) = {
+    val response = http.getRequest("http://localhost:8080/rest/items?recursive=false")
+    response match {
+      case Some(resp) if resp.code == 200 => convertToMap(resp.body)
+      case None => Map[String, String]()
     }
   }
 }
