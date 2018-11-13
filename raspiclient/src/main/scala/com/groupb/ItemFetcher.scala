@@ -1,5 +1,7 @@
 package com.groupb
 
+import scala.language.postfixOps
+
 object ItemFetcher {
   private def convertToMap(body : String) = {
     JsonMapper.convert[Seq[OpenHABItems]](body) match {
@@ -20,5 +22,12 @@ object ItemFetcher {
       case Some(resp) => convertToMap(resp.body)
       case None => Map[String, String]()
     }
+  }
+
+  def getOpenHABList(http : HttpConnection) = {
+    val datamap = getOpenHABItems(http)
+    datamap.map{
+      case (key, value) => Sensor(key, value)
+    } toList
   }
 }

@@ -32,7 +32,8 @@ object App extends App {
   val callback = new MQTTHandler(HttpHandler)
   client.setCallback(callback)
 
-  HttpHandler.postRequest(registerURL, JsonMapper.toJson(mac))
+  val registerMsg = DataMessage(mac, JsonMapper.toJson(ItemFetcher.getOpenHABList(HttpHandler)))
+  HttpHandler.postRequest(registerURL, JsonMapper.toJson(registerMsg))
 
   val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem()

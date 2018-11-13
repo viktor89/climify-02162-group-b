@@ -64,4 +64,25 @@ class ItemFetcherTests extends FlatSpec with Matchers with MockFactory {
     val result = ItemFetcher.getOpenHABItems(mockHandler)
     result.size should be (0)
   }
+
+  it should "return an empty list when OpenHAB returns an empty list" in {
+    val mockHandler = mock[HttpConnection]
+    (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Some(new HttpResponse[String]("[]", 200, responseMap)))
+    val result = ItemFetcher.getOpenHABList(mockHandler)
+    result.size should be (0)
+  }
+
+  it should "return a list representation when OpenHAB has items defined" in {
+    val mockHandler = mock[HttpConnection]
+    (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Some(new HttpResponse[String]("[{\"name\": \"device1\", \"label\": \"device1\"}, {\"name\": \"device2\", \"label\": \"device2\"}, {\"name\": \"device3\", \"label\": \"device3\"}]", 200, responseMap)))
+
+    val result = ItemFetcher.getOpenHABList(mockHandler)
+    result.size should be (3)
+    result(0).sensorName should be ("device1")
+    result(0).sensorType should be ("device1")
+    result(1).sensorName should be ("device2")
+    result(1).sensorType should be ("device2")
+    result(2).sensorName should be ("device3")
+    result(2).sensorName should be ("device3")
+  }
 }
