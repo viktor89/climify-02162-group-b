@@ -38,13 +38,4 @@ object App extends App {
   val system = ActorSystem()
   val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
   val scheduler = system.scheduler.schedule(2 seconds, 5 minutes, transmissionActor, "send") 
-
-  /*sys.addShutdownHook({
-    println("Shutdown")
-    client.disconnect
-    scheduler.cancel
-    transmissionActor ! PoisonPill
-    influxdb.close
-    System.exit(0)
-  })*/
 }
