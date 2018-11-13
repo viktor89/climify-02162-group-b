@@ -1,7 +1,5 @@
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE RolePermission;
-TRUNCATE TABLE Permission;
-SET FOREIGN_KEY_CHECKS = 1;
+DELETE FROM RolePermission WHERE 1;
+DELETE FROM Permission WHERE 1;
 
 INSERT INTO Permission(PermID,PermName,PermDescription) VALUES  (1,'Manage Institution','');
 INSERT INTO Permission(PermID,PermName,PermDescription) VALUES  (2,'Manage Devices','');
