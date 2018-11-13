@@ -86,7 +86,6 @@ function SensorsTable(props) {
                   label="Running"
                   clickable
                   className={classes.chip}
-                  color="green"
                   onDelete={() => console.log('clicked')}
                   deleteIcon={<RefreshIcon className={classes.chipRefresh} />}
                 /></TableCell>

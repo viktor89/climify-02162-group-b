@@ -35,6 +35,11 @@ const styles = theme => ({
   details: {
     alignItems: 'center',
   },
+  buttonRoot: {
+    '& span': {
+      marginTop: '0 !important',
+    }
+  },
   column: {
     flexBasis: '33.33%',
   },
@@ -86,10 +91,10 @@ function UsersTable(props) {
         <ExpansionPanelActions>
           <Grid container spacing={16}>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="primary" variant="outlined">Save</Button>
+              <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
+              <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
             </Grid>
           </Grid>
         </ExpansionPanelActions>

@@ -2,14 +2,10 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Select from "@material-ui/core/Select/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
-import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import Typography from "@material-ui/core/Typography/Typography";
 import SensorsTable from "../component/SensorsTable";
 import PendingSensorsTable from "../component/PendingSensorsTable";
+import LocationSelector from "../component/LocationSelector";
 
 const styles = theme => ({
   root: {
@@ -60,44 +56,7 @@ class ManageUsers extends Component {
                 </Grid>
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel
-                            htmlFor="institution-id"
-                        >
-                            Building
-                        </InputLabel>
-                        <Select
-                            value={1}
-                            input={
-                                <OutlinedInput
-                                    labelWidth={85}
-                                    name="selectedInstitution"
-                                    id="institution-id"
-                                />
-                            }
-                        >
-                                return <MenuItem key={1} value={1}>303A</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel
-                            htmlFor="institution-id"
-                        >
-                            Room
-                        </InputLabel>
-                        <Select
-                            value={45}
-                            input={
-                                <OutlinedInput
-                                    labelWidth={65}
-                                    name="selectedInstitution"
-                                    id="institution-id"
-                                />
-                            }
-                        >
-                            <MenuItem key={45} value={45}>45</MenuItem>
-                        </Select>
-                    </FormControl>
+                    <LocationSelector />
                   </Grid>
                 </Grid>
               <Grid item xs={12}>

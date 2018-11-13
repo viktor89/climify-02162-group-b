@@ -40,6 +40,11 @@ const styles = theme => ({
     borderLeft: `2px solid ${theme.palette.divider}`,
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
+  buttonRoot: {
+    '& span': {
+      marginTop: '0 !important',
+    }
+  },
   link: {
     color: theme.palette.primary.main,
     textDecoration: 'none',
@@ -70,7 +75,7 @@ function RolesTable(props) {
           <div className={classes.column}/>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
-          <Button fullWidth size="small" color="primary" variant="outlined">Save</Button>
+          <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
         </ExpansionPanelActions>
       </ExpansionPanel>
     </div>
