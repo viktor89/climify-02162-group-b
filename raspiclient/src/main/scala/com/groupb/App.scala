@@ -6,7 +6,7 @@ import com.paulgoldbaum.influxdbclient._
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import akka.actor.{Actor, ActorSystem, ActorRef, Props, PoisonPill}
+import akka.actor.{Actor, ActorSystem, ActorRef, Props}
 import com.typesafe.config.ConfigFactory
 
 /**
