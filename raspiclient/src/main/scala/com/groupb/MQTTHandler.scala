@@ -1,7 +1,8 @@
 package com.groupb
 
-import org.eclipse.paho.client.mqttv3._
-import scalaj.http._
+import org.eclipse.paho.client.mqttv3.{ MqttCallback, MqttMessage, IMqttDeliveryToken }
+import scala.util.{ Success, Failure }
+import scalaj.http.HttpResponse
 import com.typesafe.config.ConfigFactory
 
 class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
@@ -16,16 +17,16 @@ class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
         handler.postRequest("http://localhost:8080/rest/discovery/bindings/zwave/scan", "")
         val response = handler.getRequest("http://localhost:8080/rest/inbox")
         response match {
-          case Some(resp) => handler.postRequest(inboxURL, JsonMapper.toJson(DataMessage(MACAddress.computeMAC, JsonMapper.toJson(resp.body))))
-          case None => None
+          case Success(resp) => handler.postRequest(inboxURL, JsonMapper.toJson(DataMessage(MACAddress.computeMAC, JsonMapper.toJson(resp.body))))
+          case e => e
         }
     }
   }
 
   override def messageArrived(topic: String, message: MqttMessage) = {
     JsonMapper.convert[Message](message.toString) match {
-      case Some(msg) => act(msg)
-      case None => println("Invalid message")
+      case Success(msg) => act(msg)
+      case Failure(e) => println(s"Invalid message ${e.getMessage}")
     }
   }
 

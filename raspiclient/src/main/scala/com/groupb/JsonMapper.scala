@@ -3,7 +3,7 @@ package com.groupb
 import com.fasterxml.jackson.databind.{ObjectMapper, DeserializationFeature}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
-import java.io.IOException
+import scala.util.Try
 
 object JsonMapper {
   private val mapper = new ObjectMapper() with ScalaObjectMapper
@@ -15,10 +15,6 @@ object JsonMapper {
   }
 
   def convert[Type](jsonString : String)(implicit m : Manifest[Type]) = {
-    try {
-      Some(mapper.readValue[Type](jsonString))
-    } catch {
-      case e : IOException => None
-    }
+    Try(mapper.readValue[Type](jsonString))
   }
 }
