@@ -73,4 +73,4 @@ class ManageSensors extends Component {
     );
   }
 }
-export default withStyles(styles)(ManageSensors );
+export default withStyles(styles)(ManageSensors);

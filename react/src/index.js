@@ -48,12 +48,12 @@ class ManageUsersComponent extends React.Component {
   }
 }
 
-let manageInstitutionEntrypoint = document.getElementById("manageInstitution");
-let manageSensorsEntrypoint = document.getElementById("manageSensors");
-let GraphsEntrypoint = document.getElementById("graphs");
-let ManageUsersEntrypoint = document.getElementById("manageUsers");
+const manageInstitutionEntrypoint = document.getElementById("manageInstitution");
+const manageSensorsEntrypoint = document.getElementById("manageSensors");
+const GraphsEntrypoint = document.getElementById("graphs");
+const ManageUsersEntrypoint = document.getElementById("manageUsers");
 
-ReactDOM.render(<ManageInstitutionComponent name="manage-institution" />, manageInstitutionEntrypoint  );
-ReactDOM.render(<ManageSensorsComponent name="manage-devices" />, manageSensorsEntrypoint  );
-ReactDOM.render(<GraphsComponent  name="graphs" />, GraphsEntrypoint );
-ReactDOM.render(<ManageUsersComponent  name="manage-users" />, ManageUsersEntrypoint );
+manageInstitutionEntrypoint && ReactDOM.render(<ManageInstitutionComponent name="manage-institution" />, manageInstitutionEntrypoint);
+manageSensorsEntrypoint && ReactDOM.render(<ManageSensorsComponent name="manage-devices" />, manageSensorsEntrypoint);
+GraphsEntrypoint && ReactDOM.render(<GraphsComponent  name="graphs" />, GraphsEntrypoint);
+ManageUsersEntrypoint && ReactDOM.render(<ManageUsersComponent  name="manage-users" />, ManageUsersEntrypoint);
