@@ -1,5 +1,6 @@
 package com.groupb
 
+import scala.util.Try
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
 import scalaj.http._
@@ -25,29 +26,25 @@ case class MacMessage(val mac : String) extends TransportMessage
 case class DataMessage(val mac : String, val data : String) extends TransportMessage
 
 trait HttpConnection {
-  def getRequest(url : String) : Option[HttpResponse[String]]
-  def postRequest(url : String, data : String) : Option[HttpResponse[String]]
+  def getRequest(url : String) : Try[HttpResponse[String]]
+  def postRequest(url : String, data : String) : Try[HttpResponse[String]]
 }
 
 object HttpHandler extends HttpConnection {
   def getRequest(url : String) = {
-    try {
-      Some(Http(url)
+    Try{
+      Http(url)
         .header("Accept", "application/json")
-        .asString)
-    } catch {
-      case e : Exception => None
+        .asString
     }
   }
 
   def postRequest(url : String, data : String) = {
-    try {
-    Some(Http(url)
-      .header("Content-Type", "text/plain")
-      .header("Accept", "application/json")
-      .postData(data).asString)
-    } catch {
-      case e : Exception => None
+    Try {
+      Http(url)
+        .header("Content-Type", "text/plain")
+        .header("Accept", "application/json")
+        .postData(data).asString
     }
   }
 }

@@ -1,6 +1,7 @@
 package com.groupb
 
 import scala.language.postfixOps
+import scala.util.{Success, Failure}
 
 object ItemFetcher {
   private def convertToMap(body : String) = {
@@ -19,8 +20,8 @@ object ItemFetcher {
   def getOpenHABItems(http : HttpConnection) = {
     val response = http.getRequest("http://localhost:8080/rest/items?recursive=false")
     response match {
-      case Some(resp) => convertToMap(resp.body)
-      case None => Map[String, String]()
+      case Success(resp) => convertToMap(resp.body)
+      case Failure(_) => Map[String, String]()
     }
   }
 

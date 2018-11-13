@@ -2,6 +2,7 @@ package com.groupb
 
 import scalaj.http.HttpResponse
 import com.typesafe.config.ConfigFactory
+import scala.util.{Success, Failure}
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalamock.scalatest.MockFactory
 
@@ -17,7 +18,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     val json = JsonMapper.toJson(dataMsg)
 
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects (sendURL, json) returns(Some(new HttpResponse[String]("", 200, responseMap)))
+    (mockHandler.postRequest _) expects (sendURL, json) returns(Success(new HttpResponse[String]("", 200, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result should be (data)
@@ -30,7 +31,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     val json = JsonMapper.toJson(dataMsg)
 
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects (sendURL, json) returns(Some(new HttpResponse[String]("", 200, responseMap)))
+    (mockHandler.postRequest _) expects (sendURL, json) returns(Success(new HttpResponse[String]("", 200, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result should be (data)
@@ -45,7 +46,7 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     val json = JsonMapper.toJson(dataMsg)
 
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects(sendURL, json) returns(Some(new HttpResponse[String]("", 404, responseMap)))
+    (mockHandler.postRequest _) expects(sendURL, json) returns(Success(new HttpResponse[String]("", 404, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result.size should be (0)

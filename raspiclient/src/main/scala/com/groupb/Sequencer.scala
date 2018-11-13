@@ -1,5 +1,6 @@
 package com.groupb
 
+import scala.util.Success
 import scalaj.http.HttpResponse
 import com.typesafe.config.ConfigFactory
 
@@ -11,7 +12,7 @@ object Sequencer {
         JsonMapper.toJson(data))))
 
     response match {
-      case Some(resp) if resp.code == 200 => data
+      case Success(resp) if resp.code == 200 => data
       case _ => Seq[Data]()
     }
   }
