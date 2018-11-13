@@ -24,11 +24,12 @@ const styles = theme => ({
   },
 });
 
-class ManageUsers extends Component {
+class ManageDevices extends Component {
   constructor(props) {
     super(props);
     this.state = { getSensor: [] };
   }
+
   componentWillMount() {
     axios
       .get("/api/v2/sensor/getSensors.php")
@@ -39,10 +40,11 @@ class ManageUsers extends Component {
       })
       .catch(error => {
           this.setState(() => {
-              return { getSensor: [[]] };
+              return { getSensor: [] };
           });
       });
   }
+
   render() {
     const { classes } = this.props;
     const { getSensor } = this.state;
@@ -50,27 +52,34 @@ class ManageUsers extends Component {
     return (
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={12}>
+
             <Grid container spacing={16}>
                 <Grid item xs={6}>
                     <h2>Manage Devices</h2>
                 </Grid>
+
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
                     <LocationSelector />
                   </Grid>
+
                 </Grid>
+
               <Grid item xs={12}>
                 <Typography variant="h5">Pending  Sensors</Typography>
                 <PendingSensorsTable hubs={getSensor} />
               </Grid>
-                <Grid item xs={12}>
+
+              <Grid item xs={12}>
                   <Typography variant="h5">Sensors</Typography>
                     <SensorsTable hubs={getSensor} />
-                </Grid>
+              </Grid>
+
             </Grid>
         </Grid>
+
       </Grid>
     );
   }
 }
-export default withStyles(styles)(ManageUsers);
+export default withStyles(styles)(ManageDevices);
