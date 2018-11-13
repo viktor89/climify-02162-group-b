@@ -16,9 +16,9 @@ class TransmissionTests extends DBFramework {
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
-      (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[]", 200, responseMap))
+      (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (Some(new HttpResponse[String]("[]", 200, responseMap)))
       (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
-      (mockHandler.postRequest _) expects (sendURL, json) returns (new HttpResponse[String]("", 200, responseMap))
+      (mockHandler.postRequest _) expects (sendURL, json) returns (Some(new HttpResponse[String]("", 200, responseMap)))
     }
     val transmitter = Transmission(mockDB, mockHandler)
     transmitter.transmit
@@ -33,9 +33,9 @@ class TransmissionTests extends DBFramework {
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
-      (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[]", 200, responseMap))
+      (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (Some(new HttpResponse[String]("[]", 200, responseMap)))
       (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
-      (mockHandler.postRequest _) expects (sendURL, json) returns (new HttpResponse[String]("", 404, responseMap))
+      (mockHandler.postRequest _) expects (sendURL, json) returns (Some(new HttpResponse[String]("", 404, responseMap)))
     }
     val transmitter = Transmission(mockDB, mockHandler)
     transmitter.transmit
@@ -52,9 +52,9 @@ class TransmissionTests extends DBFramework {
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
-      (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap))
+      (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Some(new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap)))
       (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
-      (mockHandler.postRequest _) expects (sendURL, json) returns (new HttpResponse[String]("", 200, responseMap))
+      (mockHandler.postRequest _) expects (sendURL, json) returns (Some(new HttpResponse[String]("", 200, responseMap)))
       (mockDB.exec _) expects ("DELETE FROM test WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
       (mockDB.exec _) expects ("DELETE FROM test WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
       (mockDB.exec _) expects ("DELETE FROM test WHERE time = 3") returns (simulation("""{"results":[{"series":[]}]}"""))
@@ -74,9 +74,9 @@ class TransmissionTests extends DBFramework {
     val mockDB = mock[Database]
     val mockHandler = mock[HttpConnection]
     inSequence {
-      (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap))
+      (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Some(new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap)))
       (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
-      (mockHandler.postRequest _) expects (sendURL, json) returns (new HttpResponse[String]("", 404, responseMap))
+      (mockHandler.postRequest _) expects (sendURL, json) returns (Some(new HttpResponse[String]("", 404, responseMap)))
     }
     val transmitter = Transmission(mockDB, mockHandler)
     transmitter.transmit

@@ -15,8 +15,10 @@ class MQTTHandler(val handler : HttpConnection) extends MqttCallback {
         val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
         handler.postRequest("http://localhost:8080/rest/discovery/bindings/zwave/scan", "")
         val response = handler.getRequest("http://localhost:8080/rest/inbox")
-        val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(response.body))
-        handler.postRequest(inboxURL, JsonMapper.toJson(dataMsg))
+        response match {
+          case Some(resp) => handler.postRequest(inboxURL, JsonMapper.toJson(DataMessage(MACAddress.computeMAC, JsonMapper.toJson(resp.body))))
+          case None => None
+        }
     }
   }
 

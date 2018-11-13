@@ -25,23 +25,32 @@ case class MacMessage(val mac : String) extends TransportMessage
 case class DataMessage(val mac : String, val data : String) extends TransportMessage
 
 trait HttpConnection {
-  def getRequest(url : String) : HttpResponse[String]
-  def postRequest(url : String, data : String) : HttpResponse[String]
+  def getRequest(url : String) : Option[HttpResponse[String]]
+  def postRequest(url : String, data : String) : Option[HttpResponse[String]]
 }
 
 object HttpHandler extends HttpConnection {
   def getRequest(url : String) = {
-    Http(url)
-      .header("Accept", "application/json")
-      .asString
+    try {
+      Some(Http(url)
+        .header("Accept", "application/json")
+        .asString)
+    } catch {
+      case e : Exception => None
+    }
   }
-  
+
   def postRequest(url : String, data : String) = {
-    Http(url)
+    try {
+    Some(Http(url)
       .header("Content-Type", "text/plain")
       .header("Accept", "application/json")
-      .postData(data).asString
+      .postData(data).asString)
+    } catch {
+      case e : Exception => None
+    }
   }
 }
 
 case class OpenHABItems(val name : String, val label : String)
+case class Sensor(val sensorName : String, val sensorType : String)
