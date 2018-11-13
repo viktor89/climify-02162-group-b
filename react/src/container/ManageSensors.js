@@ -24,7 +24,7 @@ const styles = theme => ({
   },
 });
 
-class ManageUsers extends Component {
+class ManageSensors extends Component {
   constructor(props) {
     super(props);
     this.state = { getSensor: [] };
@@ -52,7 +52,7 @@ class ManageUsers extends Component {
         <Grid item xs={12}>
             <Grid container spacing={16}>
                 <Grid item xs={6}>
-                    <h2>Manage Devices</h2>
+                    <h2>Manage Sensors</h2>
                 </Grid>
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
@@ -73,4 +73,4 @@ class ManageUsers extends Component {
     );
   }
 }
-export default withStyles(styles)(ManageUsers);
+export default withStyles(styles)(ManageSensors );

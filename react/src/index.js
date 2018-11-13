@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ManageInstitution from "./container/ManageInstitution";
-import ManageDevices from "./container/ManageDevices";
+import ManageSensors from "./container/ManageSensors";
 import Graphs from "./container/Graphs";
 import ManageUsers from "./container/ManageUsers";
 import MuiThemeProvider from "@material-ui/core/es/styles/MuiThemeProvider";
@@ -22,7 +22,7 @@ class ManageSensorsComponent extends React.Component {
     render() {
         return (
             <MuiThemeProvider theme={theme}>
-                <ManageDevices />
+                <ManageSensors />
             </MuiThemeProvider>
         );
     }

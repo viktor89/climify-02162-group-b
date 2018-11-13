@@ -20,7 +20,7 @@
 			<?php if ($authorizer->userHasPermisson($currentUserID, "Manage Institution")) { ?>
 				<li class="menu-link menu-link-manage-institution" data-go-to="manage-institution">
 					<a href="#/manage-institution">
-						<i class="menu-link-ico nav-icon fa fa-podcast" aria-hidden="true"></i>
+						<i class="menu-link-ico nav-icon fa fa-building" aria-hidden="true"></i>
 						<p class="menu-link-text">Manage Institution</p>
 					</a>
 				</li>
@@ -28,8 +28,8 @@
             <?php if ($authorizer->userHasPermisson($currentUserID,"Manage Devices")) { ?>
 				<li class="menu-link menu-link-manage-sensors" data-go-to="manage-sensors">
 					<a href="#/manage-sensors">
-						<i class="menu-link-ico nav-icon fa fa-map" aria-hidden="true"></i>
-						<p class="menu-link-text">Manage Devices</p>
+						<i class="menu-link-ico nav-icon fa fa-broadcast" aria-hidden="true"></i>
+						<p class="menu-link-text">Manage Sensors</p>
 					</a>
 				</li>
             <?php } ?>
