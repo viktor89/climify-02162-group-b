@@ -11,7 +11,6 @@ class TransmissionActor(val transmitter : Transmission) extends Actor {
     case "send" => {
       log.info("Data transmission started")
       transmitter.transmit
-      log.info("Data transmission completed")
     }
     case _ => {
       log.info("Invalid message received")
