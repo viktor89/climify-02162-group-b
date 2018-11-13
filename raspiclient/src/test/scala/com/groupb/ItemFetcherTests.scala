@@ -57,4 +57,11 @@ class ItemFetcherTests extends FlatSpec with Matchers with MockFactory {
     val result = ItemFetcher.getOpenHABItems(mockHandler)
     result.size should be (0)
   }
+
+  it should "return an empty map if the get request to OpenHAB fails" in {
+    val mockHandler = mock[HttpConnection]
+    (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (None)
+    val result = ItemFetcher.getOpenHABItems(mockHandler)
+    result.size should be (0)
+  }
 }

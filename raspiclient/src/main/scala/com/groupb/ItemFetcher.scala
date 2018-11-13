@@ -17,7 +17,7 @@ object ItemFetcher {
   def getOpenHABItems(http : HttpConnection) = {
     val response = http.getRequest("http://localhost:8080/rest/items?recursive=false")
     response match {
-      case Some(resp) if resp.code == 200 => convertToMap(resp.body)
+      case Some(resp) => convertToMap(resp.body)
       case None => Map[String, String]()
     }
   }
