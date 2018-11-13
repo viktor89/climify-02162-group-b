@@ -2,10 +2,10 @@
 <div class="view view-dashboard">
 	<?php
     if($authorizer->userHasPermisson($currentUserID, "Manage Institution")) {
-        require_once "view-devices.php";
+        require_once "view-manage-institution.php";
     }
     if($authorizer->userHasPermisson($currentUserID, "Manage Devices")) {
-        require_once "view-data-map.php";
+        require_once "view-manage-sensors.php";
     }
     if($authorizer->userHasPermisson($currentUserID, "Graphs")) {
         require_once "view-data.php";

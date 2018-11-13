@@ -9,7 +9,7 @@ import createMuiTheme from "@material-ui/core/es/styles/createMuiTheme";
 
 const theme = createMuiTheme();
 
-class DeviceListComponent extends React.Component {
+class ManageInstitutionComponent extends React.Component {
   render() {
     return (
       <div>
@@ -18,7 +18,7 @@ class DeviceListComponent extends React.Component {
     );
   }
 }
-class ManageDevicesComponent extends React.Component {
+class ManageSensorsComponent extends React.Component {
     render() {
         return (
             <MuiThemeProvider theme={theme}>
@@ -48,12 +48,12 @@ class ManageUsersComponent extends React.Component {
   }
 }
 
-let deviceListEntrypoint = document.getElementById("deviceList");
-let manageDevicesEntrypoint = document.getElementById("manageDevices");
+let manageInstitutionEntrypoint = document.getElementById("manageInstitution");
+let manageSensorsEntrypoint = document.getElementById("manageSensors");
 let GraphsEntrypoint = document.getElementById("graphs");
 let ManageUsersEntrypoint = document.getElementById("manageUsers");
 
-ReactDOM.render(<DeviceListComponent name="list-hubs" />, deviceListEntrypoint );
-ReactDOM.render(<ManageDevicesComponent  name="manage-devices" />, manageDevicesEntrypoint );
+ReactDOM.render(<ManageInstitutionComponent name="manage-institution" />, manageInstitutionEntrypoint  );
+ReactDOM.render(<ManageSensorsComponent name="manage-devices" />, manageSensorsEntrypoint  );
 ReactDOM.render(<GraphsComponent  name="graphs" />, GraphsEntrypoint );
 ReactDOM.render(<ManageUsersComponent  name="manage-users" />, ManageUsersEntrypoint );

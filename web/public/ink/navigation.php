@@ -18,16 +18,16 @@
 	<nav>
 		<ul>
 			<?php if ($authorizer->userHasPermisson($currentUserID, "Manage Institution")) { ?>
-				<li class="menu-link menu-link-devices" data-go-to="devices">
-					<a href="#/devices">
+				<li class="menu-link menu-link-manage-institution" data-go-to="manage-institution">
+					<a href="#/manage-institution">
 						<i class="menu-link-ico nav-icon fa fa-podcast" aria-hidden="true"></i>
 						<p class="menu-link-text">Manage Institution</p>
 					</a>
 				</li>
             <?php } ?>
             <?php if ($authorizer->userHasPermisson($currentUserID,"Manage Devices")) { ?>
-				<li class="menu-link menu-link-data-map" data-go-to="data-map">
-					<a href="#/sensors">
+				<li class="menu-link menu-link-manage-sensors" data-go-to="manage-sensors">
+					<a href="#/manage-sensors">
 						<i class="menu-link-ico nav-icon fa fa-map" aria-hidden="true"></i>
 						<p class="menu-link-text">Manage Devices</p>
 					</a>
@@ -51,8 +51,8 @@
             <?php } ?>
             <?php if ($authorizer->userHasPermisson($currentUserID,"Climate Control")) { ?>
                 <li class="menu-link menu-link-climate-control" data-go-to="climate-control">
-                    <a href="#/other-users">
-                        <i class="menu-link-ico nav-icon fa fa-users" aria-hidden="true"></i>
+                    <a href="#/climate-control">
+                        <i class="menu-link-ico nav-icon fa fa-thermometer-half" aria-hidden="true"></i>
                         <p class="menu-link-text" id="menu-link-text-climate-control">Climate Control</p>
                     </a>
                 </li>
