@@ -1,5 +1,5 @@
 .idea/
-data/
+data/db
 raspiclient/target
 grafana/
 
