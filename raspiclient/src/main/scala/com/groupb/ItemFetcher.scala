@@ -6,12 +6,12 @@ import scala.util.{Success, Failure}
 object ItemFetcher {
   private def convertToMap(body : String) = {
     JsonMapper.convert[Seq[OpenHABItems]](body) match {
-      case Some(items) => {
+      case Success(items) => {
         items.foldLeft(Map[String, String]()) {
           (acc, item) => acc + (item.name -> item.label)
         }
       }
-      case None => {
+      case Failure(_) => {
         Map[String, String]()
       }
     }
