@@ -1,8 +1,8 @@
 <!-- Navigation -->
 <div class="element" id="side-navigation">
 	<?php
-        require '../api/v2/Authorizer.php';
-        $authorizer = new \API\V2\Authorizer();
+        require_once $_SERVER['DOCUMENT_ROOT'].'/api/v2/Authorizer.php';
+        $authorizer = new Authorizer();
 		if(	$currentUserRole == 1 ) {
 			$currentUserRights = "System administrator";
 		} else if(	$currentUserRole == 15 ) {
