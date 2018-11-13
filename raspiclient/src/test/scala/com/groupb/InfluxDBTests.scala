@@ -77,6 +77,7 @@ class InfluxDBTests extends DBFramework {
 
   it should "accept an empty sequence, which will not change the database when calling clearDB" in {
     val mockDB = mock[Database]
+    (mockDB.exec _).expects(*).never
     InfluxDBHandler.clearDB(mockDB)(IndexedSeq[Data]())
   }
 
