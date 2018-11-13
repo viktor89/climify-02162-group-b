@@ -28,7 +28,7 @@
             <?php if ($authorizer->userHasPermisson($currentUserID,"Manage Devices")) { ?>
 				<li class="menu-link menu-link-manage-sensors" data-go-to="manage-sensors">
 					<a href="#/manage-sensors">
-						<i class="menu-link-ico nav-icon fa fa-broadcast" aria-hidden="true"></i>
+						<i class="menu-link-ico nav-icon fa fa-rss" aria-hidden="true"></i>
 						<p class="menu-link-text">Manage Sensors</p>
 					</a>
 				</li>

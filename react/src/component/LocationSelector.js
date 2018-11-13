@@ -18,7 +18,6 @@ class LocationSelector extends Component {
       tsOpen: false,
       visible: false,
       searchValue: '0-0-0-label',
-      value: '0-0-0-value1',
       // value: ['0-0-0-0-value', '0-0-0-1-value', '0-0-0-2-value'],
       lv: {value: '0-0-0-value', label: 'spe label'},
       multipleValue: [],
@@ -84,7 +83,7 @@ class LocationSelector extends Component {
         dropdownStyle={{ height: 200, overflow: 'auto' }}
         dropdownPopupAlign={{ overflow: { adjustY: 0, adjustX: 0 }, offset: [0, 2] }}
         onDropdownVisibleChange={this.onDropdownVisibleChange}
-        placeholder={<i>Placeholder</i>}
+        placeholder={<i>Select Buildings and rooms here</i>}
         searchPlaceholder="please search"
         treeLine maxTagTextLength={10}
         value={this.state.value}
