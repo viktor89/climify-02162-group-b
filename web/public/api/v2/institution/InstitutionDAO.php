@@ -28,25 +28,31 @@ class InstitutionDAO extends API\V2\Api
 
         $statement->execute();
         $statement->store_result();
-        $statement->bind_result($id, $buildingName);
+        $statement->bind_result($buildingID, $buildingName);
 
-        $tree = [];
+        $buildings = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $tree["id"] = $id;
-            $tree["name"] = $buildingName;
-            $tree{"rooms"} = [];
-            $roomsStatement = $this->database->prepare("SELECT HubID, RoomName FROM Room WHERE BuildingID = ?");
-            $roomsStatement->bind_param("d", $id);
-            $roomsStatement->execute();
-            $roomsStatement->store_result();
-            $roomsStatement->bind_result($hubID, $roomName);
-            while ($statement->fetch()) {
-                $tree{"rooms"}[] = ["id" => $hubID, "roomName" => $roomName];
-            }
+            $buildings[] = [
+                "id" => $buildingID,
+                "name" => $buildingName,
+                "rooms" => []
+            ];
         }
         $statement->close();
 
-        return $tree;
+        for($i = 0; $i < count($buildings); $i++){
+            $statement = $this->database->prepare("SELECT HubID, RoomName FROM Room WHERE BuildingID = ?");
+            $statement->bind_param("d", $buildings[$i]["id"]);
+            $statement->execute();
+            $statement->store_result();
+            $statement->bind_result($hubID, $roomName);
+            while ($statement->fetch()) {
+                $buildings[$i]{"rooms"}[] = ["hubID" => $hubID, "roomName" => $roomName];
+            }
+            $statement->close();
+        }
+
+        return $buildings;
     }
 }
