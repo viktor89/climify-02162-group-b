@@ -41,7 +41,7 @@
 					</a>
 				</li>
             <?php } ?>
-            <?php if ($authorizer->userHasPermisson($currentUserID,"Manage Users & Roles")) { ?>
+            <?php if ($authorizer->userHasPermisson($currentUserID,"Users & Roles")) { ?>
                 <li class="menu-link menu-link-other-users" data-go-to="other-users">
                     <a href="#/other-users">
                         <i class="menu-link-ico nav-icon fa fa-users" aria-hidden="true"></i>
