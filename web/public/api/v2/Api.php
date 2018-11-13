@@ -2,7 +2,6 @@
 namespace API\V2;
 use mysqli;
 
-require '../../../vendor/autoload.php';
 require 'InfluxDBClient.php';
 require 'exceptions/ValidationException.php';
 require 'Validator.php';

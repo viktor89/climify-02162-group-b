@@ -1,38 +1,24 @@
 <!-- Dashboard -->
 <div class="view view-dashboard">
 	<?php
-		if ($currentUserRole == 1) {
-			require_once "view-devices.php";
-			require_once "view-data.php";
-			require_once "view-data-map.php";
-			require_once "view-other-users.php";
-			require_once "view-own-user.php";
-			require_once "view-system-settings.php";
-            require_once "view-permissions.php";
-		} elseif ($currentUserRole == 15) {
-			require_once "view-data.php";
-			require_once "view-data-map.php";
-			require_once "view-own-user.php";
-		} elseif ($currentUserRole == 2) {
-			require_once "view-devices.php";
-			require_once "view-data.php";
-			require_once "view-data-map.php";
-			require_once "view-other-users.php";
-			require_once "view-own-user.php";
-			require_once "view-permissions.php";
-		} elseif ($currentUserRole == 3) {
-			require_once "view-data.php";
-			require_once "view-data-map.php";
-			require_once "view-other-users.php";
-			require_once "view-own-user.php";
-		} elseif ($currentUserRole == 4) {
-			require_once "view-data.php";
-			require_once "view-data-map.php";
-		}
-		if($currentPermLogbook == 1 ){
-			require_once "view-communication.php";
-		}
-	?>
+    if($authorizer->userHasPermisson($currentUserID, "Manage Institution")) {
+        require_once "view-devices.php";
+    }
+    if($authorizer->userHasPermisson($currentUserID, "Manage Devices")) {
+        require_once "view-data-map.php";
+    }
+    if($authorizer->userHasPermisson($currentUserID, "Graphs")) {
+        require_once "view-data.php";
+    }
+    if($authorizer->userHasPermisson($currentUserID, "Users & Roles")) {
+        require_once "view-other-users.php";
+    }
+    if($authorizer->userHasPermisson($currentUserID, "Climate Control")) {
+        require_once "view-climate-control.php";
+    }
+    require_once "view-communication.php";
+    require_once "view-own-user.php";
+    require_once "view-system-settings.php"; ?>
 	<div class="go-to-top">
 		<a href="<?php echo $company_Website ?>#top-header" target="_self"><i class="ico-go-to-top fa fa-arrow-up link" aria-hidden="true"></i></a>
 	</div>
