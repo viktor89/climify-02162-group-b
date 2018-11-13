@@ -17,12 +17,14 @@ class TransmissionActorTests() extends TestKit(ActorSystem("TransmissionActorTes
 
     "handle a send message" in {
       val mockTransmission = mock[Transmission]
+      (mockTransmission.transmit _).expects().noMoreThanOnce 
       val actor = system.actorOf(Props(new TransmissionActor(mockTransmission)), name = "actor1")
       actor ! "send"
     }
 
     "handle a different message and do nothing" in {
       val mockTransmission = mock[Transmission]
+      (mockTransmission.transmit _).expects().never
       val actor = system.actorOf(Props(new TransmissionActor(mockTransmission)), name = "actor2")
       actor ! "different"
     }
