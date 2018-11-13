@@ -104,4 +104,18 @@ class HubDAO extends API\V2\Api
 
         return $hubs;
     }
+
+    public function unregisterHub($data){
+        $hub_escaped = empty($data->hubID) ? null : $this->database->real_escape_string($data->hubID);
+        $statement = $this->database->prepare("UPDATE Room SET RoomName = NULL, BuildingID = NULL WHERE HubID LIKE ? ESCAPE '#'");
+        $statement->bind_param("s", $hub_escaped);
+
+        $statement->execute();
+        $affectedRows = $statement->affected_rows;
+        $statement->close();
+
+        if($affectedRows < 0) {
+            throw new ValidationException("Hub not found!");
+        }
+    }
 }

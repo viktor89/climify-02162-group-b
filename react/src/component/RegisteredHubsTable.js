@@ -58,7 +58,7 @@ const handleHubChanged = (hub, event) => {
 };
 
 function DetailedExpansionPanel(props) {
-  const { classes, hubs, onHubChange, onSavehub } = props;
+  const { classes, hubs, onHubChange, onSavehub, onUnregisterHub } = props;
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root}>
       <ExpansionPanel>
@@ -104,7 +104,7 @@ function DetailedExpansionPanel(props) {
               <Button fullWidth size="small" color="primary" variant="outlined" onClick={() => onSavehub(hub.mac)}>Save</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="secondary" variant="outlined">Unregister</Button>
+              <Button fullWidth size="small" color="secondary" variant="outlined" onClick={() => onUnregisterHub(hub.mac)}>Unregister</Button>
             </Grid>
           </Grid>
         </ExpansionPanelActions>

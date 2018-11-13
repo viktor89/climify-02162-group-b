@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="lib/checkbox/checkbox_style.css">
 	<link rel="stylesheet" type="text/css" href="lib/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="croppie/croppie.css" />
+    <link rel="stylesheet" href="js/react.css" />
 </head>
 <body>
 

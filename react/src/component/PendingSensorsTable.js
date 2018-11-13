@@ -8,6 +8,7 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import Button from "@material-ui/core/Button/Button";
+import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
   root: {
@@ -42,6 +43,9 @@ const styles = theme => ({
       textDecoration: "underline"
     }
   },
+  textCenter: {
+    textAlign: 'center',
+  },
   rowButton: {
     marginRight: '2em',
   },
@@ -59,7 +63,7 @@ function PendingSensorsTable(props) {
             <TableCell>Sensor Type</TableCell>
             <TableCell>Building</TableCell>
             <TableCell numeric>Room</TableCell>
-            <TableCell></TableCell>
+            <TableCell className={classes.textCenter}>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -73,7 +77,20 @@ function PendingSensorsTable(props) {
                 <TableCell>{hub.sensorType}</TableCell>
                 <TableCell>{hub.Building}</TableCell>
                 <TableCell numeric>{hub.Room}</TableCell>
-                <TableCell><Button className={classes.rowButton} color="primary" variant="outlined">Approve</Button><Button variant="outlined" color="secondary">Decline</Button></TableCell>
+                <TableCell>
+                  <Grid container spacing={16} justify="center">
+                    <Grid item xs={4}>
+                      <Button fullWidth className={classes.rowButton} color="primary" variant="outlined">
+                        Approve
+                      </Button>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Button fullWidth variant="outlined" color="secondary">
+                        Decline
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </TableCell>
               </TableRow>
             );
           })}

@@ -45,6 +45,7 @@ class ManageInstitution extends Component {
     this.handleSaveRegisteredHub = this.handleSaveRegisteredHub.bind(this);
     this.handlePendingHubChanged = this.handlePendingHubChanged.bind(this);
     this.handlePendingHubChanged = this.handlePendingHubChanged.bind(this);
+    this.handleUnregisterHub = this.handleUnregisterHub.bind(this);
   }
 
   componentWillMount() {
@@ -97,6 +98,20 @@ class ManageInstitution extends Component {
     const { registeredHubs } = this.state;
     const newHub = Object.assign(hub, { [event.target.name]: event.target.value || val });
     Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
+  }
+
+  handleUnregisterHub(hubID){
+    const { selectedInstitution } = this.state;
+    axios
+      .post("/api/v2/hub/unregister.php", {
+        hubID
+      })
+      .then(() => {
+        this.getHubs(selectedInstitution);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   handleSaveRegisteredHub(mac){
@@ -180,7 +195,7 @@ class ManageInstitution extends Component {
         </Grid>
         <Grid item md={6} xs={12}>
           <h3>Registered Hubs</h3>
-          {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub.bind(this)} onHubChange={this.handleRegisteredHubChanged.bind(this)} />}
+          {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub.bind(this)} onHubChange={this.handleRegisteredHubChanged.bind(this)} onUnregisterHub={this.handleUnregisterHub.bind(this)} />}
         </Grid>
         <Grid item md={6} xs={12}>
           <h3>Unregistered Hubs</h3>

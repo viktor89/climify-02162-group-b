@@ -22,4 +22,24 @@ class InstitutionDAO extends API\V2\Api
 
         return $institutions;
     }
+
+    public function getBuildingsAndRooms() {
+        $statement = $this->database->prepare("SELECT InstID, InstName FROM Institution");
+
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($id, $buildingName);
+
+        $buildings = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $tree["id"] = $id;
+            $tree["name"] = $buildingName;
+            $tree{"rooms"} = [];
+
+        }
+        $statement->close();
+
+        return $tree;
+    }
 }
