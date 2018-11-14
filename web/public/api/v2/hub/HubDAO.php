@@ -32,40 +32,40 @@ class HubDAO extends API\V2\Api
         }
     }
 
+    public function approveHub($data){
+        $mac_escaped = $this->database->real_escape_string($data->mac);
+        $building_escaped = $this->database->real_escape_string($data->building);
+        $room_escaped = $this->database->real_escape_string($data->room);
+
+        $statement = $this->database->prepare("UPDATE Room SET RoomName = ?, BuildingID = ? WHERE HubID LIKE ? ESCAPE '#'");
+        $statement->bind_param("iis", $room_escaped, $building_escaped, $mac_escaped);
+        $statement->execute();
+        $affectedRows = $statement->affected_rows;
+        $statement->close();
+
+        if($affectedRows < 0) {
+            throw new ValidationException("error!");
+        }
+        if(isset($data->receiveMode)){
+            $this->MQTTService->sendMessage($data->mac, ["payload" => ["receiveMode" => $data->receiveMode]]);
+        }
+    }
+
     public function registerHub($data){
         if(empty($data->mac)){
             throw new Exception("No mac address provided");
         }
 
         $mac_escaped = $this->database->real_escape_string($data->mac);
-        if(!isset($data->building) && !isset($data->room)){
-            $statement = $this->database->prepare("INSERT INTO Room (HubID, RoomName, BuildingID) VALUES (?, ?, ?)");
-            $statement->bind_param("ssd", $mac_escaped, $roomName, $locationId);
+        $statement = $this->database->prepare("INSERT INTO Room (HubID, RoomName, BuildingID) VALUES (?, NULL, NULL)");
+        $statement->bind_param("s", $mac_escaped);
 
-            $statement->execute();
-            $affectedRows = $statement->affected_rows;
-            $statement->close();
+        $statement->execute();
+        $affectedRows = $statement->affected_rows;
+        $statement->close();
 
-            if($affectedRows < 0) {
-                throw new ValidationException("Hub already registered!");
-            }
-        }else{
-            $building_escaped = empty($data->room) ? null : $this->database->real_escape_string($data->building);
-
-            $room_escaped = empty($data->room) ? null : $this->database->real_escape_string($data->room);
-            $statement = $this->database->prepare("UPDATE Room SET RoomName = ?, BuildingID = ? WHERE HubID LIKE ? ESCAPE '#'");
-            $statement->bind_param("iis", $room_escaped, $building_escaped, $mac_escaped);
-
-            $statement->execute();
-            $affectedRows = $statement->affected_rows;
-            $statement->close();
-
-            if($affectedRows < 0) {
-                throw new ValidationException("error!");
-            }
-            if(isset($data->receiveMode)){
-                $this->MQTTService->sendMessage($data->mac, ["payload" => ["receiveMode" => $data->receiveMode]]);
-            }
+        if($affectedRows < 0) {
+            throw new ValidationException("Hub already registered!");
         }
     }
 

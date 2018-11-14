@@ -115,7 +115,7 @@ class ManageInstitution extends Component {
     const { registeredHubs, selectedInstitution, buildings } = this.state;
     const hub = registeredHubs.filter((hub) => (hub.mac === mac)).shift();
     axios
-      .post("/api/v2/hub/register.php", {
+      .post("/api/v2/hub/approve.php", {
         mac: hub.mac,
         room: hub.room,
         building: buildings.filter((building) => (building.name === hub.building)).shift().id || "",
@@ -154,7 +154,7 @@ class ManageInstitution extends Component {
 
   render() {
     const { classes } = this.props;
-    const { pendingHubs, registeredHubs, institutions } = this.state;
+    const { pendingHubs, registeredHubs } = this.state;
 
     return (
       <Grid container className={classes.root} spacing={16}>
@@ -162,30 +162,6 @@ class ManageInstitution extends Component {
           <Grid container className={classes.root} spacing={16} alignItems="center">
             <Grid item xs={10}>
               <h2>Manage Institution</h2>
-            </Grid>
-            <Grid item xs={2}>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel
-                  htmlFor="institution-id"
-                >
-                  Institution
-                </InputLabel>
-                <Select
-                  value={this.state.selectedInstitution}
-                  onChange={this.handleChange.bind(this)}
-                  input={
-                    <OutlinedInput
-                      labelWidth={this.state.labelWidth}
-                      name="selectedInstitution"
-                      id="institution-id"
-                    />
-                  }
-                >
-                  {institutions.map((institution) => {
-                    return <MenuItem key={institution.id} value={institution.id}>{institution.name}</MenuItem>
-                  })}
-                </Select>
-              </FormControl>
             </Grid>
           </Grid>
           <hr />
