@@ -17,11 +17,9 @@ class HubDAO extends API\V2\Api
         }
 
         $mac_escaped = $this->database->real_escape_string($mac);;
-        $locationId = null;
-        $roomName = null;
 
-        $statement = $this->database->prepare("INSERT INTO Room (HubID, RoomName, BuildingID) VALUES (?, ?, ?)");
-        $statement->bind_param("ssd", $mac_escaped, $roomName, $locationId);
+        $statement = $this->database->prepare("INSERT INTO Room (HubID, RoomName, BuildingID) VALUES (?, NULL, NULL)");
+        $statement->bind_param("s", $mac_escaped);
 
         $statement->execute();
         $affectedRows = $statement->affected_rows;

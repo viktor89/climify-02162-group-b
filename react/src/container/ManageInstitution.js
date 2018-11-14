@@ -83,6 +83,9 @@ class ManageInstitution extends Component {
         this.setState(() => {
           return { pendingHubs: response.data };
         });
+        this.setState(() => {
+          return { loading: false };
+        });
       });
     axios
       .post("/api/v2/hub/getRegisteredHubs.php", {
@@ -91,6 +94,9 @@ class ManageInstitution extends Component {
       .then(response => {
         this.setState(() => {
           return { registeredHubs: response.data };
+        });
+        this.setState(() => {
+          return { loading: false };
         });
       });
   };
@@ -145,7 +151,7 @@ class ManageInstitution extends Component {
     const { pendingHubs, selectedInstitution, buildings } = this.state;
     const hub = pendingHubs.filter((hub) => (hub.mac === mac)).shift();
     axios
-      .post("/api/v2/hub/approveHub.php", {
+      .post("/api/v2/hub/approve.php", {
         mac: hub.mac,
         room: hub.room,
         building: buildings.filter((building) => (building.name === hub.building)).shift().id || ""
@@ -160,7 +166,7 @@ class ManageInstitution extends Component {
 
   render() {
     const { classes } = this.props;
-    const { pendingHubs, registeredHubs } = this.state;
+    const { pendingHubs, registeredHubs, loading } = this.state;
 
     return (
       <Grid container className={classes.root} spacing={16}>
@@ -172,14 +178,19 @@ class ManageInstitution extends Component {
           </Grid>
           <hr />
         </Grid>
-        <Grid item md={6} xs={12}>
-          <h3>Registered Hubs</h3>
-          {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub.bind(this)} onHubChange={this.handleRegisteredHubChanged.bind(this)} onUnregisterHub={this.handleUnregisterHub.bind(this)} />}
-        </Grid>
-        <Grid item md={6} xs={12}>
-          <h3>Unregistered Hubs</h3>
-          <PendingHubsTable hubs={pendingHubs} onSavehub={this.handleSavePendingHub.bind(this)} onHubChange={this.handlePendingHubChanged.bind(this)} />
-        </Grid>
+        {(registeredHubs.length === 0 && pendingHubs.length === 0 && !loading) && (<h3>No Hubs found</h3>)}
+        {registeredHubs.length > 0 && (
+          <Grid item md={6} xs={12}>
+            <h3>Registered Hubs</h3>
+            {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub.bind(this)} onHubChange={this.handleRegisteredHubChanged.bind(this)} onUnregisterHub={this.handleUnregisterHub.bind(this)} />}
+          </Grid>
+        )}
+        {pendingHubs.length > 0 && (
+          <Grid item md={6} xs={12}>
+            <h3>Unregistered Hubs</h3>
+            <PendingHubsTable hubs={pendingHubs} onSavehub={this.handleSavePendingHub.bind(this)} onHubChange={this.handlePendingHubChanged.bind(this)} />
+          </Grid>
+        )}
       </Grid>
     );
   }
