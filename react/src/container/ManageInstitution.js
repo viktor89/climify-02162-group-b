@@ -111,7 +111,7 @@ class ManageInstitution extends Component {
     const { registeredHubs, selectedInstitution, buildings } = this.state;
     const hub = registeredHubs.filter((hub) => (hub.mac === mac)).shift();
     axios
-      .post("/api/v2/hub/approve.php", {
+      .post("/api/v2/hub/register.php", {
         mac: hub.mac,
         room: hub.room,
         building: buildings.filter((building) => (building.name === hub.building)).shift().id || "",
@@ -135,7 +135,7 @@ class ManageInstitution extends Component {
     const { pendingHubs, selectedInstitution, buildings } = this.state;
     const hub = pendingHubs.filter((hub) => (hub.mac === mac)).shift();
     axios
-      .post("/api/v2/hub/register.php", {
+      .post("/api/v2/hub/approveHub.php", {
         mac: hub.mac,
         room: hub.room,
         building: buildings.filter((building) => (building.name === hub.building)).shift().id || ""
