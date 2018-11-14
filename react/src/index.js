@@ -58,22 +58,19 @@ manageSensorsEntrypoint && ReactDOM.render(<ManageSensorsComponent name="manage-
 GraphsEntrypoint && ReactDOM.render(<GraphsComponent  name="graphs" />, GraphsEntrypoint);
 ManageUsersEntrypoint && ReactDOM.render(<ManageUsersComponent  name="manage-users" />, ManageUsersEntrypoint);
 
-$('.menu-link-manage-institution').click(() => {
-  ReactDOM.unmountComponentAtNode(manageInstitutionEntrypoint);
-  ReactDOM.render(<ManageInstitutionComponent name="manage-institution" />, manageInstitutionEntrypoint);
-});
-$('.menu-link-manage-sensors').click(() => {
-  ReactDOM.unmountComponentAtNode(manageSensorsEntrypoint);
-  ReactDOM.render(<ManageSensorsComponent name="manage-devices" />, manageSensorsEntrypoint);
-});
-$('.menu-link-data').click(() => {
-  ReactDOM.unmountComponentAtNode(GraphsEntrypoint);
-  ReactDOM.render(<GraphsComponent  name="graphs" />, GraphsEntrypoint);
-});
-$('.menu-link-other-users').click(() => {
-  ReactDOM.unmountComponentAtNode(ManageUsersEntrypoint);
-  ReactDOM.render(<ManageUsersComponent  name="manage-users" />, ManageUsersEntrypoint);
-});
-$('.menu-link-climate-control').click(() => {
-  console.log('Climate control clicked');
-});
+(function() {
+  var eventDisplay = new $.Event('displayChanged'),
+    origShow = $.fn.show,
+    origHide = $.fn.hide;
+  //
+  $.fn.show = function() {
+    origShow.apply(this, arguments);
+    $(this).trigger(eventDisplay,['show']);
+  };
+  //
+  $.fn.hide = function() {
+    origHide.apply(this, arguments);
+    $(this).trigger(eventDisplay,['hide']);
+  };
+  //
+})();

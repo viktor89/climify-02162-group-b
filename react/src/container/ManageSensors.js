@@ -37,7 +37,16 @@ class ManageSensors extends Component {
     this.getSensors();
   }
 
+  componentDidMount() {
+    $('.view-manage-sensors').on('displayChanged', (e, state) => {
+      if(state === 'show'){
+        this.getSensors();
+      }
+    });
+  }
+
   getSensors(){
+    console.log('gettings sensor list');
     axios
       .get("/api/v2/sensor/getSensors.php")
       .then(response => {

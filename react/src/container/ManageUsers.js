@@ -31,9 +31,22 @@ class ManageUsers extends Component {
       roles: []
     };
     this.handleChange = this.handleChange.bind(this);
+    this.getUsersAndRoles = this.getUsersAndRoles.bind(this);
   }
 
   componentWillMount(){
+    this.getUsersAndRoles();
+  }
+
+  componentDidMount() {
+    $('.view-other-users').on('displayChanged', (e, state) => {
+      if(state === 'show'){
+        this.getUsersAndRoles();
+      }
+    });
+  }
+
+  getUsersAndRoles(){
     axios
       .get("/api/v2/users/getUsers.php")
       .then(response => {

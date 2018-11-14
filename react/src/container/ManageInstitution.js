@@ -67,6 +67,16 @@ class ManageInstitution extends Component {
       });
   }
 
+
+  componentDidMount() {
+    const { selectedInstitution } = this.state;
+    $('.view-manage-institution').on('displayChanged', (e, state) => {
+      if(state === 'show'){
+        this.getHubs(selectedInstitution);
+      }
+    });
+  }
+
   getHubs(institutionID) {
     axios.get('/api/v2/hub/getPendingHubs.php')
       .then((response) => {
