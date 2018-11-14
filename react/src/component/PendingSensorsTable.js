@@ -52,7 +52,8 @@ const styles = theme => ({
 });
 
 function PendingSensorsTable(props) {
-  const { classes, hubs } = props;
+  const { classes, hubs, onRemoveSensor, onApproveSensor } = props;
+  console.log(onApproveSensor);
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -80,12 +81,12 @@ function PendingSensorsTable(props) {
                 <TableCell>
                   <Grid container spacing={16} justify="center">
                     <Grid item xs={4}>
-                      <Button fullWidth className={classes.rowButton} color="primary" variant="outlined">
+                      <Button fullWidth className={classes.rowButton} color="primary" variant="outlined" onClick={(e) => {onApproveSensor(hub.SensorID)}}>
                         Approve
                       </Button>
                     </Grid>
                     <Grid item xs={4}>
-                      <Button fullWidth variant="outlined" color="secondary">
+                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(hub.SensorID)}}>
                         Decline
                       </Button>
                     </Grid>

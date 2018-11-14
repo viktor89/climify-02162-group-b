@@ -102,7 +102,7 @@ class SensorDAO extends API\V2\Api
 
     public function removeSensor($data)
     {
-        $statement = $this->database->prepare("UPDATE SensorInstance SET approved = '0' WHERE SensorID = ?");
+        $statement = $this->database->prepare("DELETE FROM SensorInstance WHERE SensorID = ?");
         $statement->bind_param("s", $data->sensorID);
         $statement->execute();
         /* fetch values */
