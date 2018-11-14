@@ -38,7 +38,7 @@ class SensorDAO extends API\V2\Api
      }
 
     public function getSensors(){
-        $statement = $this->database->prepare("SELECT HubID, MapName, RoomName, SensorTypeName, SensorID FROM Room NATURAL JOIN SensorInstance LEFT JOIN Map ON BuildingID = MapID LEFT JOIN SensorType ON SensorType.SensorTypeID = SensorInstance.SensorTypeID");
+        $statement = $this->database->prepare("SELECT HubID, MapName, RoomName, SensorTypeName, SensorID FROM Room NATURAL JOIN SensorInstance LEFT JOIN Map ON BuildingID = MapID LEFT JOIN SensorType ON SensorType.SensorTypeID = SensorInstance.SensorTypeID WHERE approved");
         $statement->execute();
         $statement->store_result();
         $statement->bind_result($hubMac, $building, $room, $stype, $sID);
@@ -46,6 +46,49 @@ class SensorDAO extends API\V2\Api
         /* fetch values */
         while ($statement->fetch()) {
             $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID ];
+        }
+        $statement->close();
+        return $sensors;
+    }
+
+    public function getPendingSensors(){
+        $statement = $this->database->prepare("SELECT HubID, MapName, RoomName, SensorTypeName, SensorID FROM Room NATURAL JOIN SensorInstance LEFT JOIN Map ON BuildingID = MapID LEFT JOIN SensorType ON SensorType.SensorTypeID = SensorInstance.SensorTypeID WHERE NOT approved");
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($hubMac, $building, $room, $stype, $sID);
+        $sensors = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID ];
+        }
+        $statement->close();
+        return $sensors;
+    }
+
+    public function approveSensor(){
+        $statement = $this->database->prepare("SELECT HubID, MapName, RoomName, SensorTypeName, SensorID FROM Room NATURAL JOIN SensorInstance LEFT JOIN Map ON BuildingID = MapID LEFT JOIN SensorType ON SensorType.SensorTypeID = SensorInstance.SensorTypeID WHERE approved");
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($hubMac, $building, $room, $stype, $sID);
+        $sensors = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID ];
+        }
+        $statement->close();
+        return $sensors;
+    }
+
+    public function unapproveSensor()
+    {
+        $statement = $this->database->prepare("SELECT HubID, MapName, RoomName, SensorTypeName, SensorID FROM Room NATURAL JOIN SensorInstance LEFT JOIN Map ON BuildingID = MapID LEFT JOIN SensorType ON SensorType.SensorTypeID = SensorInstance.SensorTypeID WHERE approved");
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($hubMac, $building, $room, $stype, $sID);
+        $sensors = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType" => $stype, "SensorID" => $sID];
         }
         $statement->close();
         return $sensors;

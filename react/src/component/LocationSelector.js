@@ -35,7 +35,7 @@ class LocationSelector extends Component {
       .get("/api/v2/institution/getBuildings.php")
       .then(response => {
         this.setState(() => {
-          return { buildings: response.data.map((building => ({
+          return { buildings: response.data.filter((building => (building.rooms.length > 0))).map((building => ({
               value: building.name,
               title: building.name,
               children: building.rooms.map((room) => ({
