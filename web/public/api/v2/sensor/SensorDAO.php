@@ -6,6 +6,33 @@ use InfluxDB\Point;
 
 class SensorDAO extends API\V2\Api
 {
+
+  public function registerPendingSensor($json) {
+    foreach ($json->data as $pendingSensor) {
+      $sensorName = $pendingSensor->sensorName;
+      $sensorTypeName = $pendingSensor->sensorType;
+      $hubID = $json->mac;
+
+      $statement = $this->database->prepare("SELECT SensorTypeID FROM SensorType WHERE SensorTypeName = ?");
+      $statement->bind_param("s", $sensorTypeName);
+      $statement->execute();
+      $statement->bind_result($sensorTypeID);
+
+      if($statement->fetch() === null) {
+        $statement->close();
+        $statement = $this->database->prepare("INSERT INTO SensorType (SensorTypeName) VALUES (?)");
+        $statement->bind_param("s", $sensorTypeName);
+        $statement->execute();
+        $sensorTypeID = $this->database->insert_id;
+      }
+
+      $statement->close();
+      $statement = $this->database->prepare("INSERT INTO SensorInstance (SensorID, SensorTypeID, LocationID, HubID) VALUES (?, ?, NULL, ?)");
+      $statement->bind_param("sss", $sensorName, $sensorTypeID, $hubID);
+      $statement->execute();
+    }
+  }
+
     /**
      * @param $json
      * @throws ValidationException
