@@ -59,7 +59,7 @@ const styles = theme => ({
 });
 
 function SensorsTable(props) {
-  const { classes, hubs, onRemoveSensor } = props;
+  const { classes, sensors, onRemoveSensor } = props;
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -74,25 +74,21 @@ function SensorsTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {hubs.map(hub => {
+          {sensors.map(sensor => {
             return (
-              <TableRow key={hub.HubID}>
+              <TableRow key={sensor.SensorID}>
                 <TableCell component="th" scope="row">
-                  {hub.HubID}
+                  {sensor.HubID}
                 </TableCell>
-                <TableCell>{hub.SensorID}</TableCell>
-                <TableCell>{hub.sensorType}</TableCell>
-                <TableCell>{hub.Building}</TableCell>
-                <TableCell numeric>{hub.Room}</TableCell>
-                <TableCell><Chip
-                  label=""
-                  clickable
-                  className={classes.chip}
-                /></TableCell>
+                <TableCell>{sensor.SensorID}</TableCell>
+                <TableCell>{sensor.SensorType}</TableCell>
+                <TableCell>{sensor.Building}</TableCell>
+                <TableCell numeric>{sensor.Room}</TableCell>
+                <TableCell>Running</TableCell>
                 <TableCell>
                   <Grid container spacing={16} justify="center">
                     <Grid item xs={12}>
-                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(hub.SensorID)}}>
+                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(sensor.SensorID)}}>
                         Remove
                       </Button>
                     </Grid>

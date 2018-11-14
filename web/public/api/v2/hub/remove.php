@@ -17,7 +17,7 @@ try {
     $data = json_decode($json_str);
 
     $registerClass = new HubDAO();
-    $registerClass->unregisterHub($data);
+    $registerClass->remove($data);
 
     echo json_encode(["status" => "ok"]);
 } catch (ValidationException $e){

@@ -52,8 +52,7 @@ const styles = theme => ({
 });
 
 function PendingSensorsTable(props) {
-  const { classes, hubs, onRemoveSensor, onApproveSensor } = props;
-  console.log(onApproveSensor);
+  const { classes, sensors, onRemoveSensor, onApproveSensor } = props;
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -68,25 +67,25 @@ function PendingSensorsTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {hubs.map(hub => {
+          {sensors.map(sensor => {
             return (
-              <TableRow key={hub.HubID}>
+              <TableRow key={sensor.SensorID}>
                 <TableCell component="th" scope="row">
-                  {hub.HubID}
+                  {sensor.HubID}
                 </TableCell>
-                <TableCell>{hub.SensorID}</TableCell>
-                <TableCell>{hub.sensorType}</TableCell>
-                <TableCell>{hub.Building}</TableCell>
-                <TableCell numeric>{hub.Room}</TableCell>
+                <TableCell>{sensor.SensorID}</TableCell>
+                <TableCell>{sensor.SensorType}</TableCell>
+                <TableCell>{sensor.Building}</TableCell>
+                <TableCell numeric>{sensor.Room}</TableCell>
                 <TableCell>
                   <Grid container spacing={16} justify="center">
                     <Grid item xs={4}>
-                      <Button fullWidth className={classes.rowButton} color="primary" variant="outlined" onClick={(e) => {onApproveSensor(hub.SensorID)}}>
+                      <Button fullWidth className={classes.rowButton} color="primary" variant="outlined" onClick={(e) => {onApproveSensor(sensor.SensorID)}}>
                         Approve
                       </Button>
                     </Grid>
                     <Grid item xs={4}>
-                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(hub.SensorID)}}>
+                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(sensor.SensorID)}}>
                         Decline
                       </Button>
                     </Grid>

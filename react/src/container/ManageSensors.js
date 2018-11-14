@@ -92,11 +92,11 @@ class ManageSensors extends Component {
                 </Grid>
               <Grid item xs={12}>
                 <Typography variant="h5">Pending  Sensors</Typography>
-                <PendingSensorsTable hubs={pendingSensors} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
+                <PendingSensorsTable sensors={pendingSensors} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
               </Grid>
                 <Grid item xs={12}>
                   <Typography variant="h5">Sensors</Typography>
-                    <SensorsTable hubs={sensors} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
+                    <SensorsTable sensors={sensors} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
                 </Grid>
             </Grid>
         </Grid>

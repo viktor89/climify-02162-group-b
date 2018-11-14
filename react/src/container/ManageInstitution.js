@@ -103,14 +103,11 @@ class ManageInstitution extends Component {
   handleUnregisterHub(hubID){
     const { selectedInstitution } = this.state;
     axios
-      .post("/api/v2/hub/unregister.php", {
+      .post("/api/v2/hub/remove.php", {
         hubID
       })
       .then(() => {
         this.getHubs(selectedInstitution);
-      })
-      .catch(error => {
-        console.log(error);
       });
   }
 

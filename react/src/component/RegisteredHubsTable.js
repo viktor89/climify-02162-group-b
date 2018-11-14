@@ -104,7 +104,7 @@ function DetailedExpansionPanel(props) {
               <Button fullWidth size="small" color="primary" variant="outlined" onClick={() => onSavehub(hub.mac)}>Save</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="secondary" variant="outlined" onClick={() => onUnregisterHub(hub.mac)}>Unregister</Button>
+              <Button fullWidth size="small" color="secondary" variant="outlined" onClick={() => onUnregisterHub(hub.mac)}>Remove</Button>
             </Grid>
           </Grid>
         </ExpansionPanelActions>
