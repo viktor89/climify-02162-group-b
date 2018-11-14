@@ -38,13 +38,6 @@ class ManageInstitution extends Component {
       labelWidth: 65,
       loading: true,
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.getHubs = this.getHubs.bind(this);
-    this.handleRegisteredHubChanged = this.handleRegisteredHubChanged.bind(this);
-    this.handleSaveRegisteredHub = this.handleSaveRegisteredHub.bind(this);
-    this.handlePendingHubChanged = this.handlePendingHubChanged.bind(this);
-    this.handlePendingHubChanged = this.handlePendingHubChanged.bind(this);
-    this.handleUnregisterHub = this.handleUnregisterHub.bind(this);
   }
 
   componentWillMount() {
@@ -76,7 +69,7 @@ class ManageInstitution extends Component {
     });
   }
 
-  getHubs(institutionID) {
+  getHubs = (institutionID) => {
     let promises = [];
     promises.push(
       axios.get('/api/v2/hub/getPendingHubs.php')
@@ -97,18 +90,18 @@ class ManageInstitution extends Component {
     });
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
     this.getHubs(event.target.value);
   }
 
-  handleRegisteredHubChanged(hub, event, val) {
+  handleRegisteredHubChanged = (hub, event, val) => {
     const { registeredHubs } = this.state;
     const newHub = Object.assign(hub, { [event.target.name]: event.target.value || val });
     Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
   }
 
-  handleUnregisterHub(hubID){
+  handleUnregisterHub = (hubID) => {
     const { selectedInstitution } = this.state;
     axios
       .post("/api/v2/hub/remove.php", {
@@ -119,7 +112,7 @@ class ManageInstitution extends Component {
       });
   }
 
-  handleSaveRegisteredHub(mac){
+  handleSaveRegisteredHub = (mac) => {
     const { registeredHubs, selectedInstitution, buildings } = this.state;
     const hub = registeredHubs.filter((hub) => (hub.mac === mac)).shift();
     axios
@@ -134,13 +127,13 @@ class ManageInstitution extends Component {
       });
   }
 
-  handlePendingHubChanged(hub, event) {
+  handlePendingHubChanged = (hub, event) => {
     const { registeredHubs } = this.state;
     const newHub = Object.assign(hub, { [event.target.name]: event.target.value });
     Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
   }
 
-  handleSavePendingHub(mac){
+  handleSavePendingHub = (mac) => {
     const { pendingHubs, selectedInstitution, buildings } = this.state;
     const hub = pendingHubs.filter((hub) => (hub.mac === mac)).shift();
     axios
@@ -175,11 +168,11 @@ class ManageInstitution extends Component {
               <Grid container spacing={16}>
                 <Grid item md={6} xs={12}>
                   <h3>Registered Hubs</h3>
-                  {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub.bind(this)} onHubChange={this.handleRegisteredHubChanged.bind(this)} onUnregisterHub={this.handleUnregisterHub.bind(this)} />}
+                  {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub} onHubChange={this.handleRegisteredHubChanged} onUnregisterHub={this.handleUnregisterHub} />}
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <h3>Unregistered Hubs</h3>
-                  <PendingHubsTable hubs={pendingHubs} onSavehub={this.handleSavePendingHub.bind(this)} onHubChange={this.handlePendingHubChanged.bind(this)} />
+                  <PendingHubsTable hubs={pendingHubs} onSavehub={this.handleSavePendingHub} onHubChange={this.handlePendingHubChanged} />
                 </Grid>
               </Grid>)
         }

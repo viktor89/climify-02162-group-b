@@ -14,14 +14,6 @@ const styles = {
   },
 };
 
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-}
-
 class ManageUsers extends Component {
   constructor(props){
     super(props);
@@ -30,8 +22,6 @@ class ManageUsers extends Component {
       users: [],
       roles: []
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.getUsersAndRoles = this.getUsersAndRoles.bind(this);
   }
 
   componentWillMount(){
@@ -46,24 +36,22 @@ class ManageUsers extends Component {
     });
   }
 
-  getUsersAndRoles(){
-    axios
-      .get("/api/v2/users/getUsers.php")
+  getUsersAndRoles = () => {
+    axios.get("/api/v2/users/getUsers.php")
       .then(response => {
         this.setState(() => {
           return { users: response.data };
         });
       });
-    axios
-      .get("/api/v2/roles/getRoles.php")
+    axios.get("/api/v2/roles/getRoles.php")
       .then(response => {
         this.setState(() => {
           return { roles: response.data };
         });
       });
-  }
+  };
 
-  handleChange(event, value) {
+  handleChange = (event, value) => {
     this.setState({ value });
   };
 

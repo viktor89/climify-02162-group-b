@@ -7,8 +7,6 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Chip from "@material-ui/core/Chip/Chip";
 import Grid from "@material-ui/core/Grid/Grid";
 import Button from "@material-ui/core/Button/Button";
 
@@ -58,8 +56,7 @@ const styles = theme => ({
   }
 });
 
-function SensorsTable(props) {
-  const { classes, sensors, onRemoveSensor } = props;
+function SensorsTable({ classes, sensors, onRemoveSensor }) {
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>

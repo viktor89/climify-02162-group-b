@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import axios from "axios";
 import {Line} from "react-chartjs-2";
 
 const styles = theme => ({

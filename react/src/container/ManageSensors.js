@@ -32,14 +32,9 @@ class ManageSensors extends Component {
   constructor(props) {
     super(props);
     this.state = { sensors: [], pendingSensors: [], loading: true, selectedRooms: [] };
-    this.handleApproveSensor = this.handleApproveSensor.bind(this);
-    this.handleRemoveSensor = this.handleRemoveSensor.bind(this);
-    this.getSensors = this.getSensors.bind(this);
-    this.handleRoomSelectionChange = this.handleRoomSelectionChange.bind(this);
   }
 
   componentWillMount() {
-    this.fun();
     this.getSensors();
   }
 
@@ -54,11 +49,7 @@ class ManageSensors extends Component {
     });
   }
 
-  fun = () => {
-      console.log("fun");
-  };
-
-  getSensors(){
+  getSensors = () => {
     let promises = [];
     promises.push(axios.get("/api/v2/sensor/getSensors.php"));
     promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
@@ -73,7 +64,7 @@ class ManageSensors extends Component {
     })
   }
 
-  handleRemoveSensor(sensorID){
+  handleRemoveSensor = (sensorID) => {
     axios.post("/api/v2/sensor/remove.php", {
         sensorID: sensorID
       }).then(() => {
@@ -81,7 +72,7 @@ class ManageSensors extends Component {
       });
   }
 
-  handleApproveSensor(sensorID){
+  handleApproveSensor = (sensorID) => {
     axios.post("/api/v2/sensor/approve.php", {
         sensorID: sensorID
       }).then(() => {
@@ -89,13 +80,13 @@ class ManageSensors extends Component {
       });
   }
 
-  handleRoomSelectionChange(value){
+  handleRoomSelectionChange = (value) => {
     this.setState(() => {
       return {selectedRooms: value};
     });
   }
 
-  render() {
+  render () {
     const { classes } = this.props;
     const { sensors, pendingSensors, loading, selectedRooms } = this.state;
 
@@ -108,18 +99,18 @@ class ManageSensors extends Component {
                 </Grid>
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
-                    <LocationSelector onchangeCB={this.handleRoomSelectionChange.bind(this)} />
+                    <LocationSelector onchangeCB={this.handleRoomSelectionChange} />
                   </Grid>
                 </Grid>
               {loading ? <LinearProgress className={classes.loadingBar} /> : (
                 <Grid container spacing={16}>
                   <Grid item xs={12}>
                     <Typography variant="h5">Pending  Sensors</Typography>
-                    <PendingSensorsTable sensors={pendingSensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.HubID) >= 0))} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
+                    <PendingSensorsTable sensors={pendingSensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.HubID) >= 0))} onApproveSensor={this.handleApproveSensor} onRemoveSensor={this.handleRemoveSensor} />
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h5">Sensors</Typography>
-                    <SensorsTable sensors={sensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.Room) >= 0))} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
+                    <SensorsTable sensors={sensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.Room) >= 0))} onRemoveSensor={this.handleRemoveSensor} />
                   </Grid>
                 </Grid>
               )}

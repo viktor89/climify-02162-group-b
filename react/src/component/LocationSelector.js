@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import TreeSelect, {SHOW_ALL, SHOW_PARENT} from 'rc-tree-select';
+import TreeSelect, {SHOW_PARENT} from 'rc-tree-select';
 import 'rc-tree-select/assets/index.css';
 import './LocationSelector.css';
 import axios from "axios";
 
-const styles = theme => ({
+const styles = () => ({
   treeSelect: {
     minWidth: 300,
   }
@@ -21,16 +21,13 @@ class LocationSelector extends Component {
       multipleValue: [],
       buildings: []
     };
-    this.onClick = this.onClick.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.getBuildings = this.getBuildings.bind(this);
   }
 
   componentWillMount(){
     this.getBuildings();
   }
 
-  getBuildings() {
+  getBuildings = () => {
       const { onchangeCB } = this.props;
       axios.get("/api/v2/institution/getBuildings.php")
       .then(response => {
@@ -51,19 +48,19 @@ class LocationSelector extends Component {
         });
         onchangeCB(selectTree.map((item) => (item.value)));
       });
-  }
+  };
 
-  onClick() {
+  onClick = () => {
     this.setState({
       visible: true,
     });
-  }
+  };
 
-  onChange(value) {
+  onChange= (value) => {
     const { onchangeCB } = this.props;
     onchangeCB(value);
     this.setState({ value });
-  }
+  };
 
   render() {
     const { buildings } = this.state;

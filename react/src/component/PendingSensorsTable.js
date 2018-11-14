@@ -51,8 +51,7 @@ const styles = theme => ({
   },
 });
 
-function PendingSensorsTable(props) {
-  const { classes, sensors, onRemoveSensor, onApproveSensor } = props;
+function PendingSensorsTable({ classes, sensors, onRemoveSensor, onApproveSensor }) {
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -64,6 +63,7 @@ function PendingSensorsTable(props) {
             <TableCell>Building</TableCell>
             <TableCell numeric>Room</TableCell>
             <TableCell className={classes.textCenter}>Action</TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
