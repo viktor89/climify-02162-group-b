@@ -10,6 +10,7 @@ import Select from "@material-ui/core/Select/Select";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
 import * as ReactDOM from "react-dom";
+import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 
 const styles = theme => ({
   root: {
@@ -25,6 +26,9 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
     minWidth: 120,
+  },
+  loadingBar: {
+    width: '100%',
   },
 });
 
@@ -50,7 +54,6 @@ class ManageInstitution extends Component {
   }
 
   componentWillMount() {
-    console.log('mounting');
     const promises = [];
     promises.push(axios.get('/api/v2/institution/getInstitutions.php'));
     promises.push(axios.get('/api/v2/room/getRooms.php'));
@@ -62,9 +65,7 @@ class ManageInstitution extends Component {
         return {buildings: response[1].data}
       });
       this.getHubs(response[0].data[0].id);
-    }).catch((error) => {
-        console.log(error);
-      });
+    })
   }
 
 
@@ -78,27 +79,29 @@ class ManageInstitution extends Component {
   }
 
   getHubs(institutionID) {
-    axios.get('/api/v2/hub/getPendingHubs.php')
-      .then((response) => {
-        this.setState(() => {
-          return { pendingHubs: response.data };
-        });
-        this.setState(() => {
-          return { loading: false };
-        });
-      });
-    axios
-      .post("/api/v2/hub/getRegisteredHubs.php", {
+    this.setState(() => {
+      return {
+        loading: true,
+      };
+    });
+    let promises = [];
+    promises.push(
+      axios.get('/api/v2/hub/getPendingHubs.php')
+    );
+    promises.push(
+      axios.post("/api/v2/hub/getRegisteredHubs.php", {
         institutionID: institutionID
       })
-      .then(response => {
-        this.setState(() => {
-          return { registeredHubs: response.data };
-        });
-        this.setState(() => {
-          return { loading: false };
-        });
+    );
+    Promise.all(promises).then((response) => {
+      this.setState(() => {
+        return {
+          pendingHubs: response[0].data,
+          registeredHubs: response[1].data,
+          loading: false,
+        };
       });
+    });
   };
 
   handleChange(event) {
@@ -136,9 +139,6 @@ class ManageInstitution extends Component {
       .then(() => {
         this.getHubs(selectedInstitution);
       })
-      .catch(error => {
-        console.log(error);
-      });
   }
 
   handlePendingHubChanged(hub, event) {
@@ -159,15 +159,11 @@ class ManageInstitution extends Component {
       .then(() => {
         this.getHubs(selectedInstitution);
       })
-      .catch(error => {
-        console.log(error);
-      });
   }
 
   render() {
     const { classes } = this.props;
     const { pendingHubs, registeredHubs, loading } = this.state;
-
     return (
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={12}>
@@ -178,19 +174,22 @@ class ManageInstitution extends Component {
           </Grid>
           <hr />
         </Grid>
-        {(registeredHubs.length === 0 && pendingHubs.length === 0 && !loading) && (<h3>No Hubs found</h3>)}
-        {registeredHubs.length > 0 && (
-          <Grid item md={6} xs={12}>
-            <h3>Registered Hubs</h3>
-            {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub.bind(this)} onHubChange={this.handleRegisteredHubChanged.bind(this)} onUnregisterHub={this.handleUnregisterHub.bind(this)} />}
-          </Grid>
-        )}
-        {pendingHubs.length > 0 && (
-          <Grid item md={6} xs={12}>
-            <h3>Unregistered Hubs</h3>
-            <PendingHubsTable hubs={pendingHubs} onSavehub={this.handleSavePendingHub.bind(this)} onHubChange={this.handlePendingHubChanged.bind(this)} />
-          </Grid>
-        )}
+        {loading
+          ? (<LinearProgress className={classes.loadingBar} />)
+          : (registeredHubs.length === 0 && pendingHubs.length === 0)
+            ? (<h3>No Hubs found</h3>)
+            : (
+              <Grid container spacing={16}>
+                <Grid item md={6} xs={12}>
+                  <h3>Registered Hubs</h3>
+                  {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub.bind(this)} onHubChange={this.handleRegisteredHubChanged.bind(this)} onUnregisterHub={this.handleUnregisterHub.bind(this)} />}
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  <h3>Unregistered Hubs</h3>
+                  <PendingHubsTable hubs={pendingHubs} onSavehub={this.handleSavePendingHub.bind(this)} onHubChange={this.handlePendingHubChanged.bind(this)} />
+                </Grid>
+              </Grid>)
+        }
       </Grid>
     );
   }
