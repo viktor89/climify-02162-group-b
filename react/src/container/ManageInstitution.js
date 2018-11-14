@@ -38,6 +38,7 @@ class ManageInstitution extends Component {
       selectedInstitution: 1,
       buildings: [],
       labelWidth: 65,
+      loading: true,
     };
     this.handleChange = this.handleChange.bind(this);
     this.getHubs = this.getHubs.bind(this);
@@ -49,6 +50,7 @@ class ManageInstitution extends Component {
   }
 
   componentWillMount() {
+    console.log('mounting');
     const promises = [];
     promises.push(axios.get('/api/v2/institution/getInstitutions.php'));
     promises.push(axios.get('/api/v2/room/getRooms.php'));
@@ -71,9 +73,6 @@ class ManageInstitution extends Component {
         this.setState(() => {
           return { pendingHubs: response.data };
         });
-      })
-      .catch(error => {
-        console.log(error);
       });
     axios
       .post("/api/v2/hub/getRegisteredHubs.php", {
@@ -83,9 +82,6 @@ class ManageInstitution extends Component {
         this.setState(() => {
           return { registeredHubs: response.data };
         });
-      })
-      .catch(error => {
-        console.log(error);
       });
   };
 
