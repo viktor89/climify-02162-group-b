@@ -34,17 +34,18 @@ class LocationSelector extends Component {
     axios
       .get("/api/v2/institution/getBuildings.php")
       .then(response => {
-        this.setState(() => {
-          return { buildings: response.data.filter((building => (building.rooms.length > 0))).map((building => ({
-              value: building.name,
-              title: building.name,
-              children: building.rooms.map((room) => ({
+        const selectTree = response.data.filter((building => (building.rooms.length > 0))).map((building => ({
+            value: building.name,
+            title: building.name,
+            children: building.rooms.map((room) => ({
                 value: room.hubID,
                 title: room.roomName,
-              }))
-            }))) };
+            }))
+        })));
+        this.setState(() => {
+          return { buildings: selectTree, value: selectTree.map((item) => (item.value)) };
         });
-      })
+      });
   }
 
   onClick() {
@@ -61,7 +62,6 @@ class LocationSelector extends Component {
 
   render() {
     const { buildings } = this.state;
-    const { onchangeCB } = this.props;
     return (
       <TreeSelect
         transitionName="rc-tree-select-dropdown-slide-up"

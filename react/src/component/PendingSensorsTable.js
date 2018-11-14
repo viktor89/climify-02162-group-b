@@ -79,12 +79,12 @@ function PendingSensorsTable(props) {
                 <TableCell numeric>{sensor.Room}</TableCell>
                 <TableCell>
                   <Grid container spacing={16} justify="center">
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                       <Button fullWidth className={classes.rowButton} color="primary" variant="outlined" onClick={(e) => {onApproveSensor(sensor.SensorID)}}>
                         Approve
                       </Button>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                       <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(sensor.SensorID)}}>
                         Decline
                       </Button>

@@ -116,11 +116,11 @@ class ManageSensors extends Component {
                 <Grid container spacing={16}>
                   <Grid item xs={12}>
                     <Typography variant="h5">Pending  Sensors</Typography>
-                    <PendingSensorsTable sensors={pendingSensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building)>=0 || selectedRooms.indexOf(sensor.Room)>=0))} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
+                    <PendingSensorsTable sensors={pendingSensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.Room) >= 0))} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h5">Sensors</Typography>
-                    <SensorsTable sensors={sensors} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
+                    <SensorsTable sensors={sensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.Room) >= 0))} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
                   </Grid>
                 </Grid>
               )}
