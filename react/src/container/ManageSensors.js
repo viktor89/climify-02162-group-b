@@ -31,10 +31,11 @@ const styles = theme => ({
 class ManageSensors extends Component {
   constructor(props) {
     super(props);
-    this.state = { sensors: [], pendingSensors: [], loading: true };
+    this.state = { sensors: [], pendingSensors: [], loading: true, selectedRooms: [] };
     this.handleApproveSensor = this.handleApproveSensor.bind(this);
     this.handleRemoveSensor = this.handleRemoveSensor.bind(this);
     this.getSensors = this.getSensors.bind(this);
+    this.handleRoomSelectionChange = this.handleRoomSelectionChange.bind(this);
   }
 
   componentWillMount() {
@@ -44,15 +45,15 @@ class ManageSensors extends Component {
   componentDidMount() {
     $('.view-manage-sensors').on('displayChanged', (e, state) => {
       if(state === 'show'){
+        this.setState(() => {
+          return {loading: true};
+        });
         this.getSensors();
       }
     });
   }
 
   getSensors(){
-    this.setState(() => {
-      return {loading: true}
-    });
     let promises = []
     promises.push(axios.get("/api/v2/sensor/getSensors.php"));
     promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
@@ -87,9 +88,17 @@ class ManageSensors extends Component {
       });
   }
 
+  handleRoomSelectionChange(value){
+    this.setState(() => {
+      return {selectedRooms: value}
+    });
+  }
+
   render() {
     const { classes } = this.props;
-    const { sensors, pendingSensors, loading } = this.state;
+    const { sensors, pendingSensors, loading, selectedRooms } = this.state;
+
+    console.log(selectedRooms);
 
     return (
       <Grid container className={classes.root} spacing={16}>
@@ -100,14 +109,14 @@ class ManageSensors extends Component {
                 </Grid>
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
-                    <LocationSelector />
+                    <LocationSelector onchangeCB={this.handleRoomSelectionChange.bind(this)} />
                   </Grid>
                 </Grid>
               {loading ? <LinearProgress className={classes.loadingBar} /> : (
                 <Grid container spacing={16}>
                   <Grid item xs={12}>
                     <Typography variant="h5">Pending  Sensors</Typography>
-                    <PendingSensorsTable sensors={pendingSensors} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
+                    <PendingSensorsTable sensors={pendingSensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building)>=0 || selectedRooms.indexOf(sensor.Room)>=0))} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h5">Sensors</Typography>

@@ -54,12 +54,14 @@ class LocationSelector extends Component {
   }
 
   onChange(value, label, extra) {
-    console.log(extra);
+    const { onchangeCB } = this.props;
+    onchangeCB(value);
     this.setState({ value });
   }
 
   render() {
     const { buildings } = this.state;
+    const { onchangeCB } = this.props;
     return (
       <TreeSelect
         transitionName="rc-tree-select-dropdown-slide-up"

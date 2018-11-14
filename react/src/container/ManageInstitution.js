@@ -73,17 +73,17 @@ class ManageInstitution extends Component {
     const { selectedInstitution } = this.state;
     $('.view-manage-institution').on('displayChanged', (e, state) => {
       if(state === 'show'){
+        this.setState(() => {
+          return {
+            loading: true,
+          };
+        });
         this.getHubs(selectedInstitution);
       }
     });
   }
 
   getHubs(institutionID) {
-    this.setState(() => {
-      return {
-        loading: true,
-      };
-    });
     let promises = [];
     promises.push(
       axios.get('/api/v2/hub/getPendingHubs.php')
