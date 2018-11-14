@@ -16,8 +16,8 @@ try {
     $json_str = file_get_contents('php://input');
     # Get as an object
     $data = json_decode($json_str);
-    $sendClass = new SensorDAO();
-    $sendClass->registerPendingSensor($data);
+    $sensorDAO = new SensorDAO();
+    $sensorDAO->registerPendingSensor($data);
 
     echo json_encode(["stats" => "ok"]);
 }

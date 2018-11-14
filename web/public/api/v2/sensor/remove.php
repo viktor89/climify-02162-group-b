@@ -16,9 +16,8 @@ try {
     $json_str = file_get_contents('php://input');
     # Get as an object
     $data = json_decode($json_str);
-
     $sensorDAO = new SensorDAO();
-    $sensorDAO->writeDataAsPoints($data);
+    $sensorDAO->removeSensor($data);
 
     echo json_encode(["stats" => "ok"]);
 }
