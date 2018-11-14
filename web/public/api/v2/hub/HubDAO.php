@@ -6,11 +6,6 @@ use API\V2\ValidationException;
 
 class HubDAO extends API\V2\Api
 {
-    /**
-     * @param $mac
-     * @return false|string
-     * @throws ValidationException
-     */
     public function addNewHub($mac){
         if(empty($mac)){
             throw new Exception("No mac address provided");
@@ -49,22 +44,8 @@ class HubDAO extends API\V2\Api
         }
     }
 
-    public function registerHub($data){
-        if(empty($data->mac)){
-            throw new Exception("No mac address provided");
-        }
-
-        $mac_escaped = $this->database->real_escape_string($data->mac);
-        $statement = $this->database->prepare("INSERT INTO Room (HubID, RoomName, BuildingID) VALUES (?, NULL, NULL)");
-        $statement->bind_param("s", $mac_escaped);
-
-        $statement->execute();
-        $affectedRows = $statement->affected_rows;
-        $statement->close();
-
-        if($affectedRows < 0) {
-            throw new ValidationException("Hub already registered!");
-        }
+    public function updateHub($data){
+        $this->approveHub($data);
     }
 
     public function getPendingHubs(){

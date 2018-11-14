@@ -39,6 +39,7 @@ class ManageSensors extends Component {
   }
 
   componentWillMount() {
+    this.fun();
     this.getSensors();
   }
 
@@ -53,8 +54,12 @@ class ManageSensors extends Component {
     });
   }
 
+  fun = () => {
+      console.log("fun");
+  };
+
   getSensors(){
-    let promises = []
+    let promises = [];
     promises.push(axios.get("/api/v2/sensor/getSensors.php"));
     promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
     Promise.all(promises).then((response) => {
@@ -69,21 +74,17 @@ class ManageSensors extends Component {
   }
 
   handleRemoveSensor(sensorID){
-    axios
-      .post("/api/v2/sensor/remove.php", {
+    axios.post("/api/v2/sensor/remove.php", {
         sensorID: sensorID
-      })
-      .then(() => {
+      }).then(() => {
         this.getSensors();
       });
   }
 
   handleApproveSensor(sensorID){
-    axios
-      .post("/api/v2/sensor/approve.php", {
+    axios.post("/api/v2/sensor/approve.php", {
         sensorID: sensorID
-      })
-      .then(() => {
+      }).then(() => {
         this.getSensors();
       });
   }

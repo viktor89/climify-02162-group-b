@@ -4,12 +4,6 @@ import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import PendingHubsTable from "../component/PendingHubsTable";
 import RegisteredHubsTable from "../component/RegisteredHubsTable";
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Select from "@material-ui/core/Select/Select";
-import MenuItem from "@material-ui/core/MenuItem/MenuItem";
-import OutlinedInput from "@material-ui/core/OutlinedInput/OutlinedInput";
-import * as ReactDOM from "react-dom";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 
 const styles = theme => ({
@@ -62,12 +56,11 @@ class ManageInstitution extends Component {
         return {institutions: response[0].data};
       });
       this.setState(() => {
-        return {buildings: response[1].data}
+        return {buildings: response[1].data};
       });
       this.getHubs(response[0].data[0].id);
-    })
+    });
   }
-
 
   componentDidMount() {
     const { selectedInstitution } = this.state;
@@ -102,12 +95,12 @@ class ManageInstitution extends Component {
         };
       });
     });
-  };
+  }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
     this.getHubs(event.target.value);
-  };
+  }
 
   handleRegisteredHubChanged(hub, event, val) {
     const { registeredHubs } = this.state;
@@ -130,7 +123,7 @@ class ManageInstitution extends Component {
     const { registeredHubs, selectedInstitution, buildings } = this.state;
     const hub = registeredHubs.filter((hub) => (hub.mac === mac)).shift();
     axios
-      .post("/api/v2/hub/register.php", {
+      .post("/api/v2/hub/update.php", {
         mac: hub.mac,
         room: hub.room,
         building: buildings.filter((building) => (building.name === hub.building)).shift().id || "",
@@ -138,7 +131,7 @@ class ManageInstitution extends Component {
       })
       .then(() => {
         this.getHubs(selectedInstitution);
-      })
+      });
   }
 
   handlePendingHubChanged(hub, event) {
@@ -158,7 +151,7 @@ class ManageInstitution extends Component {
       })
       .then(() => {
         this.getHubs(selectedInstitution);
-      })
+      });
   }
 
   render() {
