@@ -20,7 +20,7 @@ class LocationSelector extends Component {
       visible: false,
       multipleValue: [],
       buildings: []
-    }
+    };
     this.onClick = this.onClick.bind(this);
     this.onChange = this.onChange.bind(this);
     this.getBuildings = this.getBuildings.bind(this);
@@ -31,8 +31,8 @@ class LocationSelector extends Component {
   }
 
   getBuildings() {
-    axios
-      .get("/api/v2/institution/getBuildings.php")
+      const { onchangeCB } = this.props;
+      axios.get("/api/v2/institution/getBuildings.php")
       .then(response => {
         const selectTree = response.data.filter((building => (building.rooms.length > 0))).map((building => ({
             value: building.name,
@@ -43,8 +43,13 @@ class LocationSelector extends Component {
             }))
         })));
         this.setState(() => {
-          return { buildings: selectTree, value: selectTree.map((item) => (item.value)) };
+          return {
+              loading: false,
+              buildings: selectTree,
+              value: selectTree.map((item) => (item.value))
+          };
         });
+        onchangeCB(selectTree.map((item) => (item.value)));
       });
   }
 
@@ -54,7 +59,7 @@ class LocationSelector extends Component {
     });
   }
 
-  onChange(value, label, extra) {
+  onChange(value) {
     const { onchangeCB } = this.props;
     onchangeCB(value);
     this.setState({ value });
@@ -69,16 +74,17 @@ class LocationSelector extends Component {
         dropdownPopupAlign={{ overflow: { adjustY: 0, adjustX: 0 }, offset: [0, 2] }}
         placeholder={<i>Select Buildings and rooms here</i>}
         searchPlaceholder="please search"
-        treeLine maxTagTextLength={10}
+        treeLine
+        maxTagTextLength={10}
         value={this.state.value}
         autoClearSearchValue
         treeData={ buildings }
         treeNodeFilterProp="title"
-        treeCheckable showCheckedStrategy={SHOW_PARENT}
+        treeCheckable
+        showCheckedStrategy={SHOW_PARENT}
         onChange={this.onChange}
         maxTagCount={20}
         maxTagPlaceholder={(valueList) => {
-          console.log('Max Tag Rest Value:', valueList);
           return `${valueList.length} rest...`
         }}
       />

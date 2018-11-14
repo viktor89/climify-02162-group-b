@@ -90,15 +90,13 @@ class ManageSensors extends Component {
 
   handleRoomSelectionChange(value){
     this.setState(() => {
-      return {selectedRooms: value}
+      return {selectedRooms: value};
     });
   }
 
   render() {
     const { classes } = this.props;
     const { sensors, pendingSensors, loading, selectedRooms } = this.state;
-
-    console.log(selectedRooms);
 
     return (
       <Grid container className={classes.root} spacing={16}>
@@ -116,7 +114,7 @@ class ManageSensors extends Component {
                 <Grid container spacing={16}>
                   <Grid item xs={12}>
                     <Typography variant="h5">Pending  Sensors</Typography>
-                    <PendingSensorsTable sensors={pendingSensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.Room) >= 0))} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
+                    <PendingSensorsTable sensors={pendingSensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.HubID) >= 0))} onApproveSensor={this.handleApproveSensor.bind(this)} onRemoveSensor={this.handleRemoveSensor.bind(this)} />
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h5">Sensors</Typography>
