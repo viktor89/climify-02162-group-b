@@ -55,21 +55,27 @@ function RolesTable({ classes, roles }) {
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
-            <Typography className={classes.heading}>Role ID:</Typography>
-            <Typography className={classes.secondaryHeading}>{role.id}</Typography>
-          </div>
-          <div className={classes.column}>
             <Typography className={classes.heading}>Role Name:</Typography>
             <Typography className={classes.secondaryHeading}>{role.name}</Typography>
           </div>
+          <div className={classes.column}>
+              <Typography className={classes.heading}>Permissions:</Typography>
+              <Typography className={classes.secondaryHeading}>{role.id}</Typography>
+          </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column}/>
-          <div className={classes.column}/>
-          <div className={classes.column}/>
+          <div className={classes.column}>
+
+          </div>
+          <div className={classes.column}>
+
+          </div>
+          <div className={classes.column}>
+
+          </div>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
-          <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
+          <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
         </ExpansionPanelActions>
       </ExpansionPanel>
     </div>
