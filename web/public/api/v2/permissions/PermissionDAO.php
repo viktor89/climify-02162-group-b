@@ -6,6 +6,22 @@ use API\V2\ValidationException;
 
 class PermissionDAO extends API\V2\Api
 {
+    public function getPermissions(){
+        $statement = $this->database->prepare("SELECT PermID,PermName FROM Permission");
+
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($permID, $permName);
+
+        $permissions = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $permissions[] = ["permID" => $permID, "permName" => $permName];
+        }
+        $statement->close();
+        return $permissions;
+    }
+
     public function set($data){
         $roleID_escaped = empty($data->roleID) ? null : $this->database->real_escape_string($data->roleID);
         $permID_escaped = empty($data->permID) ? null : $this->database->real_escape_string($data->permID);
