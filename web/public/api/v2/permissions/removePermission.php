@@ -5,7 +5,7 @@ use API\V2\ValidationException;
 require_once './PermissionDAO.php';
 require '../../../vendor/autoload.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
     http_response_code(405);
     die("Method not allowed!");
 }
@@ -16,8 +16,8 @@ try {
     # Get as an object
     $data = json_decode($json_str);
 
-    $PermissionClass = new PermissionDAO();
-    $PermissionClass->remove($data);
+    $permissionClass = new PermissionDAO();
+    $permissionClass->remove($data);
 
     echo json_encode(["status" => "ok"]);
 } catch (ValidationException $e){

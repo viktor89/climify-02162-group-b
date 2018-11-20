@@ -16,8 +16,8 @@ try {
     # Get as an object
     $data = json_decode($json_str);
 
-    $PermissionClass = new PermissionDAO();
-    $PermissionClass->set($data);
+    $permissionClass = new PermissionDAO();
+    $permissionClass->set($data);
 
     echo json_encode(["status" => "ok"]);
 } catch (ValidationException $e){
