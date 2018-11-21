@@ -22,4 +22,24 @@ class RuleDAO extends API\V2\Api
 
         return $rules;
     }
+
+    public function deleteRule($data) {
+        $statement = $this->database->prepare("DELETE FROM Rule WHERE id = ?");
+        $statement->bind_param("s", $data->ruleId);
+        $statement->execute();
+        $statement->close();
+    }
+
+    public function createRule($data) {
+        $statement = $this->database->prepare("INSERT INTO Rule (RuleType, UpperThreshold, LowerThreshold) VALUES (?, ?, ?)");
+        $statement->bind_param("ddd", $data->ruleType, $data->upperThreshold, $data->lowerThreshold);
+        $statement->execute();
+        return $this->database->insert_id;
+    }
+
+    public function updateRule($data) {
+        $statement = $this->database->prepare("UPDATE Rule SET RuleType = ?, UpperThreshold = ?, LowerThreshold = ? WHERE id = ?");
+        $statement->bind_param("dddd", $data->ruleType, $data->upperThreshold, $data->lowerThreshold, $data->ruleId);
+        $statement->execute();
+    }
 }
