@@ -9,6 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import LocationSelector from "./LocationSelector";
 import Grid from "@material-ui/core/Grid/Grid";
+import RuleLocationSelector from "./RuleLocationSelector";
 
 const styles = theme => ({
   root: {
@@ -112,7 +113,7 @@ class RulesTable extends Component {
             </div>))}
         </Grid>
         <Grid item xs={12} md={6}>
-          {selectedRule && <LocationSelector onchangeCB={this.handleRuleRoomChange} open={true} value={selectedRooms}/>}
+          {selectedRule && <RuleLocationSelector onchangeCB={this.handleRuleRoomChange} open={true} value={selectedRooms}/>}
           {!selectedRule && <em>Select a rule</em>}
         </Grid>
       </Grid>
