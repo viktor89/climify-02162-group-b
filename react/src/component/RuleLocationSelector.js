@@ -92,7 +92,7 @@ class RuleLocationSelector extends Component {
               label={building.name}
             />
           </FormGroup>
-          <Collapse in={true}>
+          <Collapse in={building.expanded}>
             <Grid container spacing={16} justify={"space-evenly"}>
               {building.rooms.map(room => (
                 <Grid key={room.roomName+room.checked} item xs={11}>
