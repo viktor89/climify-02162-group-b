@@ -14,7 +14,12 @@ import ClearIcon from '@material-ui/icons/Clear';
 const styles = () => ({
   treeSelect: {
     minWidth: 300,
-  }
+  },
+  iconButton: {
+    '&:hover': {
+      backgroundColor: 'white',
+    },
+  },
 });
 
 class RuleLocationSelector extends Component {
@@ -92,7 +97,7 @@ class RuleLocationSelector extends Component {
   }
 
   render() {
-    const { value } = this.props;
+    const { classes } = this.props;
     const { buildings } = this.state;
     return (<Grid container spacing={16}>
       {buildings.map(building => (
@@ -111,7 +116,7 @@ class RuleLocationSelector extends Component {
               label={building.name}
             />
             {console.log(building.rooms.length)}
-            {building.rooms.length > 0 && <IconButton aria-label="expand" onClick={(e) => {this.expandBuilding(building.name)}}>
+            {building.rooms.length > 0 && <IconButton className={classes.iconButton} disableRipple aria-label="expand" onClick={(e) => {this.expandBuilding(building.name)}}>
               {building.expanded ? <ClearIcon /> : <AddIcon />}
             </IconButton>}
           </FormGroup>
