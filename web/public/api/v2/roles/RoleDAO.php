@@ -8,6 +8,7 @@ class RoleDAO extends API\V2\Api
 {
     public function getRoles(){
         $statement = $this->database->prepare("SELECT RoleID, RoleName FROM Role");
+        //TODO rollens permissions skal være med, gerne som key/value(boolean) pair
 
         $statement->execute();
         $statement->store_result();
