@@ -7,6 +7,7 @@ import SensorsTable from "../component/SensorsTable";
 import PendingSensorsTable from "../component/PendingSensorsTable";
 import LocationSelector from "../component/LocationSelector";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
+import LocationDropdown from "../component/LocationDropdown";
 
 const styles = theme => ({
   root: {
@@ -31,11 +32,19 @@ const styles = theme => ({
 class ManageSensors extends Component {
   constructor(props) {
     super(props);
-    this.state = { sensors: [], pendingSensors: [], loading: true, selectedRooms: [] };
+    this.state = { 
+      sensors: [],
+      pendingSensors: [],
+      loading: true,
+      availableBuildings: [],
+      selectedBuilding: "",
+      selectedRoom: "" 
+    };
   }
 
   componentWillMount() {
     this.getSensors();
+    this.getAvailableBuildings();
   }
 
   componentDidMount() {
@@ -64,6 +73,14 @@ class ManageSensors extends Component {
     })
   }
 
+  getAvailableBuildings = () => {
+    axios.get("/api/v2/institution/getBuildings.php").then((response) => {
+      this.setState({
+          availableBuildings: response.data
+        })
+    });
+  }
+
   handleRemoveSensor = (sensorID) => {
     axios.post("/api/v2/sensor/remove.php", {
         sensorID: sensorID
@@ -86,9 +103,23 @@ class ManageSensors extends Component {
     });
   }
 
+  handleSelectBuilding = (e) => {
+    this.setState({
+      selectedBuilding: e.target.value,
+      selectedRoom: ''
+    })
+  }
+
+  handleSelectRoom = (e) => {
+    this.setState({
+      selectedRoom: e.target.value
+    })
+  }
+
   render () {
     const { classes } = this.props;
-    const { sensors, pendingSensors, loading, selectedRooms } = this.state;
+    const { sensors, pendingSensors, loading, availableBuildings, selectedBuilding, selectedRoom } = this.state;
+    console.log(this.state);
 
     return (
       <Grid container className={classes.root} spacing={16}>
@@ -99,18 +130,23 @@ class ManageSensors extends Component {
                 </Grid>
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
-                    <LocationSelector onchangeCB={this.handleRoomSelectionChange} />
+                    <Grid item xs={3}>
+                      <LocationDropdown placeholder="Building" value={selectedBuilding} options={availableBuildings} onChangeCB={this.handleSelectBuilding} />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <LocationDropdown placeholder="Room" value={selectedRoom} options={availableBuildings.filter(building => (building.id === selectedBuilding)).flatMap(building => (building.rooms)).map(room => ({id: room.hubID, name: room.roomName}))} onChangeCB={this.handleSelectRoom} />
+                    </Grid>
                   </Grid>
                 </Grid>
               {loading ? <LinearProgress className={classes.loadingBar} /> : (
                 <Grid container spacing={16}>
                   <Grid item xs={12}>
                     <Typography variant="h5">Pending  Sensors</Typography>
-                    <PendingSensorsTable sensors={pendingSensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.HubID) >= 0))} onApproveSensor={this.handleApproveSensor} onRemoveSensor={this.handleRemoveSensor} />
+                    <PendingSensorsTable sensors={pendingSensors.filter(sensor => (sensor.HubID === selectedRoom))} onApproveSensor={this.handleApproveSensor} onRemoveSensor={this.handleRemoveSensor} />
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h5">Sensors</Typography>
-                    <SensorsTable sensors={sensors.filter((sensor) => (selectedRooms.indexOf(sensor.Building) >= 0 || selectedRooms.indexOf(sensor.Room) >= 0))} onRemoveSensor={this.handleRemoveSensor} />
+                    <SensorsTable sensors={sensors.filter(sensor => (sensor.HubID === selectedRoom))} onRemoveSensor={this.handleRemoveSensor} />
                   </Grid>
                 </Grid>
               )}
