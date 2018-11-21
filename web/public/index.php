@@ -106,4 +106,5 @@
     <script src="js/react.js"></script>
 <?php } ?>
 </body>
+<?php header('Content-Type: text/html'); ?>
 </html>
