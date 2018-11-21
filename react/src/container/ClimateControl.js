@@ -38,7 +38,7 @@ class Graphs extends Component {
 
   getRules = () => {
     let promises = [];
-    promises.push(axios.get("/api/v2/rule/getRules.php"));
+    promises.push(axios.get("/api/v2/rule/read.php"));
     Promise.all(promises).then((response) => {
       this.setState(() => {
         return {
