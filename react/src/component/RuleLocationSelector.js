@@ -47,6 +47,7 @@ class RuleLocationSelector extends Component {
       return {
         buildings: buildings.map(building => ({
           id: building.id,
+          expanded: building.expanded,
           name: building.name,
           rooms: building.rooms.map(room => ({
             hubID: room.hubID,
@@ -64,6 +65,7 @@ class RuleLocationSelector extends Component {
       return {
         buildings: buildings.map(building => ({
           id: building.id,
+          expanded: building.expanded,
           name: building.name,
           rooms: building.rooms.map(room => ({
             hubID: room.hubID,
