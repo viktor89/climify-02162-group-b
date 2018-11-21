@@ -109,9 +109,10 @@ class RuleLocationSelector extends Component {
               }
               label={building.name}
             />
-            <IconButton aria-label="expand" onClick={(e) => {this.expandBuilding(building.name)}}>
+            {console.log(building.rooms.length)}
+            {building.rooms.length > 0 && <IconButton aria-label="expand" onClick={(e) => {this.expandBuilding(building.name)}}>
               {building.expanded ? <ClearIcon /> : <AddIcon />}
-            </IconButton>
+            </IconButton>}
           </FormGroup>
           <Collapse in={building.expanded}>
             <Grid container spacing={16} justify={"space-evenly"}>
