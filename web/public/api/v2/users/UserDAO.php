@@ -34,6 +34,7 @@ class UserDAO extends API\V2\Api
         $statement->bind_param("ssssss",$userName_escaped,$firstName_escaped,$lastName_escaped,$email_escaped,$roleName_escaped,$password_escaped);
 
         $statement->execute();
+        $userID = $this->database->insert_id;
         $affectedRows = $statement->affected_rows;
         $statement->close();
 
@@ -41,7 +42,7 @@ class UserDAO extends API\V2\Api
             throw new ValidationException("User not created!");
         }
 
-        //TODO skal return nyt ID
+        return $userID;
     }
 
     public function editUser($data){
