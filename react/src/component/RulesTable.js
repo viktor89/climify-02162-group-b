@@ -7,7 +7,6 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
-import LocationSelector from "./LocationSelector";
 import Grid from "@material-ui/core/Grid/Grid";
 import RuleLocationSelector from "./RuleLocationSelector";
 
