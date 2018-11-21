@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid/Grid";
 import { withStyles } from "@material-ui/core/styles";
-import axios from "axios";
 import {Line} from "react-chartjs-2";
 
 const styles = theme => ({
@@ -47,22 +46,20 @@ const data = {
 class Graphs extends Component {
   constructor(props) {
     super(props);
-    this.state = { getSensor: [] };
   }
+
   componentWillMount() {
-    axios
-      .get("/api/v2/sensor/getSensors.php")
-      .then(response => {
-        this.setState(() => {
-          return { getSensor: response.data };
-        });
-      })
-      .catch(error => {
-        this.setState(() => {
-          return { getSensor: [[]] };
-        });
-      });
+
   }
+
+  componentDidMount() {
+    $('.view-data').on('displayChanged', (e, state) => {
+      if(state === 'show'){
+        console.log(state);
+      }
+    });
+  }
+
   render() {
     const { classes } = this.props;
 

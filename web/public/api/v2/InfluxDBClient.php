@@ -1,7 +1,7 @@
 <?php
 
 namespace API\V2;
-require '../../../vendor/autoload.php';
+require  $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
 
 use InfluxDB\Client;
 use InfluxDB\Database;

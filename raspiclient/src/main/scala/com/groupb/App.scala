@@ -6,7 +6,7 @@ import com.paulgoldbaum.influxdbclient._
 import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-import akka.actor.{Actor, ActorSystem, ActorRef, Props, PoisonPill}
+import akka.actor.{Actor, ActorSystem, ActorRef, Props}
 import com.typesafe.config.ConfigFactory
 
 /**
@@ -32,19 +32,11 @@ object App extends App {
   val callback = new MQTTHandler(HttpHandler)
   client.setCallback(callback)
 
-  HttpHandler.postRequest(registerURL, JsonMapper.toJson(mac))
+  val registerMsg = DataMessage(mac, JsonMapper.toJson(ItemFetcher.getOpenHABList(HttpHandler)))
+  HttpHandler.postRequest(registerURL, JsonMapper.toJson(registerMsg))
 
   val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem()
   val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
   val scheduler = system.scheduler.schedule(2 seconds, 5 minutes, transmissionActor, "send") 
-
-  sys.addShutdownHook({
-    println("Shutdown")
-    client.disconnect
-    scheduler.cancel
-    transmissionActor ! PoisonPill
-    influxdb.close
-    System.exit(0)
-  })
 }

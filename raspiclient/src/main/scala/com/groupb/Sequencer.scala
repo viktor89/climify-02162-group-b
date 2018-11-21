@@ -1,5 +1,6 @@
 package com.groupb
 
+import scala.util.Success
 import scalaj.http.HttpResponse
 import com.typesafe.config.ConfigFactory
 
@@ -10,10 +11,9 @@ object Sequencer {
       JsonMapper.toJson(DataMessage(MACAddress.computeMAC,
         JsonMapper.toJson(data))))
 
-    if (response.code == 200) {
-      data
-    } else {
-      Seq[Data]()
+    response match {
+      case Success(resp) if resp.code == 200 => data
+      case _ => Seq[Data]()
     }
   }
 }

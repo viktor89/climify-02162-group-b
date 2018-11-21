@@ -12,8 +12,6 @@ import Input from "@material-ui/core/Input/Input";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/ExpansionPanelActions";
 import Divider from "@material-ui/core/Divider/Divider";
-import FormGroup from "@material-ui/core/FormGroup/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Switch from "@material-ui/core/Switch/Switch";
 import Grid from "@material-ui/core/Grid/Grid";
 
@@ -52,13 +50,7 @@ const styles = theme => ({
   },
 });
 
-const handleHubChanged = (hub, event) => {
-  console.log('local change');
-  console.log(hub, { [event.target.name]: event.target.value });
-};
-
-function DetailedExpansionPanel(props) {
-  const { classes, hubs, onHubChange, onSavehub } = props;
+function DetailedExpansionPanel({ classes, hubs, onHubChange, onSavehub, onUnregisterHub }) {
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root}>
       <ExpansionPanel>
@@ -104,7 +96,7 @@ function DetailedExpansionPanel(props) {
               <Button fullWidth size="small" color="primary" variant="outlined" onClick={() => onSavehub(hub.mac)}>Save</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="secondary" variant="outlined">Unregister</Button>
+              <Button fullWidth size="small" color="secondary" variant="outlined" onClick={() => onUnregisterHub(hub.mac)}>Remove</Button>
             </Grid>
           </Grid>
         </ExpansionPanelActions>

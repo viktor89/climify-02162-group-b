@@ -8,6 +8,7 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import Button from "@material-ui/core/Button/Button";
+import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
   root: {
@@ -42,13 +43,15 @@ const styles = theme => ({
       textDecoration: "underline"
     }
   },
+  textCenter: {
+    textAlign: 'center',
+  },
   rowButton: {
     marginRight: '2em',
   },
 });
 
-function PendingSensorsTable(props) {
-  const { classes, hubs } = props;
+function PendingSensorsTable({ classes, sensors, onRemoveSensor, onApproveSensor }) {
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -59,21 +62,35 @@ function PendingSensorsTable(props) {
             <TableCell>Sensor Type</TableCell>
             <TableCell>Building</TableCell>
             <TableCell numeric>Room</TableCell>
+            <TableCell className={classes.textCenter}>Action</TableCell>
             <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {hubs.map(hub => {
+          {sensors.map(sensor => {
             return (
-              <TableRow key={hub.HubID}>
+              <TableRow key={sensor.SensorID}>
                 <TableCell component="th" scope="row">
-                  {hub.HubID}
+                  {sensor.HubID}
                 </TableCell>
-                <TableCell>{hub.SensorID}</TableCell>
-                <TableCell>{hub.sensorType}</TableCell>
-                <TableCell>{hub.Building}</TableCell>
-                <TableCell numeric>{hub.Room}</TableCell>
-                <TableCell><Button className={classes.rowButton} color="primary" variant="outlined">Approve</Button><Button variant="outlined" color="secondary">Decline</Button></TableCell>
+                <TableCell>{sensor.SensorID}</TableCell>
+                <TableCell>{sensor.SensorType}</TableCell>
+                <TableCell>{sensor.Building}</TableCell>
+                <TableCell numeric>{sensor.Room}</TableCell>
+                <TableCell>
+                  <Grid container spacing={16} justify="center">
+                    <Grid item sm={12} md={6}>
+                      <Button fullWidth className={classes.rowButton} color="primary" variant="outlined" onClick={(e) => {onApproveSensor(sensor.SensorID)}}>
+                        Approve
+                      </Button>
+                    </Grid>
+                    <Grid item sm={12} md={6}>
+                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(sensor.SensorID)}}>
+                        Decline
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </TableCell>
               </TableRow>
             );
           })}

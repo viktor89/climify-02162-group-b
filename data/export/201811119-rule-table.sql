@@ -1,0 +1,5 @@
+CREATE TABLE Rule(id INT NOT NULL AUTO_INCREMENT, RuleType INT NOT NULL, UpperThreshold INT NOT NULL, LowerThreshold INT NOT NULL, PRIMARY KEY (id));
+
+ALTER TABLE Rule ADD CONSTRAINT fk_rule_type FOREIGN KEY (RuleType) REFERENCES RuleType(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+INSERT INTO Rule(id, RuleType, UpperThreshold, LowerThreshold) VALUES (NULL, 1, 25, 20);

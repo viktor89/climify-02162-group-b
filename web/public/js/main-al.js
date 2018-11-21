@@ -223,15 +223,15 @@ var subSugestions = {
 // Startpage
 if (window.matchMedia('(min-width: 800px)').matches) {
     if ( currentUserRole == 1 ) { // Administrator
-    	var userStartPage = "data-map";
+    	var userStartPage = "manage-institution";
     } else if ( currentUserRole == 15 ) { // Systemobservatør
-    	var userStartPage = "data-map";
+    	var userStartPage = "manage-institution";
     } else if ( currentUserRole == 2 ) { // Lokal admin
-    	var userStartPage = "data-map";
+    	var userStartPage = "manage-institution";
     } else if ( currentUserRole == 3 ) { // Lærer
-    	var userStartPage = "data-map";
+    	var userStartPage = "manage-institution";
     } else if ( currentUserRole == 4 ) { // Elev
-    	var userStartPage = "data-map";
+    	var userStartPage = "manage-institution";
     } else {
     	var userStartPage = "data";
     }
@@ -274,15 +274,18 @@ $('.ico-go-to-top').click(function(){
 function changeHeaderName(nav) {
 	window.nav=nav;
 	switch (nav) {
-		case "devices":
-		nav = "Manage Building";
+		case "manage-institution":
+		nav = "Manage Institution";
 		break;
-		case "data-map":
-		nav = "Sensors";
+		case "manage-sensors":
+		nav = "Manage Sensors";
 		break;
 		case "data":
 		nav = "Graphs";
 		break;
+    case "climate-control":
+    nav = "Climate Control";
+    break;
 		case "communication":
 		nav = "Logbook";
 		break;

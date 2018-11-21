@@ -7,8 +7,8 @@ import TableHead from "@material-ui/core/TableHead/TableHead";
 import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableCell from "@material-ui/core/TableCell/TableCell";
 import TableBody from "@material-ui/core/TableBody/TableBody";
-import RefreshIcon from '@material-ui/icons/Refresh';
-import Chip from "@material-ui/core/Chip/Chip";
+import Grid from "@material-ui/core/Grid/Grid";
+import Button from "@material-ui/core/Button/Button";
 
 const styles = theme => ({
   root: {
@@ -56,8 +56,7 @@ const styles = theme => ({
   }
 });
 
-function SensorsTable(props) {
-  const { classes, hubs } = props;
+function SensorsTable({ classes, sensors, onRemoveSensor }) {
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
@@ -72,24 +71,26 @@ function SensorsTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {hubs.map(hub => {
+          {sensors.map(sensor => {
             return (
-              <TableRow key={hub.HubID}>
+              <TableRow key={sensor.SensorID}>
                 <TableCell component="th" scope="row">
-                  {hub.HubID}
+                  {sensor.HubID}
                 </TableCell>
-                <TableCell>{hub.SensorID}</TableCell>
-                <TableCell>{hub.sensorType}</TableCell>
-                <TableCell>{hub.Building}</TableCell>
-                <TableCell numeric>{hub.Room}</TableCell>
-                <TableCell><Chip
-                  label="Running"
-                  clickable
-                  className={classes.chip}
-                  color="green"
-                  onDelete={() => console.log('clicked')}
-                  deleteIcon={<RefreshIcon className={classes.chipRefresh} />}
-                /></TableCell>
+                <TableCell>{sensor.SensorID}</TableCell>
+                <TableCell>{sensor.SensorType}</TableCell>
+                <TableCell>{sensor.Building}</TableCell>
+                <TableCell numeric>{sensor.Room}</TableCell>
+                <TableCell>Running</TableCell>
+                <TableCell>
+                  <Grid container spacing={16} justify="center">
+                    <Grid item xs={12}>
+                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(sensor.SensorID)}}>
+                        Remove
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </TableCell>
               </TableRow>
             );
           })}

@@ -48,11 +48,11 @@ $(".menu-link").click(function () {
 // Change view name in the header 
 function getHumanURL(nav) {
     switch (nav) {
-        case "devices":
-            nav = "Manage Building";
+        case "manage-institution":
+            nav = "Manage Institution";
             break;
-        case "data-map":
-            nav = "Sensors";
+        case "manage-sensors":
+            nav = "Manage Sensors";
             break;
         case "data":
             nav = "Graphs";
@@ -60,6 +60,9 @@ function getHumanURL(nav) {
         case "communication":
             nav = "Logbook";
             break;
+      case "climate-control":
+          nav = "Climate Control";
+          break;
         case "other-users":
             nav = "Other Users";
             break;
@@ -89,11 +92,11 @@ if (siteOnline) {
             }
             this.get('#/maalere', function () {
                 hideSingleView();
-                $(".view-devices").show();
+                $(".view-manage-institution").show();
             });
             this.get('#/plantegning', function () {
                 hideSingleView();
-                $(".view-data-map").show();
+                $(".view-manage-sensors").show();
             });
             this.get('#/grafer', function () {
                 hideSingleView();
@@ -103,6 +106,10 @@ if (siteOnline) {
                 loadMessages();
                 hideSingleView();
                 $(".view-communication").show();
+            });
+            this.get('#/climate-control', function () {
+              hideSingleView();
+              $(".view-climate-control").show();
             });
             this.get('#/andre-brugere', function () {
                 hideSingleView();

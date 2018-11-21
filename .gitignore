@@ -1,5 +1,5 @@
 .idea/
-data/
+data/db
 raspiclient/target
 grafana/
 
@@ -9,3 +9,4 @@ node_modules/
 
 web/public/js/react.js
 web/public/js/react.map
+web/public/js/react.css

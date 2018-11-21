@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -9,11 +8,6 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Input from "@material-ui/core/Input/Input";
-import Graphs from "../container/Graphs";
 import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
@@ -35,6 +29,11 @@ const styles = theme => ({
   details: {
     alignItems: 'center',
   },
+  buttonRoot: {
+    '& span': {
+      marginTop: '0 !important',
+    }
+  },
   column: {
     flexBasis: '33.33%',
   },
@@ -51,8 +50,7 @@ const styles = theme => ({
   },
 });
 
-function UsersTable(props) {
-  const { classes, users, onHubChange, onSavehub } = props;
+function UsersTable({ classes, users, onHubChange, onSavehub }) {
   return users.map((user) => (
     <div key={user.id} className={classes.root}>
       <ExpansionPanel>
@@ -86,10 +84,10 @@ function UsersTable(props) {
         <ExpansionPanelActions>
           <Grid container spacing={16}>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="primary" variant="outlined">Save</Button>
+              <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
+              <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
             </Grid>
           </Grid>
         </ExpansionPanelActions>

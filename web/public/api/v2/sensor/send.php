@@ -17,8 +17,8 @@ try {
     # Get as an object
     $data = json_decode($json_str);
 
-    $sendClass = new SensorDAO();
-    $sendClass->writeDataAsPoints($data);
+    $sensorDAO = new SensorDAO();
+    $sensorDAO->writeDataAsPoints($data);
 
     echo json_encode(["stats" => "ok"]);
 }

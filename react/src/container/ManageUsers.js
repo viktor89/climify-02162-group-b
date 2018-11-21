@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from "@material-ui/core/Typography/Typography";
@@ -15,14 +14,6 @@ const styles = {
   },
 };
 
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  );
-}
-
 class ManageUsers extends Component {
   constructor(props){
     super(props);
@@ -31,27 +22,36 @@ class ManageUsers extends Component {
       users: [],
       roles: []
     };
-    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillMount(){
-    axios
-      .get("/api/v2/users/getUsers.php")
+    this.getUsersAndRoles();
+  }
+
+  componentDidMount() {
+    $('.view-other-users').on('displayChanged', (e, state) => {
+      if(state === 'show'){
+        this.getUsersAndRoles();
+      }
+    });
+  }
+
+  getUsersAndRoles = () => {
+    axios.get("/api/v2/users/getUsers.php")
       .then(response => {
         this.setState(() => {
           return { users: response.data };
         });
       });
-    axios
-      .get("/api/v2/roles/getRoles.php")
+    axios.get("/api/v2/roles/getRoles.php")
       .then(response => {
         this.setState(() => {
           return { roles: response.data };
         });
       });
-  }
+  };
 
-  handleChange(event, value) {
+  handleChange = (event, value) => {
     this.setState({ value });
   };
 
