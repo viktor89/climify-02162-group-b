@@ -109,7 +109,7 @@ class RuleLocationSelector extends Component {
               }
               label={building.name}
             />
-            {building.rooms > 0 && <IconButton aria-label="expand" onClick={(e) => {this.expandBuilding(building.name)}}>
+            {building.rooms.length > 0 && <IconButton aria-label="expand" onClick={(e) => {this.expandBuilding(building.name)}}>
               {building.expanded ? <ClearIcon /> : <AddIcon />}
             </IconButton>}
           </FormGroup>
