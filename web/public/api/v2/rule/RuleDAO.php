@@ -16,9 +16,21 @@ class RuleDAO extends API\V2\Api
         $rules = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $rules[] = ["id" => $ruleId, "type" => $type, "unit" => $unit, "upperThreshold" => $upperThreshold, "lowerThreshold" => $lowerThreshold];
+            $rules[] = ["id" => $ruleId, "type" => $type, "unit" => $unit, "upperThreshold" => $upperThreshold, "lowerThreshold" => $lowerThreshold, "rooms" => []];
         }
         $statement->close();
+
+        for($i = 0; $i < count($rules); $i++){
+            $statement = $this->database->prepare("SELECT Room.HubID, Room.RoomName FROM RoomRule NATURAL JOIN Room WHERE id = ?");
+            $statement->bind_param("d", $rules[$i]['id']);
+            $statement->execute();
+            $statement->store_result();
+            $statement->bind_result($roomId, $roomName);
+            while ($statement->fetch()) {
+                $rules[$i]['rooms'][] = ["id" => $roomId, "name" => $roomName];
+            }
+            $statement->close();
+        }
 
         return $rules;
     }
