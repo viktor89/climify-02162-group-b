@@ -118,7 +118,6 @@ class ManageSensors extends Component {
   render () {
     const { classes } = this.props;
     const { sensors, pendingSensors, loading, availableBuildings, selectedBuilding, selectedRoom } = this.state;
-    console.log(this.state);
 
     return (
       <Grid container className={classes.root} spacing={16}>
