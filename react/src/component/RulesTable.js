@@ -79,7 +79,7 @@ class RulesTable extends Component {
   render() {
     const { classes, rules } = this.props;
     const { selectedRule, selectedRooms } = this.state;
-    return (<Grid container spacing={16} justify="center" alignItems="center">
+    return (<Grid container spacing={16}>
         <Grid item xs={12} md={6}>
           {rules.map((rule) => (
             <div key={rule.id} className={classes.root}>
@@ -112,7 +112,7 @@ class RulesTable extends Component {
             </div>))}
         </Grid>
         <Grid item xs={12} md={6}>
-          {selectedRule && <RuleLocationSelector onchangeCB={this.handleRuleRoomChange} open={true} value={selectedRooms}/>}
+          {selectedRule && <RuleLocationSelector onchangeCB={this.handleRuleRoomChange} value={selectedRooms}/>}
           {!selectedRule && <em>Select a rule</em>}
         </Grid>
       </Grid>
