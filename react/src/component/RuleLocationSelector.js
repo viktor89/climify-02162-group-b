@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid/Grid";
 import FormGroup from "@material-ui/core/FormGroup/FormGroup";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import AddIcon from '@material-ui/icons/Add';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const styles = () => ({
   treeSelect: {
@@ -106,10 +107,10 @@ class RuleLocationSelector extends Component {
               }
               label={building.name}
             />
+            <IconButton aria-label="expand" onClick={(e) => {this.expandBuilding(building.name)}}>
+              {building.expanded ? <ClearIcon /> : <AddIcon />}
+            </IconButton>
           </FormGroup>
-          <IconButton className={classes.button} aria-label="Delete" onClick={(e) => {this.expandBuilding(building.name)}}>
-            <AddIcon />
-          </IconButton>
           <Collapse in={building.expanded}>
             <Grid container spacing={16} justify={"space-evenly"}>
               {building.rooms.map(room => (
