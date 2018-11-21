@@ -59,7 +59,7 @@ class RulesTable extends Component {
     super(props);
     this.state = {
       selectedRule: null,
-      selectedRooms: ["303A"],
+      selectedRooms: [],
     }
   }
 
