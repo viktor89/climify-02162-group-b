@@ -93,7 +93,6 @@ class RuleLocationSelector extends Component {
 
   render() {
     const { value } = this.props;
-    console.log(value);
     const { buildings } = this.state;
     return (<Grid container spacing={16}>
       {buildings.map(building => (
