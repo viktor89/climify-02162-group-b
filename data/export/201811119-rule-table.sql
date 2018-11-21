@@ -1,5 +1,5 @@
-CREATE TABLE Rule ( id INT NOT NULL AUTO_INCREMENT , type VARCHAR(50) NOT NULL , unit VARCHAR(10) NOT NULL , PRIMARY KEY (id));
-# Insert default values
-INSERT INTO Rule(id, type, unit) VALUES (NULL, 'Temperature', '°C');
-INSERT INTO Rule(id, type, unit) VALUES (NULL, 'Humidity', '%');
-INSERT INTO Rule(id, type, unit) VALUES (NULL, 'CO2 Level', 'ppm');
+CREATE TABLE Rule(id INT NOT NULL AUTO_INCREMENT, RuleType INT NOT NULL, UpperThreshold INT NOT NULL, LowerThreshold INT NOT NULL, PRIMARY KEY (id));
+
+ALTER TABLE Rule ADD CONSTRAINT fk_rule_type FOREIGN KEY (RuleType) REFERENCES RuleType(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+INSERT INTO Rule(id, RuleType, UpperThreshold, LowerThreshold) VALUES (NULL, 1, 25, 20);

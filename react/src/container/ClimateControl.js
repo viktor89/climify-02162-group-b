@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Grid from "@material-ui/core/Grid/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import LocationSelector from "../component/LocationSelector";
+import axios from "axios";
+import RulesTable from "../component/RulesTable";
 
 const styles = theme => ({
   root: {
@@ -19,21 +21,36 @@ const styles = theme => ({
 class Graphs extends Component {
   constructor(props) {
     super(props);
-  }
-
-  componentWillMount() {
-
+    this.state = {
+      rules: [],
+      loading: true,
+    }
   }
 
   componentDidMount() {
     $('.view-climate-control').on('displayChanged', (e, state) => {
       if(state === 'show'){
-        console.log(state);
+        this.getRules();
       }
     });
+    this.getRules();
   }
 
+  getRules = () => {
+    let promises = [];
+    promises.push(axios.get("/api/v2/rule/getRules.php"));
+    Promise.all(promises).then((response) => {
+      this.setState(() => {
+        return {
+          rules: response[0].data,
+          loading: false,
+        }
+      });
+    })
+  };
+
   render() {
+    const { rules } = this.state;
     const { classes } = this.props;
 
     return (
@@ -43,7 +60,7 @@ class Graphs extends Component {
           <Grid container spacing={16}>
             <Grid item xs={12} md={6}>
               <h3>Manage Rules</h3>
-              test
+              <RulesTable rules={rules} />
             </Grid>
             <Grid item xs={12} md={6}>
               <LocationSelector />
