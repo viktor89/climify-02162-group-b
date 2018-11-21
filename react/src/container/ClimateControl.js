@@ -57,14 +57,9 @@ class Graphs extends Component {
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={12}>
           <h2>Climate Control</h2>
-          <Grid container spacing={16}>
-            <Grid item xs={12} md={6}>
-              <h3>Manage Rules</h3>
-              <RulesTable rules={rules} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <LocationSelector />
-            </Grid>
+          <Grid item xs={12}>
+            <h3>Manage Rules</h3>
+            <RulesTable rules={rules} />
           </Grid>
         </Grid>
       </Grid>

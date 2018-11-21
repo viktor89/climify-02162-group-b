@@ -8,6 +8,8 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
+import LocationSelector from "./LocationSelector";
+import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
   root: {
@@ -31,6 +33,10 @@ const styles = theme => ({
   column: {
     flexBasis: '33.33%',
   },
+  columnCenterText: {
+    flexBasis: '33.33%',
+    textAlign: 'center',
+  },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
@@ -50,7 +56,10 @@ const styles = theme => ({
 });
 
 function RulesTable({ classes, rules }) {
-  return rules.map((rule) => (
+  console.log(rules);
+  return (<Grid container spacing={16} justify="center" alignItems="center">
+      <Grid item xs={12} md={6}>
+    {rules.map((rule) => (
     <div key={rule.id} className={classes.root}>
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -62,6 +71,10 @@ function RulesTable({ classes, rules }) {
             <Typography className={classes.heading}>Rule Type:</Typography>
             <Typography className={classes.secondaryHeading}>{rule.type}</Typography>
           </div>
+          <div className={classes.columnCenterText}>
+            <Typography className={classes.heading}>Rule:</Typography>
+            <Typography className={classes.secondaryHeading}>{rule.lowerThreshold} {'<'} {rule.unit} {'>'} {rule.upperThreshold}</Typography>
+          </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
           <div className={classes.column}/>
@@ -72,8 +85,13 @@ function RulesTable({ classes, rules }) {
           <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
         </ExpansionPanelActions>
       </ExpansionPanel>
-    </div>
-  ));
+    </div>))}
+      </Grid>
+    <Grid item xs={12} md={6}>
+      <LocationSelector />
+    </Grid>
+  </Grid>
+  );
 }
 
 export default withStyles(styles)(RulesTable);
