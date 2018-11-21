@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import './LocationSelector.css';
 import axios from "axios";
 import Collapse from "@material-ui/core/Collapse/Collapse";
 import FormControlLabel from "@material-ui/core/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox/Checkbox";
 import Grid from "@material-ui/core/Grid/Grid";
 import FormGroup from "@material-ui/core/FormGroup/FormGroup";
+import IconButton from "@material-ui/core/IconButton/IconButton";
+import AddIcon from '@material-ui/icons/Add';
 
 const styles = () => ({
   treeSelect: {
@@ -73,6 +74,20 @@ class RuleLocationSelector extends Component {
     });
   };
 
+  expandBuilding = (name) => {
+    const { buildings } = this.state;
+    this.setState(() => {
+      return {
+        buildings: buildings.map(building => ({
+          id: building.id,
+          expanded: building.name === name ? !building.expanded : building.expanded,
+          name: building.name,
+          rooms: building.rooms
+        }))
+      }
+    });
+  }
+
   render() {
     const { buildings } = this.state;
     return (<Grid container spacing={16}>
@@ -92,7 +107,10 @@ class RuleLocationSelector extends Component {
               label={building.name}
             />
           </FormGroup>
-          <Collapse in={true}>
+          <IconButton className={classes.button} aria-label="Delete" onClick={(e) => {this.expandBuilding(building.name)}}>
+            <AddIcon />
+          </IconButton>
+          <Collapse in={building.expanded}>
             <Grid container spacing={16} justify={"space-evenly"}>
               {building.rooms.map(room => (
                 <Grid key={room.roomName+room.checked} item xs={11}>

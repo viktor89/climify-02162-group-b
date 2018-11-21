@@ -5,7 +5,6 @@ import axios from "axios";
 import Typography from "@material-ui/core/Typography/Typography";
 import SensorsTable from "../component/SensorsTable";
 import PendingSensorsTable from "../component/PendingSensorsTable";
-import LocationSelector from "../component/LocationSelector";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import LocationDropdown from "../component/LocationDropdown";
 
