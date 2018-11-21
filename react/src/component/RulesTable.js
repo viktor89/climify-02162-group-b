@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -55,43 +54,70 @@ const styles = theme => ({
   },
 });
 
-function RulesTable({ classes, rules }) {
-  console.log(rules);
-  return (<Grid container spacing={16} justify="center" alignItems="center">
-      <Grid item xs={12} md={6}>
-    {rules.map((rule) => (
-    <div key={rule.id} className={classes.root}>
-      <ExpansionPanel>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <div className={classes.column}>
-            <Typography className={classes.heading}>Rule ID:</Typography>
-            <Typography className={classes.secondaryHeading}>{rule.id}</Typography>
-          </div>
-          <div className={classes.column}>
-            <Typography className={classes.heading}>Rule Type:</Typography>
-            <Typography className={classes.secondaryHeading}>{rule.type}</Typography>
-          </div>
-          <div className={classes.columnCenterText}>
-            <Typography className={classes.heading}>Rule:</Typography>
-            <Typography className={classes.secondaryHeading}>{rule.lowerThreshold} {'<'} {rule.unit} {'>'} {rule.upperThreshold}</Typography>
-          </div>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column}/>
-          <div className={classes.column}/>
-          <div className={classes.column}/>
-        </ExpansionPanelDetails>
-        <ExpansionPanelActions>
-          <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
-        </ExpansionPanelActions>
-      </ExpansionPanel>
-    </div>))}
+class RulesTable extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      selectedRule: null,
+      selectedRooms: [],
+    }
+  }
+
+  handleRuleSelect = (ruleId) => {
+    const { selectedRule } = this.state;
+    this.setState({
+      selectedRule: selectedRule === ruleId ? '' : ruleId
+    })
+  } ;
+
+  handleRuleRoomChange = (rooms) => {
+    this.setState({
+      selectedRooms: rooms
+    })
+  };
+
+  render() {
+    const { classes, rules } = this.props;
+    const { selectedRule, selectedRooms } = this.state;
+    return (<Grid container spacing={16} justify="center" alignItems="center">
+        <Grid item xs={12} md={6}>
+          {rules.map((rule) => (
+            <div key={rule.id} className={classes.root}>
+              <ExpansionPanel onClick={(e) => {this.handleRuleSelect(rule.id)}} expanded={selectedRule === rule.id}>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                  <div className={classes.column}>
+                    <Typography className={classes.heading}>Rule ID:</Typography>
+                    <Typography className={classes.secondaryHeading}>{rule.id}</Typography>
+                  </div>
+                  <div className={classes.column}>
+                    <Typography className={classes.heading}>Rule Type:</Typography>
+                    <Typography className={classes.secondaryHeading}>{rule.type}</Typography>
+                  </div>
+                  <div className={classes.columnCenterText}>
+                    <Typography className={classes.heading}>Rule:</Typography>
+                    <Typography
+                      className={classes.secondaryHeading}>{rule.lowerThreshold} {'<'} {rule.unit} {'>'} {rule.upperThreshold}</Typography>
+                  </div>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails className={classes.details}>
+                  <div className={classes.column}/>
+                  <div className={classes.column}/>
+                  <div className={classes.column}/>
+                </ExpansionPanelDetails>
+                <ExpansionPanelActions>
+                  <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary"
+                          variant="outlined">Save</Button>
+                </ExpansionPanelActions>
+              </ExpansionPanel>
+            </div>))}
+        </Grid>
+        <Grid item xs={12} md={6}>
+          {selectedRule && <LocationSelector onchangeCB={this.handleRuleRoomChange} open={true} value={selectedRooms}/>}
+          {!selectedRule && <em>Select a rule</em>}
+        </Grid>
       </Grid>
-    <Grid item xs={12} md={6}>
-      <LocationSelector />
-    </Grid>
-  </Grid>
-  );
+    );
+  }
 }
 
 export default withStyles(styles)(RulesTable);

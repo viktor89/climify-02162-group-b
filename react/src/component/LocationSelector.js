@@ -16,10 +16,9 @@ class LocationSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tsOpen: false,
-      visible: false,
       multipleValue: [],
-      buildings: []
+      buildings: [],
+      value: props.value,
     };
   }
 
@@ -43,17 +42,10 @@ class LocationSelector extends Component {
           return {
               loading: false,
               buildings: selectTree,
-              value: selectTree.map((item) => (item.value))
           };
         });
         onchangeCB(selectTree.map((item) => (item.value)));
       });
-  };
-
-  onClick = () => {
-    this.setState({
-      visible: true,
-    });
   };
 
   onChange= (value) => {
@@ -63,9 +55,12 @@ class LocationSelector extends Component {
   };
 
   render() {
+    const { open } = this.props;
     const { buildings } = this.state;
     return (
       <TreeSelect
+        open={open || false}
+        treeDefaultExpandAll={true}
         transitionName="rc-tree-select-dropdown-slide-up"
         choiceTransitionName="rc-tree-select-selection__choice-zoom"
         dropdownPopupAlign={{ overflow: { adjustY: 0, adjustX: 0 }, offset: [0, 2] }}
