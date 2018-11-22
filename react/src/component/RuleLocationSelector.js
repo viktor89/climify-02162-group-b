@@ -115,7 +115,6 @@ class RuleLocationSelector extends Component {
               }
               label={building.name}
             />
-            {console.log(building.rooms.length)}
             {building.rooms.length > 0 && <IconButton className={classes.iconButton} disableRipple aria-label="expand" onClick={(e) => {this.expandBuilding(building.name)}}>
               {building.expanded ? <ClearIcon /> : <AddIcon />}
             </IconButton>}
