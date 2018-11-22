@@ -101,7 +101,7 @@ class RuleLocationSelector extends Component {
     const { buildings } = this.state;
     return (<Grid container spacing={16}>
       {buildings.map(building => (
-        <Grid key={building.name} item xs={12}>
+        <Grid key={building.id} item xs={12}>
           <FormGroup row>
             <FormControlLabel
               control={
@@ -122,7 +122,7 @@ class RuleLocationSelector extends Component {
           <Collapse in={building.expanded}>
             <Grid container spacing={16} justify={"space-evenly"}>
               {building.rooms.map(room => (
-                <Grid key={room.roomName+room.checked} item xs={11}>
+                <Grid key={room.hubID} item xs={11}>
                   <FormGroup row>
                     <FormControlLabel
                       control={
