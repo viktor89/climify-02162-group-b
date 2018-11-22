@@ -79,7 +79,7 @@ class RulesTable extends Component {
   render() {
     const { classes, rules } = this.props;
     const { selectedRule, selectedRooms } = this.state;
-    return (<Grid container spacing={16}>
+    return (<Grid container spacing={16} alignItems={selectedRule ? "flex-start" : "center"}>
         <Grid item xs={12} md={6}>
           {rules.map((rule) => (
             <div key={rule.id} className={classes.root}>
