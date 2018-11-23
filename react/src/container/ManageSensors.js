@@ -75,8 +75,10 @@ class ManageSensors extends Component {
   getAvailableBuildings = () => {
     axios.get("/api/v2/institution/getBuildings.php").then((response) => {
       this.setState({
-          availableBuildings: response.data
-        })
+          availableBuildings: response.data,
+          selectedBuilding: response.data.filter(building => (building.rooms.length > 0))[0].id
+        });
+        console.log(this.state);
     });
   }
 
