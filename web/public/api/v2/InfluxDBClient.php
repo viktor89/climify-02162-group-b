@@ -33,6 +33,13 @@ class InfluxDBClient
      */
     public function getDataSeries($sensorName, $minutes){
         $result = $this->database->query('SELECT last("value") AS "last_value" FROM "skoleklima"."autogen"."sensor_measurements" WHERE time > now() - '.$minutes.'m AND "sensor_name"=\''.$sensorName.'\' GROUP BY time(1m) FILL(previous)');
-        return $result->getSeries();
+        $data = [];
+        $measurements = array_shift($result->getSeries())["values"];
+        if(isset($measurements)){
+            foreach($measurements as $measurement){
+                $data[] = ["time" => $measurement[0], "value" => $measurement[1]];
+            }
+        }
+        return $data;
     }
 }
