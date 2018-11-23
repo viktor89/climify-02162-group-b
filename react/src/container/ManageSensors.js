@@ -42,8 +42,7 @@ class ManageSensors extends Component {
   }
 
   componentWillMount() {
-    this.getSensors();
-    this.getAvailableBuildings();
+    this.fetchAndResolveInitialState();
   }
 
   componentDidMount() {
@@ -52,34 +51,30 @@ class ManageSensors extends Component {
         this.setState(() => {
           return {loading: true};
         });
-        this.getSensors();
+        this.fetchAndResolveInitialState();
       }
     });
   }
 
-  getSensors = () => {
+  fetchAndResolveInitialState = () => {
     let promises = [];
     promises.push(axios.get("/api/v2/sensor/getSensors.php"));
     promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
+    promises.push(axios.get("/api/v2/institution/getBuildings.php"));
     Promise.all(promises).then((response) => {
+      var selBuilding = response[2].data.filter(building => (building.rooms.length > 0))[0];
       this.setState(() => {
         return {
           sensors: response[0].data,
           pendingSensors: response[1].data,
+          availableBuildings: response[2].data,
+          selectedBuilding: selBuilding.id,
+          selectedRoom: selBuilding.rooms
+          .filter(room => ((response[1].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0 || (response[0].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0))))[0].hubID,
           loading: false,
         }
       });
     })
-  }
-
-  getAvailableBuildings = () => {
-    axios.get("/api/v2/institution/getBuildings.php").then((response) => {
-      this.setState({
-          availableBuildings: response.data,
-          selectedBuilding: response.data.filter(building => (building.rooms.length > 0))[0].id
-        });
-        console.log(this.state);
-    });
   }
 
   handleRemoveSensor = (sensorID) => {
@@ -140,8 +135,7 @@ class ManageSensors extends Component {
                       options={availableBuildings.filter(building => (building.id === selectedBuilding))
                         .flatMap(building => (building.rooms))
                         .map(room => ({id: room.hubID, name: room.roomName}))
-                        .filter(room => ((pendingSensors.filter(sensor => (sensor.HubID === room.id)).length > 0 || (sensors.filter(sensor => (sensor.HubID === room.id)).length > 0))                          ))
-                      }
+                        .filter(room => ((pendingSensors.filter(sensor => (sensor.HubID === room.id)).length > 0 || (sensors.filter(sensor => (sensor.HubID === room.id)).length > 0))))}
                       onChangeCB={this.handleSelectRoom} />
                     </Grid>
                   </Grid>
