@@ -38,5 +38,5 @@ object App extends App {
   val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem()
   val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
-  val scheduler = system.scheduler.schedule(2 seconds, 5 minutes, transmissionActor, "send") 
+  val scheduler = system.scheduler.schedule(2 seconds, 1 minutes, transmissionActor, "send") 
 }
