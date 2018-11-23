@@ -1,5 +1,5 @@
 <?php
-require_once '../Api.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/api/v2/Api.php';
 
 use API\V2\ValidationException;
 use InfluxDB\Point;
@@ -53,5 +53,21 @@ class RuleDAO extends API\V2\Api
         $statement = $this->database->prepare("UPDATE Rule SET RuleType = ?, UpperThreshold = ?, LowerThreshold = ? WHERE id = ?");
         $statement->bind_param("dddd", $data->ruleType, $data->upperThreshold, $data->lowerThreshold, $data->ruleId);
         $statement->execute();
+    }
+
+    public function getRuleTypes() {
+        $statement = $this->database->prepare("SELECT id, type, unit FROM RuleType");
+
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($ruleTypeId, $type, $unit);
+
+        $ruleTypes = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $ruleTypes [] = ["id" => $ruleTypeId, "type" => $type, "unit" => $unit];
+        }
+        $statement->close();
+        return $ruleTypes ;
     }
 }

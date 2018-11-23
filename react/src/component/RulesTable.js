@@ -82,9 +82,9 @@ class RulesTable extends Component {
     return (<Grid container spacing={16} alignItems={selectedRule ? "flex-start" : "center"}>
         <Grid item xs={12} md={6}>
           {rules.map((rule) => (
-            <div key={rule.id} className={classes.root}>
-              <ExpansionPanel onClick={(e) => {this.handleRuleSelect(rule.id)}} expanded={selectedRule === rule.id}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+            <Grid key={rule.id} className={classes.root}>
+              <ExpansionPanel expanded={selectedRule === rule.id}>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>} onClick={(e) => {this.handleRuleSelect(rule.id)}}>
                   <div className={classes.column}>
                     <Typography className={classes.heading}>Rule ID:</Typography>
                     <Typography className={classes.secondaryHeading}>{rule.id}</Typography>
@@ -105,14 +105,22 @@ class RulesTable extends Component {
                   <div className={classes.column}/>
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions>
-                  <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary"
-                          variant="outlined">Save</Button>
+                  <Grid container spacing={16}>
+                    <Grid item xs={6}>
+                      <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary"
+                            variant="outlined">Save</Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary"
+                            variant="outlined">Delete</Button>
+                    </Grid>
+                  </Grid>
                 </ExpansionPanelActions>
               </ExpansionPanel>
-            </div>))}
+            </Grid>))}
         </Grid>
         <Grid item xs={12} md={6}>
-          {selectedRule && <RuleLocationSelector onchangeCB={this.handleRuleRoomChange} value={selectedRooms}/>}
+          {selectedRule && <RuleLocationSelector ruleId={selectedRule} onchangeCB={this.handleRuleRoomChange} value={selectedRooms}/>}
           {!selectedRule && <em>Select a rule</em>}
         </Grid>
       </Grid>

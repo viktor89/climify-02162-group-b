@@ -94,14 +94,15 @@ class RuleLocationSelector extends Component {
         }))
       }
     });
-  }
+  };
 
   render() {
-    const { classes } = this.props;
+    const { classes, ruleId } = this.props;
     const { buildings } = this.state;
     return (<Grid container spacing={16}>
       {buildings.map(building => (
-        <Grid key={building.id} item xs={12}>
+        <Grid key={building.id+ruleId} item xs={12}>
+          {console.log(building)}
           <FormGroup row>
             <FormControlLabel
               control={

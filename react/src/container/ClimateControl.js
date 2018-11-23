@@ -3,6 +3,8 @@ import Grid from "@material-ui/core/Grid/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import RulesTable from "../component/RulesTable";
+import CachedIcon from '@material-ui/icons/Cached';
+import IconButton from "@material-ui/core/IconButton/IconButton";
 
 const styles = theme => ({
   root: {
@@ -14,7 +16,11 @@ const styles = theme => ({
   },
   control: {
     padding: theme.spacing.unit * 2
-  }
+  },
+  refreshIcon: {
+    position: 'absolute',
+    right: '1em',
+  },
 });
 
 class Graphs extends Component {
@@ -54,12 +60,15 @@ class Graphs extends Component {
 
     return (
       <Grid container className={classes.root} spacing={16}>
-        <Grid item xs={12}>
+        <Grid item xs={11}>
           <h2>Climate Control</h2>
-          <Grid item xs={12}>
-            <h3>Manage Rules</h3>
-            <RulesTable rules={rules} />
-          </Grid>
+          <h3>Manage Rules</h3>
+        </Grid>
+        <IconButton className={classes.refreshIcon} aria-label="refresh" onClick={(e) => {this.getRules()}}>
+          <CachedIcon />
+        </IconButton>
+        <Grid item xs={12}>
+          <RulesTable rules={rules} />
         </Grid>
       </Grid>
     );
