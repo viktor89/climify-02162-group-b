@@ -7,7 +7,7 @@ use InfluxDB\Point;
 class RuleDAO extends API\V2\Api
 {
     public function getRules() {
-        $statement = $this->database->prepare("SELECT Rule.id, type, RuleType.id, unit, UpperThreshold, LowerThreshold FROM Rule LEFT JOIN RuleType on RuleType.id = RuleType");
+        $statement = $this->database->prepare("SELECT Rule.id, type, RuleType.id, unit, UpperThreshold, LowerThreshold FROM Rule LEFT JOIN RuleType on RuleType.id = RuleType ORDER BY Rule.id ASC");
 
         $statement->execute();
         $statement->store_result();
@@ -37,7 +37,7 @@ class RuleDAO extends API\V2\Api
 
     public function deleteRule($data) {
         $statement = $this->database->prepare("DELETE FROM Rule WHERE id = ?");
-        $statement->bind_param("s", $data->ruleId);
+        $statement->bind_param("s", $data->id);
         $statement->execute();
         $statement->close();
     }

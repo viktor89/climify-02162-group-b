@@ -60,7 +60,6 @@ class Graphs extends Component {
         lowerThreshold: '',
         upperThreshold: '',
       },
-      selectedRuleType: 0,
     }
   }
 
@@ -82,7 +81,6 @@ class Graphs extends Component {
         return {
           rules: response[0].data,
           ruleTypes: response[1].data,
-          selectedRuleType: 0,
           loading: false,
         }
       });
@@ -104,8 +102,8 @@ class Graphs extends Component {
         type: ruleType,
         upperThreshold: newRule.upperThreshold,
         lowerThreshold: newRule.lowerThreshold,
-      },
-      selectedRuleType: ruleType})
+      }
+    });
   };
 
   handleAddRuleChange = (e) => {
@@ -133,8 +131,14 @@ class Graphs extends Component {
     });
   };
 
+  deleteRule = (id) => {
+    axios.post('/api/v2/rule/delete.php', {id}).then(() => {
+      this.getRules();
+    })
+  };
+
   render() {
-    const { rules, ruleTypes, selectedRuleType, newRule } = this.state;
+    const { rules, ruleTypes, newRule } = this.state;
     const { classes } = this.props;
 
     return (
@@ -147,7 +151,7 @@ class Graphs extends Component {
           <CachedIcon />
         </IconButton>
         <Grid item xs={12}>
-          <RulesTable rules={rules} ruleTypes={ruleTypes} />
+          <RulesTable rules={rules} ruleTypes={ruleTypes} deleteRuleCB={this.deleteRule} />
         </Grid>
         <Button className={classes.addRuleButton} variant="fab" color={"primary"} onClick={this.addRuleOpen}><AddIcon /></Button>
         <Modal
@@ -168,24 +172,24 @@ class Graphs extends Component {
               </Grid>
               <Grid item xs={5}>
                 <TextField
-                  disabled={selectedRuleType === 0}
+                  disabled={newRule.type === 0}
                   label="From"
                   name="lowerThreshold"
-                  helperText={selectedRuleType === 0 && 'select a type first'}
+                  helperText={newRule.type === 0 && 'select a type first'}
                   value={newRule.lowerThreshold}
                   onChange={(e) => {this.handleAddRuleChange(e)}}
                 />
               </Grid>
               <Grid item xs={2}>
                 <Typography variant={"body2"} align={"center"} className={classes.ruleFormType}>
-                  {newRule.type > 0 ? ruleTypes.filter(rule => (rule.id === selectedRuleType)).shift().unit : ''}
+                  {newRule.type > 0 && ruleTypes.length > 0 ? ruleTypes.filter(rule => (rule.id === newRule.type)).shift().unit : ''}
                 </Typography>
               </Grid>
               <Grid item xs={5}>
                 <TextField
-                  disabled={selectedRuleType === 0}
+                  disabled={newRule.type === 0}
                   label="To"
-                  helperText={selectedRuleType === 0 && 'select a type first'}
+                  helperText={newRule.type === 0 && 'select a type first'}
                   name="upperThreshold"
                   value={newRule.upperThreshold}
                   onChange={(e) => {this.handleAddRuleChange(e)}}

@@ -9,8 +9,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid/Grid";
 import RuleLocationSelector from "./RuleLocationSelector";
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import RuleTypeDropdown from "./RuleTypeDropdown";
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import Chip from "@material-ui/core/Chip/Chip";
 
 const styles = theme => ({
   root: {
@@ -54,6 +54,9 @@ const styles = theme => ({
       textDecoration: 'underline',
     },
   },
+  chip: {
+    margin: theme.spacing.unit,
+  },
 });
 
 class RulesTable extends Component {
@@ -81,7 +84,7 @@ class RulesTable extends Component {
   };
 
   render() {
-    const { classes, rules, ruleTypes } = this.props;
+    const { classes, rules, deleteRuleCB } = this.props;
     const { selectedRule, selectedRooms } = this.state;
     return (<Grid container spacing={16} alignItems={selectedRule ? "flex-start" : "center"}>
         <Grid item xs={12} md={6}>
@@ -104,12 +107,11 @@ class RulesTable extends Component {
                   </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
-                  <div className={classes.column}/>
-                  <div className={classes.column}>
-                    <FormControl className={classes.formControl}>
-                    </FormControl>
-                  </div>
-                  <div className={classes.column}/>
+                  <Grid container space={16}>
+                    {selectedRooms.map(room => (
+                      <Chip variant={"outlined"} color={"primary"} label={room.roomName} className={classes.chip} icon={<MeetingRoomIcon />} />
+                    ))}
+                  </Grid>
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions>
                   <Grid container spacing={16}>
@@ -118,7 +120,7 @@ class RulesTable extends Component {
                             variant="outlined">Save</Button>
                     </Grid>
                     <Grid item xs={6}>
-                      <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary"
+                      <Button onClick={(e) => {deleteRuleCB(rule.id)}} classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary"
                             variant="outlined">Delete</Button>
                     </Grid>
                   </Grid>
