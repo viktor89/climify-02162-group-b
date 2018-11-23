@@ -110,7 +110,6 @@ class Graphs extends Component {
 
   handleAddRuleChange = (e) => {
     const { newRule } = this.state;
-    console.log(e);
     let newState = {};
     Object.assign(newState, newRule);
     newState[e.target.name] = e.target.value;
