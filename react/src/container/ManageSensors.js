@@ -63,14 +63,14 @@ class ManageSensors extends Component {
     promises.push(axios.get("/api/v2/institution/getBuildings.php"));
     Promise.all(promises).then((response) => {
       var selBuilding = response[2].data.filter(building => (building.rooms.length > 0))[0];
+      var selRoom = selBuilding.rooms.filter(room => ((response[1].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0 || (response[0].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0))));
       this.setState(() => {
         return {
           sensors: response[0].data,
           pendingSensors: response[1].data,
           availableBuildings: response[2].data,
           selectedBuilding: selBuilding.id,
-          selectedRoom: selBuilding.rooms
-          .filter(room => ((response[1].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0 || (response[0].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0))))[0].hubID,
+          selectedRoom: selRoom.length > 0 ? selRoom[0].hubID : '',
           loading: false,
         }
       });
