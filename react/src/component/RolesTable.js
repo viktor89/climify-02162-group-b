@@ -32,7 +32,7 @@ const styles = theme => ({
     alignItems: 'center',
   },
   column: {
-    flexBasis: '33.33%',
+    flexBasis: '25%',
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
@@ -66,15 +66,12 @@ function RolesTable({ classes, roles }) {
             <Typography className={classes.secondaryHeading}>{role.id}</Typography>
           </div>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}><div className={classes.column}/>
+        <ExpansionPanelDetails className={classes.details}>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Role Name</InputLabel>
               <Input name="building" defaultValue={role.name} onChange={(e) => onHubChange(role, e)} />
             </FormControl>
-          </div>
-          <div className={classes.column}>
-
           </div>
           <div className={classes.column}>
 
