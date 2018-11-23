@@ -22,8 +22,6 @@ class Api
         header("Last-Modified: $ts");
         header("Pragma: no-cache");
         header("Cache-Control: no-cache, must-revalidate");
-        // Regular headers
-        header('Content-Type: application/json');
         // Class objects instantiate
         $this->validator = new Validator();
         $this->influxDb = new InfluxDBClient();

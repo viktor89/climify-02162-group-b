@@ -45,7 +45,7 @@
                 <li class="menu-link menu-link-other-users" data-go-to="other-users">
                     <a href="#/other-users">
                         <i class="menu-link-ico nav-icon fa fa-users" aria-hidden="true"></i>
-                        <p class="menu-link-text" id="menu-link-text-other-users">Manage Users & Roles</p>
+                        <p class="menu-link-text" id="menu-link-text-other-users">Users & Roles</p>
                     </a>
                 </li>
             <?php } ?>
