@@ -14,12 +14,12 @@
   	<link rel="shortcut icon" type="image/png" href="img/logo/favicon.png?v=<?php echo $system_version ?>"/>
 	<link rel="stylesheet" type="text/css" href="css/styles.css?v=<?php echo $system_version ?>">
 	<link href="https://fonts.googleapis.com/css?family=Arimo:400,400i,700|Poppins:500|Raleway:500i" rel="stylesheet">
-	<link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="lib/sweetalert/dist/sweetalert.css">
 	<link rel="stylesheet" href="lib/checkbox/checkbox_style.css">
 	<link rel="stylesheet" type="text/css" href="lib/daterangepicker/daterangepicker.css" />
     <link rel="stylesheet" href="croppie/croppie.css" />
-    <link rel="stylesheet" href="js/react.css" />
 </head>
 <body>
 

@@ -1,5 +1,5 @@
 <?php
-require_once '../Api.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/api/v2/Api.php';;
 
 use API\V2\ValidationException;
 use InfluxDB\Point;
@@ -107,5 +107,9 @@ class SensorDAO extends API\V2\Api
         $statement->execute();
         /* fetch values */
         $statement->close();
+    }
+
+    public function getSensorData($data) {
+        return $this->influxDb->getDataSeries('netatmo_NAMain_15c56cc6_70ef502b52b5_Temperature', 5);
     }
 }
