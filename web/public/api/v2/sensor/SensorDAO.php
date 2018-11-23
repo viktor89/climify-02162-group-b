@@ -72,7 +72,7 @@ class SensorDAO extends API\V2\Api
         $sensors = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID ];
+            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID, "running" => count($this->influxDb->getDataSeries($sID, 5)) > 0 ];
         }
         $statement->close();
         return $sensors;
@@ -110,6 +110,6 @@ class SensorDAO extends API\V2\Api
     }
 
     public function getSensorData($data) {
-        return $this->influxDb->getDataSeries('netatmo_NAMain_15c56cc6_70ef502b52b5_Temperature', 5);
+        return $this->influxDb->getDataSeries($data->sensorName, $data->minutes);
     }
 }

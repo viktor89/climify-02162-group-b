@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 try {
     date_default_timezone_set('UTC');
+    header('Content-Type: application/json');
     # Get JSON as a string
     $json_str = file_get_contents('php://input');
     # Get as an object
