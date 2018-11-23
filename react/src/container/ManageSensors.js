@@ -5,7 +5,6 @@ import axios from "axios";
 import Typography from "@material-ui/core/Typography/Typography";
 import SensorsTable from "../component/SensorsTable";
 import PendingSensorsTable from "../component/PendingSensorsTable";
-import LocationSelector from "../component/LocationSelector";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import LocationDropdown from "../component/LocationDropdown";
 
@@ -43,8 +42,7 @@ class ManageSensors extends Component {
   }
 
   componentWillMount() {
-    this.getSensors();
-    this.getAvailableBuildings();
+    this.fetchAndResolveInitialState();
   }
 
   componentDidMount() {
@@ -53,32 +51,30 @@ class ManageSensors extends Component {
         this.setState(() => {
           return {loading: true};
         });
-        this.getSensors();
+        this.fetchAndResolveInitialState();
       }
     });
   }
 
-  getSensors = () => {
+  fetchAndResolveInitialState = () => {
     let promises = [];
     promises.push(axios.get("/api/v2/sensor/getSensors.php"));
     promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
+    promises.push(axios.get("/api/v2/institution/getBuildings.php"));
     Promise.all(promises).then((response) => {
+      var selBuilding = response[2].data.filter(building => (building.rooms.length > 0))[0];
       this.setState(() => {
         return {
           sensors: response[0].data,
           pendingSensors: response[1].data,
+          availableBuildings: response[2].data,
+          selectedBuilding: selBuilding.id,
+          selectedRoom: selBuilding.rooms
+          .filter(room => ((response[1].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0 || (response[0].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0))))[0].hubID,
           loading: false,
         }
       });
     })
-  }
-
-  getAvailableBuildings = () => {
-    axios.get("/api/v2/institution/getBuildings.php").then((response) => {
-      this.setState({
-          availableBuildings: response.data
-        })
-    });
   }
 
   handleRemoveSensor = (sensorID) => {
@@ -119,7 +115,6 @@ class ManageSensors extends Component {
   render () {
     const { classes } = this.props;
     const { sensors, pendingSensors, loading, availableBuildings, selectedBuilding, selectedRoom } = this.state;
-    console.log(this.state);
 
     return (
       <Grid container className={classes.root} spacing={16}>
@@ -131,10 +126,17 @@ class ManageSensors extends Component {
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
                     <Grid item xs={3}>
-                      <LocationDropdown placeholder="Building" value={selectedBuilding} options={availableBuildings} onChangeCB={this.handleSelectBuilding} />
+                      <LocationDropdown placeholder="Building" value={selectedBuilding} options={availableBuildings.filter(building => (building.rooms.length > 0))} onChangeCB={this.handleSelectBuilding} />
                     </Grid>
                     <Grid item xs={3}>
-                      <LocationDropdown placeholder="Room" value={selectedRoom} options={availableBuildings.filter(building => (building.id === selectedBuilding)).flatMap(building => (building.rooms)).map(room => ({id: room.hubID, name: room.roomName}))} onChangeCB={this.handleSelectRoom} />
+                      <LocationDropdown 
+                      placeholder="Room"
+                      value={selectedRoom}
+                      options={availableBuildings.filter(building => (building.id === selectedBuilding))
+                        .flatMap(building => (building.rooms))
+                        .map(room => ({id: room.hubID, name: room.roomName}))
+                        .filter(room => ((pendingSensors.filter(sensor => (sensor.HubID === room.id)).length > 0 || (sensors.filter(sensor => (sensor.HubID === room.id)).length > 0))))}
+                      onChangeCB={this.handleSelectRoom} />
                     </Grid>
                   </Grid>
                 </Grid>

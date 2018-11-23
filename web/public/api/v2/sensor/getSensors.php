@@ -11,6 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 }
 try {
     date_default_timezone_set('UTC');
+    header('Content-Type: application/json');
     $SensorDAO = new SensorDAO();
     $sensors = $SensorDAO->getSensors();
     echo json_encode($sensors);

@@ -2,20 +2,16 @@
 
 use API\V2\ValidationException;
 
-require_once './RuleDAO.php';
-require '../../../vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/api/v2/rule/RuleDAO.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(405);
     die("Method not allowed!");
 }
 try {
     date_default_timezone_set('UTC');
-    $json_str = file_get_contents('php://input');
-    # Get as an object
-    $data = json_decode($json_str);
     $ruleDAO = new RuleDAO();
-    $rules = $ruleDAO->createRule($data);
+    $rules = $ruleDAO->getRuleTypes();
     echo json_encode($rules);
 } catch (ValidationException $e){
     http_response_code(400);
