@@ -62,14 +62,14 @@ class ManageSensors extends Component {
     promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
     promises.push(axios.get("/api/v2/institution/getBuildings.php"));
     Promise.all(promises).then((response) => {
-      var selBuilding = response[2].data.filter(building => (building.rooms.length > 0))[0];
-      var selRoom = selBuilding.rooms.filter(room => ((response[1].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0 || (response[0].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0))));
+      const selBuilding = response[2].data.filter(building => (building.rooms.length > 0));
+      const selRoom = selBuilding.length > 0 && selBuilding.rooms.filter(room => ((response[1].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0 || (response[0].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0))));
       this.setState(() => {
         return {
           sensors: response[0].data,
           pendingSensors: response[1].data,
           availableBuildings: response[2].data,
-          selectedBuilding: selBuilding.id,
+          selectedBuilding: selBuilding.lenght > 0 ? selBuilding.shift().id : null,
           selectedRoom: selRoom.length > 0 ? selRoom[0].hubID : '',
           loading: false,
         }
@@ -141,12 +141,12 @@ class ManageSensors extends Component {
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
                     <Grid item xs={3}>
-                      <LocationDropdown placeholder="Building" value={selectedBuilding} options={availableBuildings.filter(building => (building.rooms.length > 0))} onChangeCB={this.handleSelectBuilding} />
+                      <LocationDropdown placeholder="Building" value={selectedBuilding || 0} options={availableBuildings.filter(building => (building.rooms.length > 0))} onChangeCB={this.handleSelectBuilding} />
                     </Grid>
                     <Grid item xs={3}>
                       <LocationDropdown 
                       placeholder="Room"
-                      value={selectedRoom}
+                      value={selectedRoom || 0}
                       options={availableBuildings.filter(building => (building.id === selectedBuilding))
                         .flatMap(building => (building.rooms))
                         .map(room => ({id: room.hubID, name: room.roomName}))
