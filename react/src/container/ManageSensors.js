@@ -77,6 +77,21 @@ class ManageSensors extends Component {
     })
   }
 
+  getSensors = () => {
+    let promises = [];
+    promises.push(axios.get("/api/v2/sensor/getSensors.php"));
+    promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
+    Promise.all(promises).then((response) => {
+      this.setState(() => {
+        return {
+          sensors: response[0].data,
+          pendingSensors: response[1].data,
+          loading: false
+        }
+      });
+    })
+  }
+
   handleRemoveSensor = (sensorID) => {
     axios.post("/api/v2/sensor/remove.php", {
         sensorID: sensorID
