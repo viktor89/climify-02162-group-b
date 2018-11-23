@@ -72,7 +72,7 @@ class SensorDAO extends API\V2\Api
         $sensors = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID ];
+            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID, "running" => count($this->influxDb->getDataSeries($sID, 5)) > 0 ];
         }
         $statement->close();
         return $sensors;
