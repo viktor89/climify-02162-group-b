@@ -132,7 +132,15 @@ class ManageSensors extends Component {
                       <LocationDropdown placeholder="Building" value={selectedBuilding} options={availableBuildings.filter(building => (building.rooms.length > 0))} onChangeCB={this.handleSelectBuilding} />
                     </Grid>
                     <Grid item xs={3}>
-                      <LocationDropdown placeholder="Room" value={selectedRoom} options={availableBuildings.filter(building => (building.id === selectedBuilding)).flatMap(building => (building.rooms)).map(room => ({id: room.hubID, name: room.roomName}))} onChangeCB={this.handleSelectRoom} />
+                      <LocationDropdown 
+                      placeholder="Room"
+                      value={selectedRoom}
+                      options={availableBuildings.filter(building => (building.id === selectedBuilding))
+                        .flatMap(building => (building.rooms))
+                        .map(room => ({id: room.hubID, name: room.roomName}))
+                        .filter(room => ((pendingSensors.filter(sensor => (sensor.HubID === room.id)).length > 0 || (sensors.filter(sensor => (sensor.HubID === room.id)).length > 0))                          ))
+                      }
+                      onChangeCB={this.handleSelectRoom} />
                     </Grid>
                   </Grid>
                 </Grid>
