@@ -1,13 +1,64 @@
 # Climify
 
 ## Web service
-We've extendended skoleklima with React components and a new api. This approach has been chosen as it best suits a gradual re-write of the codebase into a more structured version. This way we're keeping the old stuff running alongside new features we implement.
+We've extended skoleklima with React components and a new API. This approach has been chosen as it best suits a gradual re-write of the codebase into a more structured version. This way we're keeping the old stuff running alongside new features we implement. However there are some of the original files that has been modified during the development:
+- The SQL files in data/export
+- Chronograf has been added. The file for it is in data/Chronograf
+- api-get-sensor-on-school.php (located in web/public/api)
+- api-get-building.php (located in web/public/api)
+- api-get-company-info.php (located in web/public/api)
+- api-get-influx-info.php (located in web/public/api)
+- api-get-sensor-on-school.php (located in web/public/api)
+- api-user-login.php (located in web/public/api)
 
 ### React
-The react source code is located in the react folder. This is transpiled with babel into a single executable javascript-file which we run in the web-app.
+The react source code is located in the react folder. This is transpiled with babel into a single executable javascript-file which we run in the web-app. The files that constitutes the React functionality in the web application are as follows (but not limited to the actually listed files)
+- react/src/index.js
+- react/src/component/LocationSelector.css
+- react/src/component/LocationSelector.js
+- react/src/component/PendingHubsTable.js
+- react/src/component/PendingSensorsTable.js
+- react/src/component/RegisteredHubsTable.js
+- react/src/component/RolesTable.js
+- react/src/component/SensorsTable.js
+- react/src/component/UsersTable.js
+- react/src/container/Graphs.js
+- react/src/container/ManageInstitution.js
+- react/src/container/ManageSensors.js
+- react/src/container/ManageUsers.js
 
 ### Api V2
-The new api is located in web/public/api/v2. In here we've built a class-based api instead of the old sequential api.
+The new API is located in web/public/api/v2. In here we've built a class-based api instead of the old sequential api. The actual files that consititutes the new API are as follows (but not limited to the actually listed files)
+- Api.php
+- InfluxDBClient.php
+- MQTTService.php
+- Validator.php
+- AuthorizationException.php (located in the folder web/public/api/v2/exceptions)
+- ValidationException.php (located in the folder web/public/api/v2/exceptions)
+- HubDAO.php (located in the folder web/public/api/v2/hub)
+- add.php (located in the folder web/public/api/v2/hub)
+- approve.php (located in the folder web/public/api/v2/hub)
+- getPendingHubs.php (located in the folder web/public/api/v2/hub)
+- getRegisteredHubs.php (located in the folder web/public/api/v2/hub)
+- remove.php (located in the folder web/public/api/v2/hub)
+- update.php (located in the folder web/public/api/v2/hub)
+- Institution.php (located in the folder web/public/api/v2/institution)
+- getBuildings.php (located in the folder web/public/api/v2/institution)
+- getInstitutions.php (located in the folder web/public/api/v2/institution)
+- RoleDAO.php (located in the folder web/public/api/v2/roles)
+- getRoles.php (located in the folder web/public/api/v2/roles)
+- RoomDAO.php (located in the folder web/public/api/v2/room)
+- getRooms.php (located in the folder web/public/api/v2/room)
+- SensorDAO.php (located in the folder web/public/api/v2/sensor)
+- approve.php (located in the folder web/public/api/v2/sensor)
+- getData.php (located in the folder web/public/api/v2/sensor)
+- getPendingSensors.php (located in the folder web/public/api/v2/sensor)
+- getSensors.php (located in the folder web/public/api/v2/sensor)
+- register.php (located in the folder web/public/api/v2/sensor)
+- remove.php (located in the folder web/public/api/v2/sensor)
+- send.php (located in the folder web/public/api/v2/sensor)
+- UserDAO.php (located in the folder web/public/api/v2/users)
+- getUsers.php (located in the folder web/public/api/v2/users)
 
 ## Raspberry Pi
 The following section will describe how to setup openHAB and the client software on the Raspberry Pi.

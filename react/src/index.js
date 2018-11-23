@@ -8,7 +8,11 @@ import MuiThemeProvider from "@material-ui/core/es/styles/MuiThemeProvider";
 import createMuiTheme from "@material-ui/core/es/styles/createMuiTheme";
 import ClimateControl from "./container/ClimateControl";
 
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true,
+  },
+});
 
 class ManageInstitutionComponent extends React.Component {
   render() {

@@ -1,16 +1,17 @@
 {
   "name": "climify-02162-group-b",
   "version": "1.0.0",
-  "description": "## Web service The files for the web service is given web/public.",
-  "main": "index.js",
+  "description": "## Web service We've extended skoleklima with React components and a new API. This approach has been chosen as it best suits a gradual re-write of the codebase into a more structured version. This way we're keeping the old stuff running alongside new features we implement. However there are some of the original files that has been modified during the development: - The SQL files in data/export - Chronograf has been added. The file for it is in data/Chronograf - api-get-sensor-on-school.php (located in web/public/api) - api-get-building.php (located in web/public/api) - api-get-company-info.php (located in web/public/api) - api-get-influx-info.php (located in web/public/api) - api-get-sensor-on-school.php (located in web/public/api) - api-user-login.php (located in web/public/api)",
+  "main": "webpack.config.js",
   "directories": {
     "doc": "doc",
     "lib": "lib"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "parcel": "parcel watch react/src/index.js --out-dir web/public/js --target browser  --no-hmr --no-cache --out-file react",
-    "parcel:build": "parcel build react/src/index.js --out-dir web/public/js --target browser --no-cache --out-file react"
+    "webpack:watch": "webpack --watch",
+    "webpack:build": "webpack",
+    "webpack:production": "cross-env NODE_ENV=production webpack"
   },
   "repository": {
     "type": "git",
@@ -23,16 +24,33 @@
     "url": "https://github.com/viktor89/climify-02162-group-b/issues"
   },
   "homepage": "https://github.com/viktor89/climify-02162-group-b#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/node": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.1",
+    "file-loader": "^2.0.0",
+    "node-sass": "^4.10.0",
+    "path": "^0.12.7",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.26.0",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  },
   "dependencies": {
-    "@material-ui/core": "^3.4.0",
+    "@material-ui/core": "^3.5.1",
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
-    "babel-cli": "^6.26.0",
-    "babel-preset-react-app": "^3.1.2",
     "chart.js": "^2.7.3",
     "classnames": "^2.2.6",
     "downshift": "^3.1.5",
     "prop-types": "^15.6.2",
+<<<<<<< HEAD
     "rc-tree-select": "^2.3.2",
     "react": "^16.6.3",
     "react-autosuggest": "^9.4.2",
@@ -49,5 +67,10 @@
     "cssnano": "^4.1.7",
     "eslint": "^5.9.0",
     "eslint-plugin-react": "^7.11.1"
+=======
+    "react": "^16.6.3",
+    "react-chartjs-2": "^2.7.4",
+    "react-dom": "^16.6.3"
+>>>>>>> dd284d420c5596269d395441b05ed634229330f1
   }
 }

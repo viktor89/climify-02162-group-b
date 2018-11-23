@@ -1,0 +1,12 @@
+[Unit]
+Description = Raspberry Pi Client service
+After = influxdb.service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/java -jar /home/pi/raspiclient-0.0.1-jar-with-dependencies.jar
+
+[Install]
+WantedBy=multi-user.target
