@@ -1,6 +1,7 @@
 [Unit]
 Description = Raspberry Pi Client service
-After = influxdb.service
+Requires = influxdb.service openhab2.service
+After = influxdb.service openhab2.service
 
 [Service]
 Type=simple
