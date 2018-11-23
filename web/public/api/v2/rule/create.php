@@ -5,7 +5,7 @@ use API\V2\ValidationException;
 require_once './RuleDAO.php';
 require '../../../vendor/autoload.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     die("Method not allowed!");
 }

@@ -7,16 +7,16 @@ use InfluxDB\Point;
 class RuleDAO extends API\V2\Api
 {
     public function getRules() {
-        $statement = $this->database->prepare("SELECT Rule.id, type, unit, UpperThreshold, LowerThreshold FROM Rule LEFT JOIN RuleType on RuleType.id = RuleType");
+        $statement = $this->database->prepare("SELECT Rule.id, type, RuleType.id, unit, UpperThreshold, LowerThreshold FROM Rule LEFT JOIN RuleType on RuleType.id = RuleType");
 
         $statement->execute();
         $statement->store_result();
-        $statement->bind_result($ruleId, $type, $unit, $upperThreshold, $lowerThreshold);
+        $statement->bind_result($ruleId, $type, $typeId, $unit, $upperThreshold, $lowerThreshold);
 
         $rules = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $rules[] = ["id" => $ruleId, "type" => $type, "unit" => $unit, "upperThreshold" => $upperThreshold, "lowerThreshold" => $lowerThreshold, "rooms" => []];
+            $rules[] = ["id" => $ruleId, "type" => ["id" => $typeId, "name" => $type], "unit" => $unit, "upperThreshold" => $upperThreshold, "lowerThreshold" => $lowerThreshold, "rooms" => []];
         }
         $statement->close();
 
@@ -44,7 +44,7 @@ class RuleDAO extends API\V2\Api
 
     public function createRule($data) {
         $statement = $this->database->prepare("INSERT INTO Rule (RuleType, UpperThreshold, LowerThreshold) VALUES (?, ?, ?)");
-        $statement->bind_param("ddd", $data->ruleType, $data->upperThreshold, $data->lowerThreshold);
+        $statement->bind_param("ddd", $data->type, $data->upperThreshold, $data->lowerThreshold);
         $statement->execute();
         return $this->database->insert_id;
     }

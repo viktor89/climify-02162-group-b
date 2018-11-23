@@ -9,6 +9,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid/Grid";
 import RuleLocationSelector from "./RuleLocationSelector";
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import RuleTypeDropdown from "./RuleTypeDropdown";
 
 const styles = theme => ({
   root: {
@@ -70,14 +72,16 @@ class RulesTable extends Component {
     })
   } ;
 
-  handleRuleRoomChange = (rooms) => {
+  handleRuleRoomChange = (buildings) => {
+    const rooms = buildings.flatMap(building => (building.rooms)).filter(room => (room.checked));
+    console.log(rooms);
     this.setState({
       selectedRooms: rooms
     })
   };
 
   render() {
-    const { classes, rules } = this.props;
+    const { classes, rules, ruleTypes } = this.props;
     const { selectedRule, selectedRooms } = this.state;
     return (<Grid container spacing={16} alignItems={selectedRule ? "flex-start" : "center"}>
         <Grid item xs={12} md={6}>
@@ -91,7 +95,7 @@ class RulesTable extends Component {
                   </div>
                   <div className={classes.column}>
                     <Typography className={classes.heading}>Rule Type:</Typography>
-                    <Typography className={classes.secondaryHeading}>{rule.type}</Typography>
+                    <Typography className={classes.secondaryHeading}>{rule.type.name}</Typography>
                   </div>
                   <div className={classes.columnCenterText}>
                     <Typography className={classes.heading}>Rule:</Typography>
@@ -101,7 +105,10 @@ class RulesTable extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails className={classes.details}>
                   <div className={classes.column}/>
-                  <div className={classes.column}/>
+                  <div className={classes.column}>
+                    <FormControl className={classes.formControl}>
+                    </FormControl>
+                  </div>
                   <div className={classes.column}/>
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions>
@@ -120,7 +127,7 @@ class RulesTable extends Component {
             </Grid>))}
         </Grid>
         <Grid item xs={12} md={6}>
-          {selectedRule && <RuleLocationSelector ruleId={selectedRule} onchangeCB={this.handleRuleRoomChange} value={selectedRooms}/>}
+          {selectedRule && <RuleLocationSelector ruleId={selectedRule} onChangeCB={this.handleRuleRoomChange} value={selectedRooms}/>}
           {!selectedRule && <em>Select a rule</em>}
         </Grid>
       </Grid>
