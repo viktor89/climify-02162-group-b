@@ -62,15 +62,22 @@ class ManageSensors extends Component {
     promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
     promises.push(axios.get("/api/v2/institution/getBuildings.php"));
     Promise.all(promises).then((response) => {
-      const selBuilding = response[2].data.filter(building => (building.rooms.length > 0));
-      const selRoom = selBuilding.length > 0 && selBuilding.rooms.filter(room => ((response[1].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0 || (response[0].data.filter(sensor => (sensor.HubID === room.hubID)).length > 0))));
+      // Responses
+      const vSensors = response[0].data;
+      const vPendingSensors = response[1].data;
+      const vAvailableBuildings = response[2].data;
+      // Array of filtered buildings. Only buildings with rooms
+      const vFilteredBuildings = vAvailableBuildings.filter(building => (building.rooms.length > 0));
+      // Array of filtered rooms. Only rooms with pending or attached/approved sensors
+      const vFilteredRooms = vFilteredBuildings.length > 0 ? vFilteredBuildings[0].rooms.filter(room => (((vPendingSensors.filter(sensor => (sensor.HubID === room.hubID)).length > 0) || (vSensors.filter(sensor => (sensor.HubID === room.hubID)).length > 0)))) : null;
+
       this.setState(() => {
         return {
-          sensors: response[0].data,
-          pendingSensors: response[1].data,
-          availableBuildings: response[2].data,
-          selectedBuilding: selBuilding.lenght > 0 ? selBuilding.shift().id : null,
-          selectedRoom: selRoom.length > 0 ? selRoom[0].hubID : '',
+          sensors: vSensors,
+          pendingSensors: vPendingSensors,
+          availableBuildings: vAvailableBuildings,
+          selectedBuilding: vFilteredBuildings.length > 0 ? vFilteredBuildings[0].id : null,
+          selectedRoom: vFilteredRooms !== null && vFilteredRooms.length > 0 ? vFilteredRooms[0].hubID : null,
           loading: false,
         }
       });
