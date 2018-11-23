@@ -1,5 +1,5 @@
 <?php
-require_once '../Api.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/api/v2/Api.php';;
 
 use API\V2\ValidationException;
 use InfluxDB\Point;
@@ -72,7 +72,7 @@ class SensorDAO extends API\V2\Api
         $sensors = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID ];
+            $sensors[] = ["HubID" => $hubMac, "Building" => $building, "Room" => $room, "SensorType"=>$stype, "SensorID" => $sID, "running" => count($this->influxDb->getDataSeries($sID, 5)) > 0 ];
         }
         $statement->close();
         return $sensors;
@@ -107,5 +107,9 @@ class SensorDAO extends API\V2\Api
         $statement->execute();
         /* fetch values */
         $statement->close();
+    }
+
+    public function getSensorData($data) {
+        return $this->influxDb->getDataSeries($data->sensorName, $data->minutes);
     }
 }

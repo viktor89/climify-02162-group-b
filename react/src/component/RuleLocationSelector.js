@@ -30,7 +30,7 @@ class RuleLocationSelector extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getBuildings();
   }
 
@@ -47,39 +47,45 @@ class RuleLocationSelector extends Component {
   };
 
   selectAllChildren(name, checked) {
+    const { onChangeCB } = this.props;
     const { buildings } = this.state;
-    this.setState(() => {
-      return {
-        buildings: buildings.map(building => ({
-          id: building.id,
-          expanded: building.expanded,
-          name: building.name,
-          rooms: building.rooms.map(room => ({
-            hubID: room.hubID,
-            roomName: room.roomName,
-            checked: building.name === name ? checked : room.checked,
-          }))
+    const newState = {
+      buildings: buildings.map(building => ({
+        id: building.id,
+        expanded: building.expanded,
+        name: building.name,
+        rooms: building.rooms.map(room => ({
+          hubID: room.hubID,
+          roomName: room.roomName,
+          checked: building.name === name ? checked : room.checked,
         }))
-      }
+      }))
+    };
+    this.setState(() => {
+      return newState
     });
+    onChangeCB(newState.buildings);
   }
 
   handleSelect = (name, value) => {
+    const { onChangeCB } = this.props;
     const { buildings } = this.state;
-    this.setState(() => {
-      return {
-        buildings: buildings.map(building => ({
-          id: building.id,
-          expanded: building.expanded,
-          name: building.name,
-          rooms: building.rooms.map(room => ({
-            hubID: room.hubID,
-            roomName: room.roomName,
-            checked: room.roomName === name ? value : room.checked,
-          }))
+    const newState = {
+      buildings: buildings.map(building => ({
+        id: building.id,
+        expanded: building.expanded,
+        name: building.name,
+        rooms: building.rooms.map(room => ({
+          hubID: room.hubID,
+          roomName: room.roomName,
+          checked: room.roomName === name ? value : room.checked,
         }))
-      }
+      }))
+    };
+    this.setState(() => {
+      return newState
     });
+    onChangeCB(newState.buildings);
   };
 
   expandBuilding = (name) => {
@@ -94,14 +100,14 @@ class RuleLocationSelector extends Component {
         }))
       }
     });
-  }
+  };
 
   render() {
-    const { classes } = this.props;
+    const { classes, ruleId } = this.props;
     const { buildings } = this.state;
-    return (<Grid container spacing={16}>
+    return (<Grid key={ruleId} container spacing={16}>
       {buildings.map(building => (
-        <Grid key={building.id} item xs={12}>
+        <Grid key={building.id+ruleId} item xs={12}>
           <FormGroup row>
             <FormControlLabel
               control={
@@ -122,7 +128,7 @@ class RuleLocationSelector extends Component {
           <Collapse in={building.expanded}>
             <Grid container spacing={16} justify={"space-evenly"}>
               {building.rooms.map(room => (
-                <Grid key={room.hubID} item xs={11}>
+                <Grid key={ruleId + room.hubID + room.roomName + room.checked} item xs={11}>
                   <FormGroup row>
                     <FormControlLabel
                       control={

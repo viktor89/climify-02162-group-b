@@ -1,5 +1,5 @@
 <?php
-require_once '../Api.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/api/v2/Api.php';
 
 use API\V2\ValidationException;
 
