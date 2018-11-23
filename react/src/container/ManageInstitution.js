@@ -26,6 +26,10 @@ const styles = theme => ({
   },
 });
 
+const createBuilding = (value) => ({
+    building: value
+})
+
 class ManageInstitution extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +39,7 @@ class ManageInstitution extends Component {
       institutions: [],
       selectedInstitution: 1,
       buildings: [],
+      rooms: [],
       labelWidth: 65,
       loading: true,
     };
@@ -43,7 +48,7 @@ class ManageInstitution extends Component {
   componentWillMount() {
     const promises = [];
     promises.push(axios.get('/api/v2/institution/getInstitutions.php'));
-    promises.push(axios.get('/api/v2/room/getRooms.php'));
+    promises.push(axios.get('/api/v2/institution/getBuildings.php'))
     Promise.all(promises).then((response) => {
       this.setState(() => {
         return {institutions: response[0].data};
@@ -146,10 +151,24 @@ class ManageInstitution extends Component {
         this.getHubs(selectedInstitution);
       });
   }
+  // Creatable component
+
+  handleCreate = (event) => {
+      setTimeout(() => {
+          const {buildings} = this.state;
+          const newBuilding = createBuilding(event.value)
+
+          this.setState({
+              buildings: [...buildings, newBuilding],
+              value: newBuilding,
+          });
+      }, 1000);
+  }
 
   render() {
     const { classes } = this.props;
-    const { pendingHubs, registeredHubs, loading } = this.state;
+    const { pendingHubs, registeredHubs, loading, buildings, rooms} = this.state;
+    const buildingList = buildings.map(building => ({label: building.name}));
     return (
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={12}>
@@ -172,12 +191,13 @@ class ManageInstitution extends Component {
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <h3>Unregistered Hubs</h3>
-                  <PendingHubsTable hubs={pendingHubs} onSavehub={this.handleSavePendingHub} onHubChange={this.handlePendingHubChanged} />
+                  <PendingHubsTable hubs={pendingHubs} buildings={buildingList} onSavehub={this.handleSavePendingHub} onHubChange={this.handlePendingHubChanged} rooms={rooms} onCreate={this.handleCreate} onChange={this.handleChange}/>
                 </Grid>
               </Grid>)
         }
       </Grid>
     );
   }
-}
+};
 export default withStyles(styles)(ManageInstitution);
+

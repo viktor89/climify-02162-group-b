@@ -12,6 +12,12 @@ import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
 
+
+// Auto Suggest imports:
+import Select from 'react-select';
+import Creatable from 'react-select/lib/Creatable';
+import CreatableSelect from 'react-select/lib/Creatable';
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -36,7 +42,11 @@ const styles = theme => ({
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit}px`,
+  },
+
+  spacing: {
+      padding: `${theme.spacing.unit}px`,
   },
   link: {
     color: theme.palette.primary.main,
@@ -47,9 +57,9 @@ const styles = theme => ({
   },
 });
 
-function DetailedExpansionPanel({ classes, hubs, onHubChange, onSavehub }) {
+function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, handleCreate, handleChange}) {
   return hubs.map((hub) => (
-    <div key={hub.mac} className={classes.root}>
+    <div key={hub.mac} className={classes.root} >
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
@@ -61,18 +71,22 @@ function DetailedExpansionPanel({ classes, hubs, onHubChange, onSavehub }) {
             <Typography className={classes.secondaryHeading}>{hub.ip}</Typography>
           </div>
         </ExpansionPanelSummary>
+
         <ExpansionPanelDetails className={classes.details}>
           <div className={classes.column}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="component-simple">Room</InputLabel>
-              <Input name="room" onChange={(e) => onHubChange(hub, e)} />
-            </FormControl>
+            <Typography className={classes.secondaryHeading}>Building</Typography>
+            <CreatableSelect isClearable
+                             placeholder='Building'
+                             options={buildings}
+                             onChange={handleChange}
+                             onCreateOption={handleCreate}/>
           </div>
-          <div className={classes.column}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="component-simple">Building</InputLabel>
-              <Input name="building" onChange={(e) => onHubChange(hub, e)} />
-            </FormControl>          </div>
+
+          <div className={classNames(classes.column, classes.spacing)}>
+            <Typography className={classes.secondaryHeading}>Room</Typography>
+            <CreatableSelect placeholder='Room' options={rooms} />
+          </div>
+
           <div className={classNames(classes.column, classes.helper)}>
             <Button fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
           </div>
