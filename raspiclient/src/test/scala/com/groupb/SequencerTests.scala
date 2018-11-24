@@ -9,7 +9,7 @@ import org.scalamock.scalatest.MockFactory
 class SequencerTests extends FlatSpec with Matchers with MockFactory {
   val responseMap = Map[String, IndexedSeq[String]]()
 
-  "A Sequencer" should "transmit a non-empty sequence of Data as JSON successfully" in {
+  "Sequencer" should "transmit a non-empty sequence of Data as JSON successfully" in {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val data = IndexedSeq(Data("test", "test", 1, 0),
       Data("test", "test", 2, 0),

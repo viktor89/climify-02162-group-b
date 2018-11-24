@@ -7,7 +7,7 @@ import org.scalatest.{FlatSpec, Matchers}
   * URLs in test originate from scalaj-http's tests
   */
 class HttpHandlerTests extends FlatSpec with Matchers {
-  "A HttpHandler" should "be able to make a get request to any site" in {
+  "HttpHandler" should "be able to make a get request to any site" in {
     val resp = HttpHandler.getRequest("https://httpbin.org/get")
     resp.isSuccess should be (true)
     resp.get.code should be (200)

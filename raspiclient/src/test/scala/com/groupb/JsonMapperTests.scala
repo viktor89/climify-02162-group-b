@@ -6,7 +6,7 @@ import org.scalatest.prop.Checkers
 import org.scalacheck.Arbitrary
 
 class JsonMapperTests extends FlatSpec with Checkers with Matchers {
-  "A JsonMapper" should "be able to convert strings to and from JSON" in {
+  "JsonMapper" should "be able to convert strings to and from JSON" in {
     check((obj : String) => JsonMapper.convert[String](JsonMapper.toJson(obj)) == Success(obj))
   }
 

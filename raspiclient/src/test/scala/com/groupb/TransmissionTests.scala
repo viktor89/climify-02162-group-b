@@ -8,7 +8,7 @@ import com.typesafe.config.ConfigFactory
 class TransmissionTests extends DBFramework {
   val responseMap = Map[String, IndexedSeq[String]]()
 
-  "A Transmission object" should "handle a transmission that succeeds with no data in db" in {
+  "Transmission" should "handle a transmission that succeeds with no data in db" in {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val jsonResult = """{"results":[{"series":[]}]}"""
     val data = IndexedSeq[Data]()

@@ -16,10 +16,10 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
     TestKit.shutdownActorSystem(system)
   }
 
-  "A TransmissionActor" must {
+  "TransmissionActor" must {
     "handle a send message" in {
       val mockTransmission = mock[Transmission]
-      (mockTransmission.transmit _).expects().noMoreThanOnce 
+      (mockTransmission.transmit _).expects().once 
       val actor = TestActorRef(new TransmissionActor(mockTransmission))
       actor ! "send"
     }
