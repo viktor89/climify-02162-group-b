@@ -49,7 +49,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
       actor ! TState("test", "20")
     }
 
-    "handle a ViewInbox where OpenHAB call does succeed" in {
+    "handle a ViewInbox where OpenHAB calls does succeed" in {
       val responseMap = Map[String, IndexedSeq[String]]()
       val dataMsg = DataMessage(MACAddress.computeMAC, "\"\"")
       val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
@@ -63,7 +63,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
       actor ! ViewInbox()
     }
 
-    "handle a ViewInbox where OpenHAB call fails" in {
+    "handle a ViewInbox where OpenHAB calls fail" in {
       val responseMap = Map[String, IndexedSeq[String]]()
       val dataMsg = DataMessage(MACAddress.computeMAC, "[]")
       val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
