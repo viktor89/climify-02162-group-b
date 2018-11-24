@@ -48,7 +48,7 @@ class InstitutionDAO extends API\V2\Api
             $statement->store_result();
             $statement->bind_result($hubID, $roomName);
             while ($statement->fetch()) {
-                $buildings[$i]{"rooms"}[] = ["hubID" => $hubID, "roomName" => $roomName];
+                $buildings[$i]["rooms"][] = ["hubID" => $hubID, "roomName" => $roomName];
             }
             $statement->close();
         }

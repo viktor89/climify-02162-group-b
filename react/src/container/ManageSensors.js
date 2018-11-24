@@ -42,8 +42,7 @@ class ManageSensors extends Component {
   }
 
   componentWillMount() {
-    this.getSensors();
-    this.getAvailableBuildings();
+    this.fetchAndResolveInitialState();
   }
 
   componentDidMount() {
@@ -52,9 +51,37 @@ class ManageSensors extends Component {
         this.setState(() => {
           return {loading: true};
         });
-        this.getSensors();
+        this.fetchAndResolveInitialState();
       }
     });
+  }
+
+  fetchAndResolveInitialState = () => {
+    let promises = [];
+    promises.push(axios.get("/api/v2/sensor/getSensors.php"));
+    promises.push(axios.get("/api/v2/sensor/getPendingSensors.php"));
+    promises.push(axios.get("/api/v2/institution/getBuildings.php"));
+    Promise.all(promises).then((response) => {
+      // Responses
+      const vSensors = response[0].data;
+      const vPendingSensors = response[1].data;
+      const vAvailableBuildings = response[2].data;
+      // Array of filtered buildings. Only buildings with rooms
+      const vFilteredBuildings = vAvailableBuildings.filter(building => (building.rooms.length > 0));
+      // Array of filtered rooms. Only rooms with pending or attached/approved sensors
+      const vFilteredRooms = vFilteredBuildings.length > 0 ? vFilteredBuildings[0].rooms.filter(room => (((vPendingSensors.filter(sensor => (sensor.HubID === room.hubID)).length > 0) || (vSensors.filter(sensor => (sensor.HubID === room.hubID)).length > 0)))) : null;
+
+      this.setState(() => {
+        return {
+          sensors: vSensors,
+          pendingSensors: vPendingSensors,
+          availableBuildings: vAvailableBuildings,
+          selectedBuilding: vFilteredBuildings.length > 0 ? vFilteredBuildings[0].id : null,
+          selectedRoom: vFilteredRooms !== null && vFilteredRooms.length > 0 ? vFilteredRooms[0].hubID : null,
+          loading: false,
+        }
+      });
+    })
   }
 
   getSensors = () => {
@@ -66,18 +93,10 @@ class ManageSensors extends Component {
         return {
           sensors: response[0].data,
           pendingSensors: response[1].data,
-          loading: false,
+          loading: false
         }
       });
     })
-  }
-
-  getAvailableBuildings = () => {
-    axios.get("/api/v2/institution/getBuildings.php").then((response) => {
-      this.setState({
-          availableBuildings: response.data
-        })
-    });
   }
 
   handleRemoveSensor = (sensorID) => {
@@ -129,10 +148,17 @@ class ManageSensors extends Component {
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
                     <Grid item xs={3}>
-                      <LocationDropdown placeholder="Building" value={selectedBuilding} options={availableBuildings} onChangeCB={this.handleSelectBuilding} />
+                      <LocationDropdown placeholder="Building" value={selectedBuilding || 0} options={availableBuildings.filter(building => (building.rooms.length > 0))} onChangeCB={this.handleSelectBuilding} />
                     </Grid>
                     <Grid item xs={3}>
-                      <LocationDropdown placeholder="Room" value={selectedRoom} options={availableBuildings.filter(building => (building.id === selectedBuilding)).flatMap(building => (building.rooms)).map(room => ({id: room.hubID, name: room.roomName}))} onChangeCB={this.handleSelectRoom} />
+                      <LocationDropdown 
+                      placeholder="Room"
+                      value={selectedRoom || 0}
+                      options={availableBuildings.filter(building => (building.id === selectedBuilding))
+                        .flatMap(building => (building.rooms))
+                        .map(room => ({id: room.hubID, name: room.roomName}))
+                        .filter(room => ((pendingSensors.filter(sensor => (sensor.HubID === room.id)).length > 0 || (sensors.filter(sensor => (sensor.HubID === room.id)).length > 0))))}
+                      onChangeCB={this.handleSelectRoom} />
                     </Grid>
                   </Grid>
                 </Grid>
