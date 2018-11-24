@@ -24,16 +24,15 @@ object App extends App {
   val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
   
   val mac = MACAddress.computeMAC
-  println(mac)
-
   val registerMsg = DataMessage(mac, JsonMapper.toJson(ItemFetcher.getOpenHABList(HttpHandler)))
   HttpHandler.postRequest(registerURL, JsonMapper.toJson(registerMsg))
 
   val transmitter = Transmission(database, HttpHandler)
-  val system = ActorSystem()
+  val system = ActorSystem("RaspberryPiSystem", ConfigFactory.load)
   val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
   val msgHandler = system.actorOf(Props(new MessageActor(HttpHandler)), name = "MessageHandler")
   val scheduler = system.scheduler.schedule(2 seconds, 1 minutes, transmissionActor, "send")
+  msgHandler ! Log(mac)
 
   val brokerURL = endpointConfig.getString("endpoints.mqtt")
   val persistance = new MemoryPersistence
