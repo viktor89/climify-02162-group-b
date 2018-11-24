@@ -73,7 +73,7 @@ class ItemFetcherTests extends FlatSpec with Matchers with MockFactory {
     result.size should be (0)
   }
 
-  it should "return a list representation when OpenHAB has items defined" in {
+  it should "return a non-empty list when OpenHAB has items defined" in {
     val mockHandler = mock[HttpConnection]
     (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[{\"name\": \"device1\", \"label\": \"device1\"}, {\"name\": \"device2\", \"label\": \"device2\"}, {\"name\": \"device3\", \"label\": \"device3\"}]", 200, responseMap)))
 

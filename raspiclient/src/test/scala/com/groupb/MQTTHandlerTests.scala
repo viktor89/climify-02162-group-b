@@ -86,7 +86,7 @@ class MQTTHandlerTests extends TestKit(ActorSystem("MQTTHandlerTests")) with Imp
       handler.messageArrived("topic", new MqttMessage(JsonMapper.toJson(viewInbox).getBytes()))
     }
 
-    "do nothing when the MQTT payload is not in JSON" in {
+    "forward an invalid message to the MessageActor if the MQTTMessage payload is not JSON" in {
       val mockHandler = mock[HttpConnection]
       (mockHandler.postRequest _).expects(*,*).never
       (mockHandler.getRequest _).expects(*).never
@@ -95,7 +95,7 @@ class MQTTHandlerTests extends TestKit(ActorSystem("MQTTHandlerTests")) with Imp
       handler.messageArrived("topic", new MqttMessage("...".getBytes()))
     }
 
-    "do nothing when the MQTTMessage payload does not follow the ICD actions" in {
+    "forward an invalid message to the MessageActor if the MQTTMessage payload does not follow the ICD actions" in {
       val mockHandler = mock[HttpConnection]
       (mockHandler.postRequest _).expects(*,*).never
       (mockHandler.getRequest _).expects(*).never
