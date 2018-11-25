@@ -23,4 +23,9 @@ class JsonMapperTests extends FlatSpec with Checkers with Matchers {
     val result = JsonMapper.convert[Message]("{ \"test\" : \"data\"}")
     result.isFailure should be (true)
   }
+
+  it should "return a string in the form { \"mac\":*, \"data\":*} when calling wrapForTransport" in {
+    check((mac : String, data : String) =>
+      "{ \"mac\":\"" + mac + "\",\"data\":" + data + " }" == JsonMapper.wrapForTransport(mac, data))
+  }
 }

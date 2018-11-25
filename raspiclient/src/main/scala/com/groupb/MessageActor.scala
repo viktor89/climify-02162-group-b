@@ -15,8 +15,8 @@ class MessageActor(val http : HttpConnection) extends Actor with ActorLogging {
       http.postRequest("http://localhost:8080/rest/discovery/bindings/zwave/scan", "")
       val response = http.getRequest("http://localhost:8080/rest/inbox")
       response match {
-        case Success(resp) => http.postRequest(inboxURL, JsonMapper.toJson(DataMessage(MACAddress.computeMAC, JsonMapper.toJson(resp.body))))
-        case _ => http.postRequest(inboxURL, JsonMapper.toJson(DataMessage(MACAddress.computeMAC, "[]")))
+        case Success(resp) => http.postRequest(inboxURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, resp.body))
+        case _ => http.postRequest(inboxURL, JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]"))
       }
     }
     case Log(msg) => log.info(msg)

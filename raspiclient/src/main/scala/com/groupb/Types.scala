@@ -21,7 +21,6 @@ case class TState(val uuid: String, val temp : String) extends Message
 case class ViewInbox() extends Message
 
 case class Data(val sensorName : String, val sensorType : String, val time : Any, val value : Any)
-case class DataMessage(val mac : String, val data : String)
 case class Log(val msg : String)
 
 trait HttpConnection {

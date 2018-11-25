@@ -14,11 +14,10 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     val data = IndexedSeq(Data("test", "test", 1, 0),
       Data("test", "test", 2, 0),
       Data("test","test", 3, 0))
-    val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
-    val json = JsonMapper.toJson(dataMsg)
-
+    val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(data))
+    
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects (sendURL, json) returns(Success(new HttpResponse[String]("", 200, responseMap)))
+    (mockHandler.postRequest _) expects (sendURL, dataMsg) returns(Success(new HttpResponse[String]("", 200, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result should be (data)
@@ -27,11 +26,10 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
   it should "transmit a empty sequence of Data as JSON successfully" in {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")
     val data = IndexedSeq[Data]()
-    val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
-    val json = JsonMapper.toJson(dataMsg)
+    val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]")
 
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects (sendURL, json) returns(Success(new HttpResponse[String]("", 200, responseMap)))
+    (mockHandler.postRequest _) expects (sendURL, dataMsg) returns(Success(new HttpResponse[String]("", 200, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result should be (data)
@@ -42,11 +40,10 @@ class SequencerTests extends FlatSpec with Matchers with MockFactory {
     val data = IndexedSeq(Data("test", "test", 1, 0),
       Data("test", "test", 2, 0),
       Data("test", "test", 3, 0))
-    val dataMsg = DataMessage(MACAddress.computeMAC, JsonMapper.toJson(data))
-    val json = JsonMapper.toJson(dataMsg)
+    val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, JsonMapper.toJson(data))
 
     val mockHandler = mock[HttpConnection]
-    (mockHandler.postRequest _) expects(sendURL, json) returns(Success(new HttpResponse[String]("", 404, responseMap)))
+    (mockHandler.postRequest _) expects(sendURL, dataMsg) returns(Success(new HttpResponse[String]("", 404, responseMap)))
 
     val result = Sequencer.transmitData(mockHandler)(data)
     result.size should be (0)
