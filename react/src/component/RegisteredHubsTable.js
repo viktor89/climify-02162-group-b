@@ -15,20 +15,6 @@ import Divider from "@material-ui/core/Divider/Divider";
 import Switch from "@material-ui/core/Switch/Switch";
 import Grid from "@material-ui/core/Grid/Grid";
 
-// Auto Suggest imports:
-import Autosuggest from 'react-autosuggest';
-import deburr from 'lodash/deburr';
-import keycode from 'keycode';
-import Downshift from 'downshift';
-import TextField from '@material-ui/core/TextField';
-import Popper from '@material-ui/core/Popper';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import Chip from '@material-ui/core/Chip';
-
-
-// Midlertidig
-
 const styles = theme => ({
   root: {
     width: '100%',

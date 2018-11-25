@@ -8,14 +8,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Input from "@material-ui/core/Input/Input";
-
-
-// Auto Suggest imports:
-import Select from 'react-select';
-import Creatable from 'react-select/lib/Creatable';
 import CreatableSelect from 'react-select/lib/Creatable';
 import Grid from "@material-ui/core/Grid/Grid";
 
@@ -58,7 +50,7 @@ const styles = theme => ({
   },
 });
 
-function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, handleCreate, handleChange, onUnregisterHub}) {
+function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, onCreate, onUnregisterHub}) {
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root} >
       <ExpansionPanel>
@@ -80,8 +72,8 @@ function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSaveh
               <CreatableSelect isClearable
                                placeholder='Building'
                                options={buildings}
-                               onChange={handleChange}
-                               onCreateOption={handleCreate}/>
+                               onChange={(label, action) => {console.log(label, action)}}
+                               onCreateOption={name => {console.log(name)}}/>
             </Grid>
             <Grid item xs={6}>
               <Typography className={ classes.secondaryHeading}>Room</Typography>

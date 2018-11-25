@@ -87,32 +87,27 @@ class SensorDAO extends API\V2\Api
     {
         $points = [];
         $hubDAO = new HubDAO();
-        $sensorDAO = new SensorDAO();
         if (!$hubDAO->isHubRegistered($data->mac)) {
             throw new ValidationException('Hub not registered!');
         };
         foreach($data->data as $sensor) {
-            if (!$sensorDAO->sensorExists($sensor->sensorName)) {
+            if (!$this->sensorExists($sensor->sensorName)) {
                 $object = new stdClass();
                 $object->mac = $data->mac;
                 $object->data = [$sensor];
-                $sensorDAO->registerPendingSensor($object);
+                $this->registerPendingSensor($object);
             }
-        }
-        if (empty($data)) {
-            throw new Exception('Unable to parse json');
-        }
-
-        foreach ($data->data as $measurement) {
-            $this->validator::validateMeasurement($measurement);
-            $points[] =
-                new Point(
-                    'sensor_measurements', // name of the table
-                    (float)sprintf("%.2f", $measurement->value), // the measurement value
-                    ['sensor_name' => $measurement->sensorName, 'hubID' => $data->mac, "sensor_type" => $measurement->sensorType],
-                    [],
-                    $measurement->time // Time precision has to be set to seconds!
-                );
+            else if($this->isSensorApproved($sensor->sensorName)){
+                $this->validator::validateMeasurement($sensor);
+                $points[] =
+                    new Point(
+                        'sensor_measurements', // name of the table
+                        (float)sprintf("%.2f", $sensor->value), // the measurement value
+                        ['sensor_name' => $sensor->sensorName, 'hubID' => $data->mac, "sensor_type" => $sensor->sensorType],
+                        [],
+                        $sensor->time // Time precision has to be set to seconds!
+                    );
+            }
         }
 
         if (!$this->influxDb->writePoints($points)) {

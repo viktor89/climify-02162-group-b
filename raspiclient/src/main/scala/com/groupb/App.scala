@@ -24,8 +24,8 @@ object App extends App {
   val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
   
   val mac = MACAddress.computeMAC
-  val registerMsg = DataMessage(mac, JsonMapper.toJson(ItemFetcher.getOpenHABList(HttpHandler)))
-  HttpHandler.postRequest(registerURL, JsonMapper.toJson(registerMsg))
+  val registerMsg = JsonMapper.wrapForTransport(mac, JsonMapper.toJson(ItemFetcher.getOpenHABList(HttpHandler)))
+  HttpHandler.postRequest(registerURL, registerMsg)
 
   val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem("RaspberryPiSystem", ConfigFactory.load)

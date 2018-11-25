@@ -58,12 +58,12 @@ class MQTTHandlerTests extends TestKit(ActorSystem("MQTTHandlerTests")) with Imp
 
     "handle a MQTTMessage consisting of ViewInbox" in {
       val mockHandler = mock[HttpConnection]
-      val dataMsg = DataMessage(MACAddress.computeMAC, "\"\"")
+      val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]")
       val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
       inSequence {
         (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(Success(new HttpResponse[String]("", 200, responseMap)))
-        (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Success(new HttpResponse[String]("", 200, responseMap)))
-        (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns(Success(new HttpResponse[String]("", 200, responseMap)))
+        (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Success(new HttpResponse[String]("[]", 200, responseMap)))
+        (mockHandler.postRequest _) expects(inboxURL, dataMsg) returns(Success(new HttpResponse[String]("", 200, responseMap)))
       }
       val actor = TestActorRef(new MessageActor(mockHandler))
       val handler = new MQTTHandler(actor)
@@ -73,12 +73,12 @@ class MQTTHandlerTests extends TestKit(ActorSystem("MQTTHandlerTests")) with Imp
 
     "handle a MQTTMessage consisting of ViewInbox where OpenHAB fails during inbox fetch" in {
       val mockHandler = mock[HttpConnection]
-      val dataMsg = DataMessage(MACAddress.computeMAC, "[]")
+      val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]")
       val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
       inSequence {
         (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(Success(new HttpResponse[String]("", 200, responseMap)))
         (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Failure(new RuntimeException("Exception was thrown")))
-        (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns(Success(new HttpResponse[String]("", 200, responseMap)))
+        (mockHandler.postRequest _) expects(inboxURL, dataMsg) returns(Success(new HttpResponse[String]("", 200, responseMap)))
       }
       val actor = TestActorRef(new MessageActor(mockHandler))
       val handler = new MQTTHandler(actor)

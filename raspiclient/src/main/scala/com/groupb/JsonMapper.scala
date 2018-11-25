@@ -17,4 +17,8 @@ object JsonMapper {
   def convert[Type](jsonString : String)(implicit m : Manifest[Type]) = {
     Try(mapper.readValue[Type](jsonString))
   }
+
+  def wrapForTransport(mac : String, data : String) = {
+    "{ \"mac\":\""+ mac +"\",\"data\":"+data +" }"
+  }
 }

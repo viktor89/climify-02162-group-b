@@ -51,13 +51,13 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
 
     "handle a ViewInbox where OpenHAB calls does succeed" in {
       val responseMap = Map[String, IndexedSeq[String]]()
-      val dataMsg = DataMessage(MACAddress.computeMAC, "\"\"")
+      val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]")
       val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
       val mockHandler = mock[HttpConnection]
       inSequence {
         (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(Success(new HttpResponse[String]("", 200, responseMap)))
-        (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Success(new HttpResponse[String]("", 200, responseMap)))
-        (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns(Success(new HttpResponse[String]("", 200, responseMap)))
+        (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Success(new HttpResponse[String]("[]", 200, responseMap)))
+        (mockHandler.postRequest _) expects(inboxURL, dataMsg) returns(Success(new HttpResponse[String]("", 200, responseMap)))
       }
       val actor = TestActorRef(new MessageActor(mockHandler))
       actor ! ViewInbox()
@@ -65,13 +65,13 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
 
     "handle a ViewInbox where OpenHAB calls fail" in {
       val responseMap = Map[String, IndexedSeq[String]]()
-      val dataMsg = DataMessage(MACAddress.computeMAC, "[]")
+      val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]")
       val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
       val mockHandler = mock[HttpConnection]
       inSequence {
         (mockHandler.postRequest _) expects("http://localhost:8080/rest/discovery/bindings/zwave/scan", "") returns(Success(new HttpResponse[String]("", 200, responseMap)))
         (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Failure(new RuntimeException("Exception was thrown")))
-        (mockHandler.postRequest _) expects(inboxURL, JsonMapper.toJson(dataMsg)) returns(Success(new HttpResponse[String]("", 200, responseMap)))
+        (mockHandler.postRequest _) expects(inboxURL, dataMsg) returns(Success(new HttpResponse[String]("", 200, responseMap)))
       }
       val actor = TestActorRef(new MessageActor(mockHandler))
       actor ! ViewInbox()
