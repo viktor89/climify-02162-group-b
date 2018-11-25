@@ -22,21 +22,23 @@ object App extends App {
     influxdbConfig.getString("influxdb.user"),
     influxdbConfig.getString("influxdb.password"))
   val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
-  val brokerURL = endpointConfig.getString("endpoints.mqtt")
+  
   val mac = MACAddress.computeMAC
-  println(mac)
-  val persistance = new MemoryPersistence
-  val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
-  client.connect
-  client.subscribe(mac)
-  val callback = new MQTTHandler(HttpHandler)
-  client.setCallback(callback)
-
   val registerMsg = DataMessage(mac, JsonMapper.toJson(ItemFetcher.getOpenHABList(HttpHandler)))
   HttpHandler.postRequest(registerURL, JsonMapper.toJson(registerMsg))
 
   val transmitter = Transmission(database, HttpHandler)
-  val system = ActorSystem()
+  val system = ActorSystem("RaspberryPiSystem", ConfigFactory.load)
   val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
-  val scheduler = system.scheduler.schedule(2 seconds, 5 minutes, transmissionActor, "send") 
+  val msgHandler = system.actorOf(Props(new MessageActor(HttpHandler)), name = "MessageHandler")
+  val scheduler = system.scheduler.schedule(2 seconds, 1 minutes, transmissionActor, "send")
+  msgHandler ! Log(mac)
+
+  val brokerURL = endpointConfig.getString("endpoints.mqtt")
+  val persistance = new MemoryPersistence
+  val client = new MqttClient(brokerURL, MqttClient.generateClientId, persistance)
+  client.connect
+  client.subscribe(mac)
+  val callback = new MQTTHandler(msgHandler)
+  client.setCallback(callback)
 }
