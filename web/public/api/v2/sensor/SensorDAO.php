@@ -30,13 +30,13 @@ class SensorDAO extends API\V2\Api
             $sensorName = $pendingSensor->sensorName;
             $sensorTypeName = $pendingSensor->sensorType;
             $hubID = $json->mac;
-
             $statement = $this->database->prepare("SELECT SensorTypeID FROM SensorType WHERE SensorTypeName = ?");
             $statement->bind_param("s", $sensorTypeName);
             $statement->execute();
             $statement->bind_result($sensorTypeID);
+            $statement->fetch();
 
-            if ($statement->fetch() === null) {
+            if ($sensorTypeID === null) {
                 $statement->close();
                 $statement = $this->database->prepare("INSERT INTO SensorType (SensorTypeName) VALUES (?)");
                 $statement->bind_param("s", $sensorTypeName);

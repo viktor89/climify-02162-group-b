@@ -26,7 +26,7 @@ const styles = theme => ({
   loadingBar: {
     width: '100%',
   },
-    refreshIcon: {
+  refreshIcon: {
         position: 'absolute',
         right: '1em',
     },
