@@ -8,8 +8,14 @@ use InfluxDB\Point;
 
 class SensorDAO extends API\V2\Api
 {
+    /**
+     * @param $sensorName
+     * @return bool
+     * @throws Exception
+     */
     public function isSensorApproved($sensorName)
     {
+        $this->validator::requiredString($sensorName);
         $statement = $this->database->prepare("SELECT SensorID FROM SensorInstance WHERE approved AND SensorID = ?");
         $statement->bind_param("s", $sensorName);
         $statement->execute();
@@ -24,9 +30,30 @@ class SensorDAO extends API\V2\Api
         return count($sensors)>0;
     }
 
+    public function sensorExists($sensorName) {
+        $this->validator::requiredString($sensorName);
+        $statement = $this->database->prepare("SELECT SensorID FROM SensorInstance WHERE SensorID = ?");
+        $statement->bind_param("s", $sensorName);
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($sensorId);
+        $sensors = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $sensors[] = $sensorId;
+        }
+        $statement->close();
+        return count($sensors)>0;
+    }
+
+    /**
+     * @param $json
+     * @throws Exception
+     */
     public function registerPendingSensor($json)
     {
         foreach ($json->data as $pendingSensor) {
+            $this->validator::validateSensorObject($pendingSensor);
             $sensorName = $pendingSensor->sensorName;
             $sensorTypeName = $pendingSensor->sensorType;
             $hubID = $json->mac;
@@ -65,7 +92,7 @@ class SensorDAO extends API\V2\Api
             throw new ValidationException('Hub not registered!');
         };
         foreach($data->data as $sensor) {
-            if (!$sensorDAO->isSensorApproved($sensor->sensorName)) {
+            if (!$sensorDAO->sensorExists($sensor->sensorName)) {
                 $object = new stdClass();
                 $object->mac = $data->mac;
                 $object->data = [$sensor];
