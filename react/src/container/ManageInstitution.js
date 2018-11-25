@@ -196,11 +196,22 @@ class ManageInstitution extends Component {
               <Grid container spacing={16}>
                 <Grid item md={6} xs={12}>
                   <h3>Registered Hubs</h3>
-                  {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub} onHubChange={this.handleRegisteredHubChanged} onUnregisterHub={this.handleUnregisterHub} />}
+                  {registeredHubs && <RegisteredHubsTable
+                      hubs={registeredHubs}
+                      onSavehub={this.handleSaveRegisteredHub}
+                      onHubChange={this.handleRegisteredHubChanged}
+                      onUnregisterHub={this.handleUnregisterHub} />}
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <h3>Unregistered Hubs</h3>
-                  <PendingHubsTable hubs={pendingHubs} buildings={buildingList} onSavehub={this.handleSavePendingHub} onHubChange={this.handlePendingHubChanged} rooms={rooms} onCreate={this.handleCreate} onChange={this.handleChange}/>
+                  <PendingHubsTable
+                      hubs={pendingHubs}
+                      buildings={buildingList}
+                      onSavehub={this.handleSavePendingHub}
+                      onUnregisterHub={this.handleUnregisterHub}
+                      onHubChange={this.handlePendingHubChanged}
+                      rooms={rooms} onCreate={this.handleCreate}
+                      onChange={this.handleChange}/>
                 </Grid>
               </Grid>)
         }

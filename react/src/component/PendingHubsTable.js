@@ -17,6 +17,7 @@ import Input from "@material-ui/core/Input/Input";
 import Select from 'react-select';
 import Creatable from 'react-select/lib/Creatable';
 import CreatableSelect from 'react-select/lib/Creatable';
+import Grid from "@material-ui/core/Grid/Grid";
 
 const styles = theme => ({
   root: {
@@ -57,7 +58,7 @@ const styles = theme => ({
   },
 });
 
-function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, handleCreate, handleChange}) {
+function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, handleCreate, handleChange, onUnregisterHub}) {
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root} >
       <ExpansionPanel>
@@ -73,23 +74,26 @@ function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSaveh
         </ExpansionPanelSummary>
 
         <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column}>
-            <Typography className={classes.secondaryHeading}>Building</Typography>
-            <CreatableSelect isClearable
-                             placeholder='Building'
-                             options={buildings}
-                             onChange={handleChange}
-                             onCreateOption={handleCreate}/>
-          </div>
-
-          <div className={classNames(classes.column, classes.spacing)}>
-            <Typography className={classes.secondaryHeading}>Room</Typography>
-            <CreatableSelect placeholder='Room' options={rooms} />
-          </div>
-
-          <div className={classNames(classes.column, classes.helper)}>
-            <Button fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
-          </div>
+          <Grid container spacing={16}>
+            <Grid item xs={6}>
+              <Typography className={classes.secondaryHeading}>Building</Typography>
+              <CreatableSelect isClearable
+                               placeholder='Building'
+                               options={buildings}
+                               onChange={handleChange}
+                               onCreateOption={handleCreate}/>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography className={ classes.secondaryHeading}>Room</Typography>
+              <CreatableSelect placeholder='Room' options={rooms} />
+            </Grid>
+            <Grid item xs={6}>
+              <Button fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button fullWidth size="small" variant="outlined" color="secondary"  onClick={() => onUnregisterHub(hub.mac)}>Remove</Button>
+            </Grid>
+          </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     </div>
