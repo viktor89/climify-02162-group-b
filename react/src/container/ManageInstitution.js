@@ -5,6 +5,8 @@ import axios from "axios";
 import PendingHubsTable from "../component/PendingHubsTable";
 import RegisteredHubsTable from "../component/RegisteredHubsTable";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
+import CachedIcon from '@material-ui/icons/Cached';
+import IconButton from "@material-ui/core/IconButton/IconButton";
 
 const styles = theme => ({
   root: {
@@ -24,6 +26,10 @@ const styles = theme => ({
   loadingBar: {
     width: '100%',
   },
+    refreshIcon: {
+        position: 'absolute',
+        right: '1em',
+    },
 });
 
 const createBuilding = (value) => ({
@@ -167,7 +173,7 @@ class ManageInstitution extends Component {
 
   render() {
     const { classes } = this.props;
-    const { pendingHubs, registeredHubs, loading, buildings, rooms} = this.state;
+    const { pendingHubs, registeredHubs, loading, buildings, rooms, selectedInstitution} = this.state;
     const buildingList = buildings.map(building => ({label: building.name}));
     return (
       <Grid container className={classes.root} spacing={16}>
@@ -179,6 +185,9 @@ class ManageInstitution extends Component {
           </Grid>
           <hr />
         </Grid>
+          <IconButton className={classes.refreshIcon} aria-label="refresh" onClick={() => {this.getHubs(selectedInstitution)}}>
+              <CachedIcon />
+          </IconButton>
         {loading
           ? (<LinearProgress className={classes.loadingBar} />)
           : (registeredHubs.length === 0 && pendingHubs.length === 0)
