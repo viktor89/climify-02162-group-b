@@ -156,7 +156,12 @@ class ManageSensors extends Component {
                       <LocationDropdown
                           placeholder="Building"
                           value={selectedBuilding || 0}
-                          options={availableBuildings.filter(building => (building.rooms.length > 0))} onChangeCB={this.handleSelectBuilding} />
+                          options={availableBuildings
+                              .filter(building => (building.rooms
+                                  .map(room => ({id: room.hubID, name: room.roomName}))
+                                  .filter(room => ((pendingSensors.filter(sensor => (sensor.HubID === room.id)).length > 0 || (sensors.filter(sensor => (sensor.HubID === room.id)).length > 0))))
+                                  .length > 0))}
+                          onChangeCB={this.handleSelectBuilding} />
                     </Grid>
                     <Grid item xs={3}>
                       <LocationDropdown 
