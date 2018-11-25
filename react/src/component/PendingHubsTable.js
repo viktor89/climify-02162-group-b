@@ -50,7 +50,7 @@ const styles = theme => ({
   },
 });
 
-function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, handleCreate, handleChange, onUnregisterHub}) {
+function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, onCreate, onUnregisterHub}) {
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root} >
       <ExpansionPanel>
@@ -72,8 +72,8 @@ function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSaveh
               <CreatableSelect isClearable
                                placeholder='Building'
                                options={buildings}
-                               onChange={handleChange}
-                               onCreateOption={handleCreate}/>
+                               onChange={(label, action) => {console.log(label, action)}}
+                               onCreateOption={name => {console.log(name)}}/>
             </Grid>
             <Grid item xs={6}>
               <Typography className={ classes.secondaryHeading}>Room</Typography>

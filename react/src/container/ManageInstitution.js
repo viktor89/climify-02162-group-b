@@ -101,11 +101,6 @@ class ManageInstitution extends Component {
     });
   }
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-    this.getHubs(event.target.value);
-  }
-
   handleRegisteredHubChanged = (hub, event, val) => {
     const { registeredHubs } = this.state;
     const newHub = Object.assign(hub, { [event.target.name]: event.target.value || val });
@@ -139,6 +134,7 @@ class ManageInstitution extends Component {
   }
 
   handlePendingHubChanged = (hub, event) => {
+    console.log(hub,event);
     const { registeredHubs } = this.state;
     const newHub = Object.assign(hub, { [event.target.name]: event.target.value });
     Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
@@ -210,7 +206,7 @@ class ManageInstitution extends Component {
                       onUnregisterHub={this.handleUnregisterHub}
                       onHubChange={this.handlePendingHubChanged}
                       rooms={rooms} onCreate={this.handleCreate}
-                      onChange={this.handleChange}/>
+                  />
                 </Grid>
               </Grid>)
         }
