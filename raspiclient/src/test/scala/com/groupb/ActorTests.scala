@@ -77,6 +77,14 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
       actor ! ViewInbox()
     }
 
+    "log the content of a Log message" in {
+      val mockHandler = mock[HttpConnection]
+      (mockHandler.postRequest _).expects(*,*).never
+      (mockHandler.getRequest _).expects(*).never
+      val actor = TestActorRef(new MessageActor(mockHandler))
+      actor ! Log("message")
+    }
+
     "do nothing if a different message was received" in {
       val mockHandler = mock[HttpConnection]
       (mockHandler.postRequest _).expects(*,*).never

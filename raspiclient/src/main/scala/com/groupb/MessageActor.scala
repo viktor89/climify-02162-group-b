@@ -19,6 +19,7 @@ class MessageActor(val http : HttpConnection) extends Actor with ActorLogging {
         case _ => http.postRequest(inboxURL, JsonMapper.toJson(DataMessage(MACAddress.computeMAC, "[]")))
       }
     }
+    case Log(msg) => log.info(msg)
     case _ => log.info("Invalid message received")
   }
 }

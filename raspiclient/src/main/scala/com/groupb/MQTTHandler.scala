@@ -13,7 +13,7 @@ class MQTTHandler(val msgHandler : ActorRef) extends MqttCallback {
   }
 
   override def connectionLost(cause: Throwable) = {
-    println(cause.toString)
+    msgHandler ! Log(cause.toString)
   }
 
   override def deliveryComplete(token: IMqttDeliveryToken) = {
