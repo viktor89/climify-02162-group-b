@@ -7,7 +7,7 @@ import com.paulgoldbaum.influxdbclient.Parameter.Precision.Precision
 
 object InfluxDBHandler {
   def readData(db : Database)(types : Map[String, String]) = {
-    val seriesQuery = db.query("SELECT * FROM /^*/", Parameter.Precision.SECONDS)
+    val seriesQuery = db.query("SELECT * FROM /^*/", Parameter.Precision.NANOSECONDS)
     val result = Await.result(seriesQuery, Duration.Inf)
     result.series.flatMap(serie => {
       serie.records.map(record => {
@@ -19,7 +19,8 @@ object InfluxDBHandler {
 
   def clearDB(db : Database)(data : Seq[Data]) = {
     data.foreach(d => {
-      db.exec("DELETE FROM " + d.sensorName + " WHERE time = " + d.time)
+      val query = db.exec("DELETE FROM " + d.sensorName + " WHERE time = " + d.time)
+      Await.result(query, Duration.Inf)
     })
   }
 }

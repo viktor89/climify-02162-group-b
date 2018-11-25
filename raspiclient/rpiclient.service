@@ -1,11 +1,11 @@
 [Unit]
 Description = Raspberry Pi Client service
-After = influxdb.service
+Requires = influxdb.service openhab2.service
+Wants = network-online.target
+After = influxdb.service openhab2.service network-online.target
 
 [Service]
 Type=simple
-Restart=always
-RestartSec=1
 ExecStart=/usr/bin/java -jar /home/pi/raspiclient-0.0.1-jar-with-dependencies.jar
 
 [Install]

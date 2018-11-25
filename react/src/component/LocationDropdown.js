@@ -14,7 +14,7 @@ const styles = () => ({
 
 function LocationDropdown({ classes, placeholder, value, options, onChangeCB }) {
     return (
-        <FormControl className={classes.select}>
+        <FormControl disabled={options.length === 0} className={classes.select}>
             <InputLabel shrink htmlFor="placeholder">{placeholder}</InputLabel>
             <Select className={classes.select} value={value} onChange={(e) => onChangeCB(e)}>{options.map(option => {
                 return (<MenuItem key={option.id} value={option.id}>
