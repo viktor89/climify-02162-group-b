@@ -8,14 +8,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
-import FormControl from "@material-ui/core/FormControl/FormControl";
-import InputLabel from "@material-ui/core/InputLabel/InputLabel";
-import Input from "@material-ui/core/Input/Input";
-
-
-// Auto Suggest imports:
-import Select from 'react-select';
-import Creatable from 'react-select/lib/Creatable';
 import CreatableSelect from 'react-select/lib/Creatable';
 import Grid from "@material-ui/core/Grid/Grid";
 

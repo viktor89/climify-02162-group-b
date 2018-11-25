@@ -34,7 +34,7 @@ const styles = theme => ({
 
 const createBuilding = (value) => ({
     building: value
-})
+});
 
 class ManageInstitution extends Component {
   constructor(props) {
@@ -157,24 +157,23 @@ class ManageInstitution extends Component {
         this.getHubs(selectedInstitution);
       });
   }
+
   // Creatable component
-
   handleCreate = (event) => {
-      setTimeout(() => {
-          const {buildings} = this.state;
-          const newBuilding = createBuilding(event.value)
+    const {buildings} = this.state;
+    const newBuilding = createBuilding(event.value);
 
-          this.setState({
-              buildings: [...buildings, newBuilding],
-              value: newBuilding,
-          });
-      }, 1000);
-  }
+    this.setState({
+        buildings: [...buildings, newBuilding],
+        value: newBuilding,
+    });
+  };
 
   render() {
     const { classes } = this.props;
     const { pendingHubs, registeredHubs, loading, buildings, rooms, selectedInstitution} = this.state;
     const buildingList = buildings.map(building => ({label: building.name}));
+
     return (
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={12}>
@@ -219,5 +218,5 @@ class ManageInstitution extends Component {
     );
   }
 };
-export default withStyles(styles)(ManageInstitution);
 
+export default withStyles(styles)(ManageInstitution);
