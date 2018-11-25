@@ -7,6 +7,8 @@ import SensorsTable from "../component/SensorsTable";
 import PendingSensorsTable from "../component/PendingSensorsTable";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
 import LocationDropdown from "../component/LocationDropdown";
+import CachedIcon from '@material-ui/icons/Cached';
+import IconButton from "@material-ui/core/IconButton/IconButton";
 
 const styles = theme => ({
   root: {
@@ -26,6 +28,9 @@ const styles = theme => ({
   loadingBar: {
     width: '100%',
   },
+  refreshIcon: {
+
+  }
 });
 
 class ManageSensors extends Component {
@@ -148,7 +153,15 @@ class ManageSensors extends Component {
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
                     <Grid item xs={3}>
-                      <LocationDropdown placeholder="Building" value={selectedBuilding || 0} options={availableBuildings.filter(building => (building.rooms.length > 0))} onChangeCB={this.handleSelectBuilding} />
+                      <LocationDropdown
+                          placeholder="Building"
+                          value={selectedBuilding || 0}
+                          options={availableBuildings
+                              .filter(building => (building.rooms
+                                  .map(room => ({id: room.hubID, name: room.roomName}))
+                                  .filter(room => ((pendingSensors.filter(sensor => (sensor.HubID === room.id)).length > 0 || (sensors.filter(sensor => (sensor.HubID === room.id)).length > 0))))
+                                  .length > 0))}
+                          onChangeCB={this.handleSelectBuilding} />
                     </Grid>
                     <Grid item xs={3}>
                       <LocationDropdown 
@@ -160,6 +173,11 @@ class ManageSensors extends Component {
                         .filter(room => ((pendingSensors.filter(sensor => (sensor.HubID === room.id)).length > 0 || (sensors.filter(sensor => (sensor.HubID === room.id)).length > 0))))}
                       onChangeCB={this.handleSelectRoom} />
                     </Grid>
+                      <Grid item xs={1}>
+                          <IconButton className={classes.refreshIcon} aria-label="refresh" onClick={() => {this.fetchAndResolveInitialState()}}>
+                              <CachedIcon />
+                          </IconButton>
+                      </Grid>
                   </Grid>
                 </Grid>
               {loading ? <LinearProgress className={classes.loadingBar} /> : (

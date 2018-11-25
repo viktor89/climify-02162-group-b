@@ -8,8 +8,14 @@ use InfluxDB\Point;
 
 class SensorDAO extends API\V2\Api
 {
+    /**
+     * @param $sensorName
+     * @return bool
+     * @throws Exception
+     */
     public function isSensorApproved($sensorName)
     {
+        $this->validator::requiredString($sensorName);
         $statement = $this->database->prepare("SELECT SensorID FROM SensorInstance WHERE approved AND SensorID = ?");
         $statement->bind_param("s", $sensorName);
         $statement->execute();
@@ -24,19 +30,40 @@ class SensorDAO extends API\V2\Api
         return count($sensors)>0;
     }
 
+    public function sensorExists($sensorName) {
+        $this->validator::requiredString($sensorName);
+        $statement = $this->database->prepare("SELECT SensorID FROM SensorInstance WHERE SensorID = ?");
+        $statement->bind_param("s", $sensorName);
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($sensorId);
+        $sensors = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $sensors[] = $sensorId;
+        }
+        $statement->close();
+        return count($sensors)>0;
+    }
+
+    /**
+     * @param $json
+     * @throws Exception
+     */
     public function registerPendingSensor($json)
     {
         foreach ($json->data as $pendingSensor) {
+            $this->validator::validateSensorObject($pendingSensor);
             $sensorName = $pendingSensor->sensorName;
             $sensorTypeName = $pendingSensor->sensorType;
             $hubID = $json->mac;
-
             $statement = $this->database->prepare("SELECT SensorTypeID FROM SensorType WHERE SensorTypeName = ?");
             $statement->bind_param("s", $sensorTypeName);
             $statement->execute();
             $statement->bind_result($sensorTypeID);
+            $statement->fetch();
 
-            if ($statement->fetch() === null) {
+            if ($sensorTypeID === null) {
                 $statement->close();
                 $statement = $this->database->prepare("INSERT INTO SensorType (SensorTypeName) VALUES (?)");
                 $statement->bind_param("s", $sensorTypeName);
@@ -60,32 +87,27 @@ class SensorDAO extends API\V2\Api
     {
         $points = [];
         $hubDAO = new HubDAO();
-        $sensorDAO = new SensorDAO();
         if (!$hubDAO->isHubRegistered($data->mac)) {
             throw new ValidationException('Hub not registered!');
         };
         foreach($data->data as $sensor) {
-            if (!$sensorDAO->isSensorApproved($sensor->sensorName)) {
+            if (!$this->sensorExists($sensor->sensorName)) {
                 $object = new stdClass();
                 $object->mac = $data->mac;
                 $object->data = [$sensor];
-                $sensorDAO->registerPendingSensor($object);
+                $this->registerPendingSensor($object);
             }
-        }
-        if (empty($data)) {
-            throw new Exception('Unable to parse json');
-        }
-
-        foreach ($data->data as $measurement) {
-            $this->validator::validateMeasurement($measurement);
-            $points[] =
-                new Point(
-                    'sensor_measurements', // name of the table
-                    (float)sprintf("%.2f", $measurement->value), // the measurement value
-                    ['sensor_name' => $measurement->sensorName, 'hubID' => $data->mac, "sensor_type" => $measurement->sensorType],
-                    [],
-                    $measurement->time // Time precision has to be set to seconds!
-                );
+            else if($this->isSensorApproved($sensor->sensorName)){
+                $this->validator::validateMeasurement($sensor);
+                $points[] =
+                    new Point(
+                        'sensor_measurements', // name of the table
+                        (float)sprintf("%.2f", $sensor->value), // the measurement value
+                        ['sensor_name' => $sensor->sensorName, 'hubID' => $data->mac, "sensor_type" => $sensor->sensorType],
+                        [],
+                        $sensor->time // Time precision has to be set to seconds!
+                    );
+            }
         }
 
         if (!$this->influxDb->writePoints($points)) {
