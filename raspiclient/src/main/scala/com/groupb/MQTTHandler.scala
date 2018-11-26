@@ -6,6 +6,7 @@ import scala.util.{ Success, Failure }
 
 class MQTTHandler(val msgHandler : ActorRef) extends MqttCallback {
   override def messageArrived(topic: String, message: MqttMessage) = {
+    println(message.toString)
     JsonMapper.convert[Message](message.toString) match {
       case Success(msg) => msgHandler ! msg
       case Failure(e) => msgHandler ! "Invalid JSON"
