@@ -80,7 +80,7 @@ function PendingSensorsTable({ classes, sensors, onRemoveSensor, onApproveSensor
                 <TableCell>
                   <Grid container spacing={16} justify="center">
                     <Grid item sm={12} md={6}>
-                      <Button fullWidth className={classes.rowButton} color="primary" variant="outlined" onClick={(e) => {onApproveSensor(sensor.SensorID)}}>
+                      <Button fullWidth className={classes.rowButton} color="primary" variant="outlined" onClick={(e) => {onApproveSensor(sensor.HubID, sensor.SensorID)}}>
                         Approve
                       </Button>
                     </Grid>

@@ -152,6 +152,7 @@ class SensorDAO extends API\V2\Api
         $statement->execute();
         /* fetch values */
         $statement->close();
+        $this->MQTTService->sendMessage($data->mac, ["type" => "ApproveThing", "name" => $data->sensorID]);
     }
 
     public function removeSensor($data)

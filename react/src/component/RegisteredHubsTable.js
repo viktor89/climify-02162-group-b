@@ -75,7 +75,7 @@ function DetailedExpansionPanel({ classes, buildings, hubs, onHubChange, onSaveh
               <InputLabel htmlFor="receiveMode">Receive Mode</InputLabel>
               <Switch
                 name="receiveMode"
-                onChange={(e, val) => onHubChange(hub, e, val)}
+                onChange={(e, val) => onHubChange(hub.mac, 'receiveMode', val)}
               />
             </Grid>
             <Grid item xs={4}>
