@@ -8,6 +8,9 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import Input from "@material-ui/core/Input/Input";
 
 const styles = theme => ({
   root: {
@@ -59,13 +62,16 @@ function RolesTable({ classes, roles }) {
             <Typography className={classes.secondaryHeading}>{role.name}</Typography>
           </div>
           <div className={classes.column}>
-              <Typography className={classes.heading}>Permissions:</Typography>
-              <Typography className={classes.secondaryHeading}>{role.id}</Typography>
+            <Typography className={classes.heading}>Permissions:</Typography>
+            <Typography className={classes.secondaryHeading}>{role.id}</Typography>
           </div>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}>
+        <ExpansionPanelDetails className={classes.details}><div className={classes.column}/>
           <div className={classes.column}>
-
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="component-simple">Role Name</InputLabel>
+              <Input name="building" defaultValue={role.name} onChange={(e) => onHubChange(role, e)} />
+            </FormControl>
           </div>
           <div className={classes.column}>
 
@@ -75,6 +81,7 @@ function RolesTable({ classes, roles }) {
           </div>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
+          <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
           <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
         </ExpansionPanelActions>
       </ExpansionPanel>

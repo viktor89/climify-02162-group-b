@@ -17,9 +17,7 @@ try {
     $data = json_decode($json_str);
 
     $roleDAO = new RoleDAO();
-    $roleDAO->createRole($data);
-
-    echo json_encode(["status" => "ok"]);
+    echo json_encode(["roleID" => $roleDAO->createRole($data)]);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

@@ -72,7 +72,7 @@ class HubDAO extends API\V2\Api
             throw new ValidationException("error!");
         }
         if(isset($data->receiveMode)){
-            $this->MQTTService->sendMessage($data->mac, ["payload" => ["receiveMode" => $data->receiveMode]]);
+            $this->MQTTService->sendMessage($data->mac, ["type" => "ViewInbox"]);
         }
     }
 

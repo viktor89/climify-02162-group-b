@@ -8,6 +8,7 @@ class RoleDAO extends API\V2\Api
 {
     public function getRoles(){
         $statement = $this->database->prepare("SELECT RoleID, RoleName FROM Role");
+        //TODO rollens permissions skal være med, gerne som key/value(boolean) pair
 
         $statement->execute();
         $statement->store_result();
@@ -23,13 +24,13 @@ class RoleDAO extends API\V2\Api
     }
 
     public function createRole($data){
-        $roleID_escaped = empty($data->roleID) ? null : $this->database->real_escape_string($data->roleID);
         $roleName_escaped = empty($data->roleName) ? null : $this->database->real_escape_string($data->roleName);
 
-        $statement = $this->database->prepare("INSERT INTO Role (RoleID,RoleName) VALUES (?,?)");
-        $statement->bind_param("ds",$roleID_escaped,$roleName_escaped);
+        $statement = $this->database->prepare("INSERT INTO Role (RoleName) VALUES (?)");
+        $statement->bind_param("s",$roleName_escaped);
 
         $statement->execute();
+        $roleID = $this->database->insert_id;
         $affectedRows = $statement->affected_rows;
         $statement->close();
 
@@ -37,7 +38,7 @@ class RoleDAO extends API\V2\Api
             throw new ValidationException("Role not created!");
         }
 
-        //TODO skal return nyt ID (hvis det er auto increment)
+        return $roleID;
     }
 
     public function editRole($data){

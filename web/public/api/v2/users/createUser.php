@@ -17,9 +17,7 @@ try {
     $data = json_decode($json_str);
 
     $userClass = new UserDAO();
-    $userClass->createUser($data);
-
-    echo json_encode(["status" => "ok"]);
+    echo json_encode(["userID" => $userClass->createUser($data)]);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

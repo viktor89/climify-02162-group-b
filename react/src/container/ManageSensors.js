@@ -112,8 +112,9 @@ class ManageSensors extends Component {
       });
   }
 
-  handleApproveSensor = (sensorID) => {
+  handleApproveSensor = (mac, sensorID) => {
     axios.post("/api/v2/sensor/approve.php", {
+        mac: mac,
         sensorID: sensorID
       }).then(() => {
         this.getSensors();

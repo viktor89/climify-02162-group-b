@@ -9,6 +9,9 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid/Grid";
+import FormControl from "@material-ui/core/FormControl/FormControl";
+import InputLabel from "@material-ui/core/InputLabel/InputLabel";
+import Input from "@material-ui/core/Input/Input";
 
 const styles = theme => ({
   root: {
@@ -71,15 +74,47 @@ function UsersTable({ classes, users, onHubChange, onSavehub }) {
             <Typography className={classes.heading}>Last name:</Typography>
             <Typography className={classes.secondaryHeading}>{user.lastname}</Typography>
           </div>
+            <div className={classes.column}>
+                <Typography className={classes.heading}>E-mail:</Typography>
+                <Typography className={classes.secondaryHeading}>{user.email}</Typography>
+            </div>
           <div className={classes.column}>
             <Typography className={classes.heading}>Role:</Typography>
             <Typography className={classes.secondaryHeading}>{user.role}</Typography>
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column}/>
-          <div className={classes.column}/>
-          <div className={classes.column}/>
+            <div className={classes.column}/>
+            <div className={classes.column}>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="component-simple">Username</InputLabel>
+                    <Input name="building" defaultValue={user.username} onChange={(e) => onHubChange(user, e)} />
+                </FormControl>
+            </div>
+            <div className={classes.column}>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="component-simple">First name</InputLabel>
+                    <Input name="building" defaultValue={user.firstname} onChange={(e) => onHubChange(user, e)} />
+                </FormControl>
+            </div>
+            <div className={classes.column}>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="component-simple">Last name</InputLabel>
+                    <Input name="building" defaultValue={user.lastname} onChange={(e) => onHubChange(user, e)} />
+                </FormControl>
+            </div>
+            <div className={classes.column}>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="component-simple">E-mail</InputLabel>
+                    <Input name="building" defaultValue={user.email} onChange={(e) => onHubChange(user, e)} />
+                </FormControl>
+            </div>
+            <div className={classes.column}>
+                <FormControl className={classes.formControl}>
+                    <InputLabel htmlFor="component-simple">Role</InputLabel>
+                    <Input name="building" defaultValue={user.role} onChange={(e) => onHubChange(user, e)} />
+                </FormControl>
+            </div>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
           <Grid container spacing={16}>
