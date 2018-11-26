@@ -8,6 +8,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import akka.actor.{Actor, ActorSystem, ActorRef, Props}
 import com.typesafe.config.ConfigFactory
+import scala.util.Try
 
 /**
   * @author pll
@@ -22,6 +23,10 @@ object App extends App {
     influxdbConfig.getString("influxdb.user"),
     influxdbConfig.getString("influxdb.password"))
   val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
+  Try {
+    database.dropRetentionPolicy("one_day_policy")
+    database.createRetentionPolicy("one_day_policy", "1d", 1, default = true)
+  }
   
   val mac = MACAddress.computeMAC
   val registerMsg = JsonMapper.wrapForTransport(mac, JsonMapper.toJson(ItemFetcher.getOpenHABList(HttpHandler)))

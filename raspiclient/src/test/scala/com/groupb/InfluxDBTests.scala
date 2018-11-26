@@ -11,7 +11,7 @@ class InfluxDBTests extends DBFramework {
   "InfluxDBHandler" should "return an empty sequence when the database is empty when calling readData" in {
     val jsonResult = """{"results":[{"series":[]}]}"""
     val mockDB = mock[Database]
-    (mockDB.query _) expects("SELECT * FROM /^*/", *) returns(simulation(jsonResult))
+    (mockDB.query _) expects("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)(Map[String, String]())
     result.size should be (0)
@@ -21,7 +21,7 @@ class InfluxDBTests extends DBFramework {
     val types = Map("Test1" -> "test")
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}""" 
     val mockDB = mock[Database]
-    (mockDB.query _) expects("SELECT * FROM /^*/", *) returns(simulation(jsonResult))
+    (mockDB.query _) expects("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)(types)
     result.size should be (3)
@@ -34,7 +34,7 @@ class InfluxDBTests extends DBFramework {
     val types = Map("Test1" -> "test", "Test2" -> "test")
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}, {"name":"Test2","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
     val mockDB = mock[Database]
-    (mockDB.query _) expects("SELECT * FROM /^*/", *) returns(simulation(jsonResult))
+    (mockDB.query _) expects("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)(types)
     result.size should be (6)
@@ -50,7 +50,7 @@ class InfluxDBTests extends DBFramework {
     val types = Map[String, String]()
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}""" 
     val mockDB = mock[Database]
-    (mockDB.query _) expects("SELECT * FROM /^*/", *) returns(simulation(jsonResult))
+    (mockDB.query _) expects("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)(types)
     result.size should be (3)
@@ -63,7 +63,7 @@ class InfluxDBTests extends DBFramework {
     val types = Map("Test1" -> "test")
     val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}, {"name":"Test2","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
     val mockDB = mock[Database]
-    (mockDB.query _) expects("SELECT * FROM /^*/", *) returns(simulation(jsonResult))
+    (mockDB.query _) expects("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns(simulation(jsonResult))
 
     val result = InfluxDBHandler.readData(mockDB)(types)
     result.size should be (6)
