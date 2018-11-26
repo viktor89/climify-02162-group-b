@@ -110,7 +110,10 @@ sudo systemctl enable influxdb
 sudo systemctl start influxdb
 ```
 - The final steps for setting up the InfluxDB and connecting it to openHAB is given in the following sections on https://community.openhab.org/t/influxdb-grafana-persistence-and-graphing/13761
-  - InfluxDB Installation and Setup
+  - InfluxDB Installation and Setup. It should be noted that the database must have a retention policy of 1 day.
+```bash
+CREATE DATABASE openhab_db WITH DURATION 1d
+```
   - Connecting openHAB to InfluxDB (use the default address 127.0.0.1:8086 in the /etc/openhab2/services/influxdb.cfg file)
 
 The final part of the openHAB setup is installing the Z-Wave binding, which was done after starting up openHAB for the first time. The binding can be installed using the Paper UI by clicking on Extensions and then search for Z-Wave under the Bindings tab.
