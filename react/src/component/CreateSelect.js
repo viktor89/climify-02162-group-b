@@ -10,28 +10,29 @@ class CreateSelect extends Component {
         }
     }
     handleChange = (selectedOption) => {
-        console.log(selectedOption);
-        this.setState({selectedOption });
-        console.log(`Option selected:`, selectedOption);
-
+      const {onChange, name} = this.props;
+      this.setState({selectedOption });
+      onChange(name, selectedOption ? selectedOption.value : '');
     };
 
     handleCreate = (inputValue) => {
-        const {onCreate} = this.props;
+        const {onCreate, onChange, name} = this.props;
         onCreate(inputValue);
+        onChange(name, inputValue);
+        this.setState({selectedOption: {label: inputValue, value: inputValue}});
     };
 
-    handleInputChange = (inputValue, actionMeta) => {
-        console.log(inputValue, actionMeta);
-        this.setState({ inputValue });
+    handleInputChange = (inputValue) => {
+      this.setState({ inputValue });
     };
 
     render() {
         const {selectedOption, inputValue} = this.state;
-        const {options, placeholder} = this.props;
+        const {options, placeholder, disabled} = this.props;
         return (
             <CreatableSelect isClearable
-                             placeholder={placeholder}
+                             isDisabled={disabled}
+                             placeholder={!disabled ? placeholder : 'Select building first...'}
                              options={options}
                              value={selectedOption}
                              inputValue={inputValue}

@@ -49,10 +49,9 @@ const styles = theme => ({
   },
 });
 
-function PendingsHubsTable({ classes, hubs, buildings, onHubChange, onSavehub, rooms, onCreateBuilding, onUnregisterHub}) {
+function PendingsHubsTable({ classes, hubs, buildings, onHubChange, onSavehub, rooms, onCreateBuilding, onCreateRoom, onUnregisterHub}) {
   return hubs.map((hub) => (
-    <div key={hub.mac} className={classes.root} >
-        {console.log(buildings)}
+  <div key={hub.mac} className={classes.root} >
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
@@ -68,18 +67,31 @@ function PendingsHubsTable({ classes, hubs, buildings, onHubChange, onSavehub, r
         <ExpansionPanelDetails className={classes.details}>
           <Grid container spacing={16}>
             <Grid item xs={6}>
-              <Typography className={classes.secondaryHeading}>Building</Typography>
-                {buildings && <CreateSelect
-                    onCreate={onCreateBuilding}
-                    options={buildings.map(building => ({label: building.name, value: building.name}))}
-                    placeholder='Building'
-                />}
+              {buildings && <CreateSelect
+                  name="building"
+                  onChange={(name, value) => onHubChange(hub.mac, name, value)}
+                  onCreate={onCreateBuilding}
+                  options={buildings.map(building => ({label: building.name, value: building.name}))}
+                  placeholder='Building'
+              />}
             </Grid>
             <Grid item xs={6}>
-              <Typography className={ classes.secondaryHeading}>Room</Typography>
+              <CreateSelect
+                key={hub.building}
+                disabled={hub.building === undefined || hub.building === ''}
+                name="room"
+                options={
+                  buildings
+                    .filter(building => (building.name === hub.building)).length > 0
+                    ? buildings.filter(building => (building.name === hub.building)).shift().rooms.map(room => ({label: room.roomName, value: room.roomName}))
+                    : null}
+                onChange={(name, value) => onHubChange(hub.mac, name, value)}
+                onCreate={() => {}}
+                placeholder='Room'
+              />
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
+              <Button disabled={!hub.building || !hub.room} fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
             </Grid>
             <Grid item xs={6}>
               <Button fullWidth size="small" variant="outlined" color="secondary"  onClick={() => onUnregisterHub(hub.mac)}>Remove</Button>

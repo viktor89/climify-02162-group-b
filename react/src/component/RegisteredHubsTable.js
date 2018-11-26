@@ -14,6 +14,7 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions/Expan
 import Divider from "@material-ui/core/Divider/Divider";
 import Switch from "@material-ui/core/Switch/Switch";
 import Grid from "@material-ui/core/Grid/Grid";
+import CreateSelect from "./CreateSelect";
 
 const styles = theme => ({
   root: {
@@ -50,7 +51,7 @@ const styles = theme => ({
   },
 });
 
-function DetailedExpansionPanel({ classes, hubs, onHubChange, onSavehub, onUnregisterHub }) {
+function DetailedExpansionPanel({ classes, buildings, hubs, onHubChange, onSavehub, onUnregisterHub, onCreateBuilding }) {
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root}>
       <ExpansionPanel>
@@ -69,31 +70,45 @@ function DetailedExpansionPanel({ classes, hubs, onHubChange, onSavehub, onUnreg
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-          <div className={classes.column}>
-            <InputLabel htmlFor="receiveMode">Receive Mode</InputLabel>
-            <Switch
-              name="receiveMode"
-              onChange={(e, val) => onHubChange(hub, e, val)}
-            />
-          </div>
-          <div className={classes.column}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="component-simple">Building</InputLabel>
-              <Input name="building" defaultValue={hub.building} onChange={(e) => onHubChange(hub, e)} />
-            </FormControl>
-          </div>
-          <div className={classes.column}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="component-simple">Room</InputLabel>
-              <Input name="room" defaultValue={hub.room} onChange={(e) => onHubChange(hub, e)} />
-            </FormControl>
-          </div>
+          <Grid container spacing={16}>
+            <Grid item xs={3}>
+              <InputLabel htmlFor="receiveMode">Receive Mode</InputLabel>
+              <Switch
+                name="receiveMode"
+                onChange={(e, val) => onHubChange(hub, e, val)}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              {buildings && <CreateSelect
+                name="building"
+                onChange={(name, value) => onHubChange(hub.mac, name, value)}
+                onCreate={onCreateBuilding}
+                options={buildings.map(building => ({label: building.name, value: building.name}))}
+                placeholder='Building'
+              />}
+            </Grid>
+            <Grid item xs={4}>
+              <CreateSelect
+                key={hub.building}
+                disabled={hub.building === undefined || hub.building === ''}
+                name="room"
+                options={
+                  buildings
+                    .filter(building => (building.name === hub.building)).length > 0
+                    ? buildings.filter(building => (building.name === hub.building)).shift().rooms.map(room => ({label: room.roomName, value: room.roomName}))
+                    : null}
+                onChange={(name, value) => onHubChange(hub.mac, name, value)}
+                onCreate={() => {}}
+                placeholder='Room'
+              />
+            </Grid>
+          </Grid>
         </ExpansionPanelDetails>
         <Divider />
         <ExpansionPanelActions>
           <Grid container spacing={16}>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="primary" variant="outlined" onClick={() => onSavehub(hub.mac)}>Save</Button>
+              <Button disabled={!hub.building || !hub.room} fullWidth size="small" color="primary" variant="outlined" onClick={() => onSavehub(hub.mac)}>Save</Button>
             </Grid>
             <Grid item xs={6}>
               <Button fullWidth size="small" color="secondary" variant="outlined" onClick={() => onUnregisterHub(hub.mac)}>Remove</Button>
