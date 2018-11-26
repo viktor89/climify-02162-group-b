@@ -97,7 +97,7 @@ class SensorDAO extends API\V2\Api
                 $object->data = [$sensor];
                 $this->registerPendingSensor($object);
             }
-            else if($this->isSensorApproved($sensor->sensorName)){
+            if($this->isSensorApproved($sensor->sensorName)){
                 $this->validator::validateMeasurement($sensor);
                 $points[] =
                     new Point(
