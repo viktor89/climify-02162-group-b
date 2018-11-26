@@ -47,8 +47,23 @@ class HubDAO extends API\V2\Api
         $building_escaped = $this->database->real_escape_string($data->building);
         $room_escaped = $this->database->real_escape_string($data->room);
 
+        $statement = $this->database->prepare("SELECT MapID FROM Map WHERE MapName = ?");
+        $statement->bind_param("s", $building_escaped);
+        $statement->execute();
+        $statement->bind_result($buildingID);
+        $statement->fetch();
+        if($buildingID === null){
+            $statement->close();
+            $statement = $this->database->prepare("INSERT INTO Map (MapName, FileName, InstID) VALUES (?, ?, 1)");
+            $statement->bind_param("ss", $data->building, $data->building);
+            $statement->execute();
+            $buildingID = $this->database->insert_id;
+        }
+
+        $statement->close();
+
         $statement = $this->database->prepare("UPDATE Room SET RoomName = ?, BuildingID = ? WHERE HubID LIKE ? ESCAPE '#'");
-        $statement->bind_param("iis", $room_escaped, $building_escaped, $mac_escaped);
+        $statement->bind_param("iis", $room_escaped, $buildingID, $mac_escaped);
         $statement->execute();
         $affectedRows = $statement->affected_rows;
         $statement->close();

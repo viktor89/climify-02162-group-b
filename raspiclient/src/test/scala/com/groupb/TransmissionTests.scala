@@ -16,7 +16,7 @@ class TransmissionTests extends DBFramework {
     val mockHandler = mock[HttpConnection]
     inSequence {
       (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[]", 200, responseMap)))
-      (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
+      (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 200, responseMap)))
     }
     val transmitter = Transmission(mockDB, mockHandler)
@@ -31,7 +31,7 @@ class TransmissionTests extends DBFramework {
     val mockHandler = mock[HttpConnection]
     inSequence {
       (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[]", 200, responseMap)))
-      (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
+      (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 404, responseMap)))
     }
     val transmitter = Transmission(mockDB, mockHandler)
@@ -49,7 +49,7 @@ class TransmissionTests extends DBFramework {
     val mockHandler = mock[HttpConnection]
     inSequence {
       (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap)))
-      (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
+      (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 200, responseMap)))
       (mockDB.exec _) expects ("DELETE FROM test WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
       (mockDB.exec _) expects ("DELETE FROM test WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
@@ -70,7 +70,7 @@ class TransmissionTests extends DBFramework {
     val mockHandler = mock[HttpConnection]
     inSequence {
       (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap)))
-      (mockDB.query _) expects ("SELECT * FROM /^*/", *) returns (simulation(jsonResult))
+      (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
       (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 404, responseMap)))
     }
     val transmitter = Transmission(mockDB, mockHandler)

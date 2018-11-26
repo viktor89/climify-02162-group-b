@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
-import CreatableSelect from 'react-select/lib/Creatable';
 import Grid from "@material-ui/core/Grid/Grid";
+import CreateSelect from '../component/CreateSelect';
 
 const styles = theme => ({
   root: {
@@ -50,9 +49,9 @@ const styles = theme => ({
   },
 });
 
-function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, onCreate, onUnregisterHub}) {
+function PendingsHubsTable({ classes, hubs, buildings, onHubChange, onSavehub, rooms, onCreateBuilding, onCreateRoom, onUnregisterHub}) {
   return hubs.map((hub) => (
-    <div key={hub.mac} className={classes.root} >
+  <div key={hub.mac} className={classes.root} >
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
@@ -68,19 +67,31 @@ function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSaveh
         <ExpansionPanelDetails className={classes.details}>
           <Grid container spacing={16}>
             <Grid item xs={6}>
-              <Typography className={classes.secondaryHeading}>Building</Typography>
-              <CreatableSelect isClearable
-                               placeholder='Building'
-                               options={buildings}
-                               onChange={(label, action) => {console.log(label, action)}}
-                               onCreateOption={name => {console.log(name)}}/>
+              {buildings && <CreateSelect
+                  name="building"
+                  onChange={(name, value) => onHubChange(hub.mac, name, value)}
+                  onCreate={onCreateBuilding}
+                  options={buildings.map(building => ({label: building.name, value: building.name}))}
+                  placeholder='Building'
+              />}
             </Grid>
             <Grid item xs={6}>
-              <Typography className={ classes.secondaryHeading}>Room</Typography>
-              <CreatableSelect placeholder='Room' options={rooms} />
+              <CreateSelect
+                key={hub.building}
+                disabled={hub.building === undefined || hub.building === ''}
+                name="room"
+                options={
+                  buildings
+                    .filter(building => (building.name === hub.building)).length > 0
+                    ? buildings.filter(building => (building.name === hub.building)).shift().rooms.map(room => ({label: room.roomName, value: room.roomName}))
+                    : null}
+                onChange={(name, value) => onHubChange(hub.mac, name, value)}
+                onCreate={() => {}}
+                placeholder='Room'
+              />
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
+              <Button disabled={!hub.building || !hub.room} fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
             </Grid>
             <Grid item xs={6}>
               <Button fullWidth size="small" variant="outlined" color="secondary"  onClick={() => onUnregisterHub(hub.mac)}>Remove</Button>
@@ -92,8 +103,8 @@ function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSaveh
   ));
 }
 
-DetailedExpansionPanel.propTypes = {
+PendingsHubsTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(DetailedExpansionPanel);
+export default withStyles(styles)(PendingsHubsTable);
