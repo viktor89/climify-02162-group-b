@@ -32,7 +32,7 @@ const styles = theme => ({
     alignItems: 'center',
   },
   column: {
-    flexBasis: '33.33%',
+    flexBasis: '20%',
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
@@ -57,24 +57,26 @@ function RolesTable({ classes, roles }) {
     <div key={role.id} className={classes.root}>
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <div className={classes.column}>
+                <Typography className={classes.heading}>Role ID:</Typography>
+                <Typography className={classes.secondaryHeading}>{role.id}</Typography>
+            </div>
           <div className={classes.column}>
             <Typography className={classes.heading}>Role Name:</Typography>
             <Typography className={classes.secondaryHeading}>{role.name}</Typography>
           </div>
           <div className={classes.column}>
             <Typography className={classes.heading}>Permissions:</Typography>
-            <Typography className={classes.secondaryHeading}>{role.id}</Typography>
+            <Typography className={classes.secondaryHeading}>{role.permissions.length}</Typography>
           </div>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails className={classes.details}><div className={classes.column}/>
+        <ExpansionPanelDetails className={classes.details}>
+            <div className={classes.column}/>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Role Name</InputLabel>
               <Input name="building" defaultValue={role.name} onChange={(e) => onHubChange(role, e)} />
             </FormControl>
-          </div>
-          <div className={classes.column}>
-
           </div>
           <div className={classes.column}>
 
