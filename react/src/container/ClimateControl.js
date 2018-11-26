@@ -151,7 +151,7 @@ class Graphs extends Component {
           <CachedIcon />
         </IconButton>
         <Grid item xs={12}>
-          <RulesTable rules={rules} ruleTypes={ruleTypes} deleteRuleCB={this.deleteRule} />
+            {rules && <RulesTable rules={rules} ruleTypes={ruleTypes} deleteRuleCB={this.deleteRule} />}
         </Grid>
         <Button className={classes.addRuleButton} variant="fab" color={"primary"} onClick={this.addRuleOpen}><AddIcon /></Button>
         <Modal

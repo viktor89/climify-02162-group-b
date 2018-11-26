@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
-import CreatableSelect from 'react-select/lib/Creatable';
 import Grid from "@material-ui/core/Grid/Grid";
+import CreateSelect from '../component/CreateSelect';
 
 const styles = theme => ({
   root: {
@@ -50,9 +49,10 @@ const styles = theme => ({
   },
 });
 
-function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSavehub, rooms, onCreate, onUnregisterHub}) {
+function PendingsHubsTable({ classes, hubs, buildings, onHubChange, onSavehub, rooms, onCreateBuilding, onUnregisterHub}) {
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root} >
+        {console.log(buildings)}
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
@@ -69,15 +69,14 @@ function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSaveh
           <Grid container spacing={16}>
             <Grid item xs={6}>
               <Typography className={classes.secondaryHeading}>Building</Typography>
-              <CreatableSelect isClearable
-                               placeholder='Building'
-                               options={buildings}
-                               onChange={(label, action) => {console.log(label, action)}}
-                               onCreateOption={name => {console.log(name)}}/>
+                {buildings && <CreateSelect
+                    onCreate={onCreateBuilding}
+                    options={buildings.map(building => ({label: building.name, value: building.name}))}
+                    placeholder='Building'
+                />}
             </Grid>
             <Grid item xs={6}>
               <Typography className={ classes.secondaryHeading}>Room</Typography>
-              <CreatableSelect placeholder='Room' options={rooms} />
             </Grid>
             <Grid item xs={6}>
               <Button fullWidth size="small" variant="outlined" color="primary" onClick={() => onSavehub(hub.mac)}>Register</Button>
@@ -92,8 +91,8 @@ function DetailedExpansionPanel({ classes, hubs, buildings, onHubChange, onSaveh
   ));
 }
 
-DetailedExpansionPanel.propTypes = {
+PendingsHubsTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(DetailedExpansionPanel);
+export default withStyles(styles)(PendingsHubsTable);
