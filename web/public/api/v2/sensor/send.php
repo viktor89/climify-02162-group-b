@@ -20,7 +20,7 @@ try {
     $sensorDAO = new SensorDAO();
     $sensorDAO->writeDataAsPoints($data);
 
-    echo json_encode(["stats" => "ok"]);
+    echo json_encode(["status" => "ok"]);
 }
 catch (ValidationException $e){
     http_response_code(400);

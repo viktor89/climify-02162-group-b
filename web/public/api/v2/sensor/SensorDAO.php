@@ -105,7 +105,7 @@ class SensorDAO extends API\V2\Api
                         (float)sprintf("%.2f", $sensor->value), // the measurement value
                         ['sensor_name' => $sensor->sensorName, 'hubID' => $data->mac, "sensor_type" => $sensor->sensorType],
                         [],
-                        $sensor->time // Time precision has to be set to seconds!
+                        (int)substr($sensor->time, 0, 10)
                     );
             }
         }
