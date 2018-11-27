@@ -22,6 +22,8 @@ case class ViewInbox() extends Message
 
 case class Data(val sensorName : String, val sensorType : String, val time : Any, val value : Any)
 case class Log(val msg : String)
+case class readDB(val types : Map[String, String])
+case class clearDB(val data : Seq[Data])
 
 trait HttpConnection {
   def getRequest(url : String) : Try[HttpResponse[String]]
