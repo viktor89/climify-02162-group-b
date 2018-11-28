@@ -38,6 +38,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[]", 200, responseMap)))
         (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
         (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 200, responseMap)))
+        (mockDB.multiQuery _) expects (Seq[String](), *)
       }
 
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -55,6 +56,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[]", 200, responseMap)))
         (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
         (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 404, responseMap)))
+        (mockDB.multiQuery _) expects (Seq[String](), *)
       }
 
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -75,9 +77,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap)))
         (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
         (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 200, responseMap)))
-        (mockDB.exec _) expects ("DELETE FROM test WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects ("DELETE FROM test WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects ("DELETE FROM test WHERE time = 3") returns (simulation("""{"results":[{"series":[]}]}"""))
+        (mockDB.multiQuery _) expects(Seq("DELETE FROM test WHERE time = 1", "DELETE FROM test WHERE time = 2", "DELETE FROM test WHERE time = 3"), *) 
       }
 
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -98,6 +98,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap)))
         (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
         (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 404, responseMap)))
+        (mockDB.multiQuery _) expects (Seq[String](), *)
       }
 
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -109,7 +110,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
       val mockDB = mock[Database]
       val mockHandler = mock[HttpConnection]
         (mockDB.query _).expects(*,*).never
-        (mockDB.exec _).expects(*).never
+        (mockDB.multiQuery _).expects(*,*).never
         (mockHandler.getRequest _).expects(*).never
         (mockHandler.postRequest _).expects(*,*).never
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -265,7 +266,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
 
     "accept an empty sequence, which will not change the database when a clearDB msg is received" in {
       val mockDB = mock[Database]
-        (mockDB.exec _).expects(*).never
+      (mockDB.multiQuery _) expects(Seq[String](), *)
       val actor = TestActorRef(new DBActor(mockDB))
       actor ! clearDB(Seq[Data]())
     }
@@ -275,12 +276,8 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         Data("Test1", "test", 1, 0),
         Data("Test1", "test", 2, 0))
       val mockDB = mock[Database]
+      (mockDB.multiQuery _) expects (Seq("DELETE FROM Test1 WHERE time = 0", "DELETE FROM Test1 WHERE time = 1", "DELETE FROM Test1 WHERE time = 2"), *)
 
-      inSequence {
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
-      }
       val actor = TestActorRef(new DBActor(mockDB))
       actor ! clearDB(data)
     }
@@ -294,14 +291,8 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         Data("Test2", "test", 2, 0))
       val mockDB = mock[Database]
 
-      inSequence {
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
-      }
+      (mockDB.multiQuery _) expects (Seq("DELETE FROM Test1 WHERE time = 0", "DELETE FROM Test1 WHERE time = 1", "DELETE FROM Test1 WHERE time = 2", "DELETE FROM Test2 WHERE time = 0", "DELETE FROM Test2 WHERE time = 1", "DELETE FROM Test2 WHERE time = 2"), *)
+
       val actor = TestActorRef(new DBActor(mockDB))
       actor ! clearDB(data)
     }
@@ -309,7 +300,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
     "do nothing when receiving a different message" in {
       val mockDB = mock[Database]
         (mockDB.query _).expects(*,*).never
-        (mockDB.exec _).expects(*).never
+        (mockDB.multiQuery _).expects(*,*).never
       val actor = TestActorRef(new DBActor(mockDB))
       actor ! "different"
     }

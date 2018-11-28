@@ -20,10 +20,8 @@ class DBActor(private val db : Database) extends Actor with ActorLogging {
   }
 
   private def clearDB(data : Seq[Data]) = {
-    data.foreach(d => {
-      val query = db.exec("DELETE FROM " + d.sensorName + " WHERE time = " + d.time)
-      Await.result(query, Duration.Inf)
-    })
+    val query = data.map(d => "DELETE FROM " + d.sensorName + " WHERE time = " + d.time)
+    db.multiQuery(query, Parameter.Precision.NANOSECONDS)
   }
 
   def receive = {
