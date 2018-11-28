@@ -2,11 +2,6 @@ package com.groupb
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.Logging
-import akka.pattern.ask
-import akka.util.Timeout
-import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.language.postfixOps
 import scala.util.Success
 import com.typesafe.config.ConfigFactory
 
