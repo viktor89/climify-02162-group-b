@@ -25,8 +25,8 @@ class DBActor(private val db : Database) extends Actor with ActorLogging {
   }
 
   def receive = {
-    case readDB(types) => sender ! readData(types)
-    case clearDB(data) => clearDB(data)
+    case ReadDB(types) => sender ! DataPoints(readData(types))
+    case DataPoints(data) => clearDB(data)
     case _ => log.info("Invalid DB Message")
   }
 }

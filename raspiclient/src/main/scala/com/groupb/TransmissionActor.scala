@@ -25,11 +25,11 @@ class TransmissionActor(val dbActor : ActorRef, val http : HttpConnection) exten
     case "send" => {
       log.info("Data transmission started")
       val types = ItemFetcher.getOpenHABItems(http)
-      implicit val timeout = Timeout(5 seconds)
-      val callDB = dbActor ? readDB(types)
-      val storedData = Await.result(callDB, Duration.Inf).asInstanceOf[Seq[Data]]
-      val deletionList = transmitData(storedData)
-      dbActor ! clearDB(deletionList)
+      dbActor ! ReadDB(types)
+    }
+    case DataPoints(data) => {
+      val deletionList = transmitData(data)
+      dbActor ! DataPoints(deletionList)
     }
     case _ => {
       log.info("Invalid message received")
