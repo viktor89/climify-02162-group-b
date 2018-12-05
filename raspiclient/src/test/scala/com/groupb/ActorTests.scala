@@ -38,6 +38,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[]", 200, responseMap)))
         (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
         (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 200, responseMap)))
+        (mockDB.multiQuery _) expects (Seq[String](), *)
       }
 
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -55,6 +56,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects ("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[]", 200, responseMap)))
         (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
         (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 404, responseMap)))
+        (mockDB.multiQuery _) expects (Seq[String](), *)
       }
 
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -75,9 +77,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap)))
         (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
         (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 200, responseMap)))
-        (mockDB.exec _) expects ("DELETE FROM test WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects ("DELETE FROM test WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects ("DELETE FROM test WHERE time = 3") returns (simulation("""{"results":[{"series":[]}]}"""))
+        (mockDB.multiQuery _) expects(Seq("DELETE FROM test WHERE time = 1", "DELETE FROM test WHERE time = 2", "DELETE FROM test WHERE time = 3"), *) 
       }
 
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -98,6 +98,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects("http://localhost:8080/rest/items?recursive=false") returns (Success(new HttpResponse[String]("[{\"name\":\"test\", \"label\":\"test\"}]", 200, responseMap)))
         (mockDB.query _) expects ("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns (simulation(jsonResult))
         (mockHandler.postRequest _) expects (sendURL, dataMsg) returns (Success(new HttpResponse[String]("", 404, responseMap)))
+        (mockDB.multiQuery _) expects (Seq[String](), *)
       }
 
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -109,7 +110,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
       val mockDB = mock[Database]
       val mockHandler = mock[HttpConnection]
         (mockDB.query _).expects(*,*).never
-        (mockDB.exec _).expects(*).never
+        (mockDB.multiQuery _).expects(*,*).never
         (mockHandler.getRequest _).expects(*).never
         (mockHandler.postRequest _).expects(*,*).never
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -181,18 +182,18 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
   }
 
   "DBActor" must {
-    "return an empty sequence when the database is empty when a readDB msg is received" in {
+    "return an empty sequence when the database is empty when a ReadDB msg is received" in {
       val jsonResult = """{"results":[{"series":[]}]}"""
       val mockDB = mock[Database]
       (mockDB.query _) expects("SELECT * FROM /^*/ WHERE time > now() - 7200s", *) returns(simulation(jsonResult))
       val actor = TestActorRef(new DBActor(mockDB))
       implicit val timeout = Timeout(5 seconds)
-      val callDB = actor ? readDB(Map[String, String]())
-      val result = Await.result(callDB, Duration.Inf).asInstanceOf[Seq[Data]]
-      result.size should be (0)
+      val callDB = actor ? ReadDB(Map[String, String]())
+      val result = Await.result(callDB, Duration.Inf).asInstanceOf[DataPoints]
+      result.data.size should be (0)
     }
 
-    "return an sequence with one series when the database only contains one series when a readDB msg is received" in {
+    "return an sequence with one series when the database only contains one series when a ReadDB msg is received" in {
       val types = Map("Test1" -> "test")
       val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
       val mockDB = mock[Database]
@@ -200,15 +201,15 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
 
       val actor = TestActorRef(new DBActor(mockDB))
       implicit val timeout = Timeout(5 seconds)
-      val callDB = actor ? readDB(types)
-      val result = Await.result(callDB, Duration.Inf).asInstanceOf[Seq[Data]]
-      result.size should be (3)
-      result contains Data("Test1", "test", "0", "0") should be (true)
-      result contains Data("Test1", "test", "1", "0") should be (true)
-      result contains Data("Test1", "test", "2", "0") should be (true)
+      val callDB = actor ? ReadDB(types)
+      val result = Await.result(callDB, Duration.Inf).asInstanceOf[DataPoints]
+      result.data.size should be (3)
+      result.data contains Data("Test1", "test", "0", "0") should be (true)
+      result.data contains Data("Test1", "test", "1", "0") should be (true)
+      result.data contains Data("Test1", "test", "2", "0") should be (true)
     }
 
-    "return an sequence with two series when the database contains two series when a readDB msg is received" in {
+    "return an sequence with two series when the database contains two series when a ReadDB msg is received" in {
       val types = Map("Test1" -> "test", "Test2" -> "test")
       val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}, {"name":"Test2","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
       val mockDB = mock[Database]
@@ -216,18 +217,18 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
 
       val actor = TestActorRef(new DBActor(mockDB))
       implicit val timeout = Timeout(5 seconds)
-      val callDB = actor ? readDB(types)
-      val result = Await.result(callDB, Duration.Inf).asInstanceOf[Seq[Data]]
-      result.size should be (6)
-      result contains Data("Test1", "test", "0", "0") should be (true)
-      result contains Data("Test1", "test", "1", "0") should be (true)
-      result contains Data("Test1", "test", "2", "0") should be (true)
-      result contains Data("Test2", "test", "0", "0") should be (true)
-      result contains Data("Test2", "test", "1", "0") should be (true)
-      result contains Data("Test2", "test", "2", "0") should be (true)
+      val callDB = actor ? ReadDB(types)
+      val result = Await.result(callDB, Duration.Inf).asInstanceOf[DataPoints]
+      result.data.size should be (6)
+      result.data contains Data("Test1", "test", "0", "0") should be (true)
+      result.data contains Data("Test1", "test", "1", "0") should be (true)
+      result.data contains Data("Test1", "test", "2", "0") should be (true)
+      result.data contains Data("Test2", "test", "0", "0") should be (true)
+      result.data contains Data("Test2", "test", "1", "0") should be (true)
+      result.data contains Data("Test2", "test", "2", "0") should be (true)
     }
 
-    "give a serie a \"Unknown type\" when the serie is not present in OpenHAB when a readDB msg is received" in {
+    "give a serie a \"Unknown type\" when the serie is not present in OpenHAB when a ReadDB msg is received" in {
       val types = Map[String, String]()
       val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
       val mockDB = mock[Database]
@@ -235,15 +236,15 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
 
       val actor = TestActorRef(new DBActor(mockDB))
       implicit val timeout = Timeout(5 seconds)
-      val callDB = actor ? readDB(types)
-      val result = Await.result(callDB, Duration.Inf).asInstanceOf[Seq[Data]]
-      result.size should be (3)
-      result contains Data("Test1", "Unknown type", "0", "0") should be (true)
-      result contains Data("Test1", "Unknown type", "1", "0") should be (true)
-      result contains Data("Test1", "Unknown type", "2", "0") should be (true)
+      val callDB = actor ? ReadDB(types)
+      val result = Await.result(callDB, Duration.Inf).asInstanceOf[DataPoints]
+      result.data.size should be (3)
+      result.data contains Data("Test1", "Unknown type", "0", "0") should be (true)
+      result.data contains Data("Test1", "Unknown type", "1", "0") should be (true)
+      result.data contains Data("Test1", "Unknown type", "2", "0") should be (true)
     }
 
-    "only give \"Unknown type\" to series that are not present in OpenHAB and actual types to those that do when a readDB msg is received" in {
+    "only give \"Unknown type\" to series that are not present in OpenHAB and actual types to those that do when a ReadDB msg is received" in {
       val types = Map("Test1" -> "test")
       val jsonResult = """{"results":[{"series":[{"name":"Test1","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}, {"name":"Test2","columns":["time", "value"],"values":[["0", "0"], ["1", "0"], ["2", "0"]],"tags":{"tag": "value"}}]}]}"""
       val mockDB = mock[Database]
@@ -251,41 +252,37 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
 
       val actor = TestActorRef(new DBActor(mockDB))
       implicit val timeout = Timeout(5 seconds)
-      val callDB = actor ? readDB(types)
-      val result = Await.result(callDB, Duration.Inf).asInstanceOf[Seq[Data]]
+      val callDB = actor ? ReadDB(types)
+      val result = Await.result(callDB, Duration.Inf).asInstanceOf[DataPoints]
 
-      result.size should be (6)
-      result contains Data("Test1", "test", "0", "0") should be (true)
-      result contains Data("Test1", "test", "1", "0") should be (true)
-      result contains Data("Test1", "test", "2", "0") should be (true)
-      result contains Data("Test2", "Unknown type", "0", "0") should be (true)
-      result contains Data("Test2", "Unknown type", "1", "0") should be (true)
-      result contains Data("Test2", "Unknown type", "2", "0") should be (true)
+      result.data.size should be (6)
+      result.data contains Data("Test1", "test", "0", "0") should be (true)
+      result.data contains Data("Test1", "test", "1", "0") should be (true)
+      result.data contains Data("Test1", "test", "2", "0") should be (true)
+      result.data contains Data("Test2", "Unknown type", "0", "0") should be (true)
+      result.data contains Data("Test2", "Unknown type", "1", "0") should be (true)
+      result.data contains Data("Test2", "Unknown type", "2", "0") should be (true)
     }
 
-    "accept an empty sequence, which will not change the database when a clearDB msg is received" in {
+    "accept an empty sequence, which will not change the database when a DataPoints msg is received" in {
       val mockDB = mock[Database]
-        (mockDB.exec _).expects(*).never
+      (mockDB.multiQuery _) expects(Seq[String](), *)
       val actor = TestActorRef(new DBActor(mockDB))
-      actor ! clearDB(Seq[Data]())
+      actor ! DataPoints(Seq[Data]())
     }
 
-    "accept an sequence consisting of a single series, where the content will be cleared from the database when a clearDB msg is received" in {
+    "accept an sequence consisting of a single series, where the content will be cleared from the database when a DataPoints msg is received" in {
       val data = IndexedSeq(Data("Test1", "test", 0, 0),
         Data("Test1", "test", 1, 0),
         Data("Test1", "test", 2, 0))
       val mockDB = mock[Database]
+      (mockDB.multiQuery _) expects (Seq("DELETE FROM Test1 WHERE time = 0", "DELETE FROM Test1 WHERE time = 1", "DELETE FROM Test1 WHERE time = 2"), *)
 
-      inSequence {
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
-      }
       val actor = TestActorRef(new DBActor(mockDB))
-      actor ! clearDB(data)
+      actor ! DataPoints(data)
     }
 
-    "accept an sequence consisting of two series, where the content will be cleared from the database when a clearDB msg is received" in {
+    "accept an sequence consisting of two series, where the content will be cleared from the database when a DataPoints msg is received" in {
       val data = IndexedSeq(Data("Test1", "test", 0, 0),
         Data("Test1", "test", 1, 0),
         Data("Test1", "test", 2, 0),
@@ -294,22 +291,16 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         Data("Test2", "test", 2, 0))
       val mockDB = mock[Database]
 
-      inSequence {
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test1 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 0") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 1") returns (simulation("""{"results":[{"series":[]}]}"""))
-        (mockDB.exec _) expects("DELETE FROM Test2 WHERE time = 2") returns (simulation("""{"results":[{"series":[]}]}"""))
-      }
+      (mockDB.multiQuery _) expects (Seq("DELETE FROM Test1 WHERE time = 0", "DELETE FROM Test1 WHERE time = 1", "DELETE FROM Test1 WHERE time = 2", "DELETE FROM Test2 WHERE time = 0", "DELETE FROM Test2 WHERE time = 1", "DELETE FROM Test2 WHERE time = 2"), *)
+
       val actor = TestActorRef(new DBActor(mockDB))
-      actor ! clearDB(data)
+      actor ! DataPoints(data)
     }
 
     "do nothing when receiving a different message" in {
       val mockDB = mock[Database]
         (mockDB.query _).expects(*,*).never
-        (mockDB.exec _).expects(*).never
+        (mockDB.multiQuery _).expects(*,*).never
       val actor = TestActorRef(new DBActor(mockDB))
       actor ! "different"
     }
