@@ -23,15 +23,15 @@ object App extends App {
     influxdbConfig.getString("influxdb.user"),
     influxdbConfig.getString("influxdb.password"))
   val database = influxdb.selectDatabase(influxdbConfig.getString("influxdb.dbname"))
-    
+
   val mac = MACAddress.computeMAC
   val registerMsg = JsonMapper.wrapForTransport(mac, JsonMapper.toJson(ItemFetcher.getOpenHABList(HttpHandler)))
   HttpHandler.postRequest(registerURL, registerMsg)
 
-  val transmitter = Transmission(database, HttpHandler)
   val system = ActorSystem("RaspberryPiSystem", ConfigFactory.load)
-  val transmissionActor = system.actorOf(Props(new TransmissionActor(transmitter)), name = "TransmissionActor")
-  val msgHandler = system.actorOf(Props(new MessageActor(HttpHandler)), name = "MessageHandler")
+  val dbActor = system.actorOf(Props(new DBActor(database)), name = "DBActor")
+  val transmissionActor = system.actorOf(Props(new TransmissionActor(dbActor, HttpHandler)), name = "TransmissionActor")
+  val msgHandler = system.actorOf(Props(new MessageActor(HttpHandler, dbActor)), name = "MessageHandler")
   val scheduler = system.scheduler.schedule(2 seconds, 1 minutes, transmissionActor, "send")
   msgHandler ! Log(mac)
 
