@@ -111,6 +111,7 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
       val mockHandler = mock[HttpConnection]
         (mockDB.query _).expects(*,*).never
         (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
         (mockHandler.getRequest _).expects(*).never
         (mockHandler.postRequest _).expects(*,*).never
       val dbactor = TestActorRef(new DBActor(mockDB))
@@ -122,22 +123,37 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
   "MessageActor" must {
     "handle a ApproveThing message" in {
       val responseMap = Map[String, IndexedSeq[String]]()
+      val mockDB = mock[Database]
+        (mockDB.query _).expects(*,*).never
+        (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
+      val dbactor = TestActorRef(new DBActor(mockDB))
       val mockHandler = mock[HttpConnection]
       (mockHandler.postRequest _) expects("http://localhost:8080/rest/inbox/test/approve", "test") returns(Success(new HttpResponse[String]("", 200, responseMap)))
-      val actor = TestActorRef(new MessageActor(mockHandler))
+      val actor = TestActorRef(new MessageActor(mockHandler, dbactor))
       actor ! ApproveThing("test")
     }
 
     "handle a TState message" in {
       val responseMap = Map[String, IndexedSeq[String]]()
+      val mockDB = mock[Database]
+        (mockDB.query _).expects(*,*).never
+        (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
+      val dbactor = TestActorRef(new DBActor(mockDB))
       val mockHandler = mock[HttpConnection]
       (mockHandler.postRequest _) expects("http://localhost:8080/rest/items/test", "20") returns(Success(new HttpResponse[String]("", 200, responseMap)))
-      val actor = TestActorRef(new MessageActor(mockHandler))
+      val actor = TestActorRef(new MessageActor(mockHandler, dbactor))
       actor ! TState("test", "20")
     }
 
     "handle a ViewInbox where OpenHAB calls does succeed" in {
       val responseMap = Map[String, IndexedSeq[String]]()
+      val mockDB = mock[Database]
+        (mockDB.query _).expects(*,*).never
+        (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
+      val dbactor = TestActorRef(new DBActor(mockDB))
       val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]")
       val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
       val mockHandler = mock[HttpConnection]
@@ -146,12 +162,17 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Success(new HttpResponse[String]("[]", 200, responseMap)))
         (mockHandler.postRequest _) expects(inboxURL, dataMsg) returns(Success(new HttpResponse[String]("", 200, responseMap)))
       }
-      val actor = TestActorRef(new MessageActor(mockHandler))
+      val actor = TestActorRef(new MessageActor(mockHandler, dbactor))
       actor ! ViewInbox()
     }
 
     "handle a ViewInbox where OpenHAB calls fail" in {
       val responseMap = Map[String, IndexedSeq[String]]()
+      val mockDB = mock[Database]
+        (mockDB.query _).expects(*,*).never
+        (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
+      val dbactor = TestActorRef(new DBActor(mockDB))
       val dataMsg = JsonMapper.wrapForTransport(MACAddress.computeMAC, "[]")
       val inboxURL = ConfigFactory.load("endpoints").getString("endpoints.inbox")
       val mockHandler = mock[HttpConnection]
@@ -160,23 +181,58 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
         (mockHandler.getRequest _) expects("http://localhost:8080/rest/inbox") returns(Failure(new RuntimeException("Exception was thrown")))
         (mockHandler.postRequest _) expects(inboxURL, dataMsg) returns(Success(new HttpResponse[String]("", 200, responseMap)))
       }
-      val actor = TestActorRef(new MessageActor(mockHandler))
+      val actor = TestActorRef(new MessageActor(mockHandler, dbactor))
       actor ! ViewInbox()
     }
 
+    "handle a DeleteItem message where the OpenHAB call succeeds" in {
+      val mockDB = mock[Database]
+      val mockHandler = mock[HttpConnection]
+      inSequence {
+        (mockHandler.deleteRequest _) expects("http://localhost:8080/rest/items/test") returns(Success(new HttpResponse[String]("", 200, responseMap)))
+        (mockDB.exec _) expects ("DROP MEASUREMENT test")
+      }
+
+      val dbactor = TestActorRef(new DBActor(mockDB))
+      val actor = TestActorRef(new MessageActor(mockHandler, dbactor))
+      actor ! DeleteItem("test")
+    }
+
+    "handle a DeleteItem message where the OpenHAB call fails" in {
+      val mockDB = mock[Database]
+        (mockDB.query _).expects(*,*).never
+        (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
+      val dbactor = TestActorRef(new DBActor(mockDB))
+      val mockHandler = mock[HttpConnection]
+      (mockHandler.deleteRequest _) expects("http://localhost:8080/rest/items/test") returns(Failure(new RuntimeException("Exception was thrown")))
+      val actor = TestActorRef(new MessageActor(mockHandler, dbactor))
+      actor ! DeleteItem("test")
+    }
+
     "log the content of a Log message" in {
+      val mockDB = mock[Database]
+        (mockDB.query _).expects(*,*).never
+        (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
+      val dbactor = TestActorRef(new DBActor(mockDB))
       val mockHandler = mock[HttpConnection]
         (mockHandler.postRequest _).expects(*,*).never
         (mockHandler.getRequest _).expects(*).never
-      val actor = TestActorRef(new MessageActor(mockHandler))
+      val actor = TestActorRef(new MessageActor(mockHandler, dbactor))
       actor ! Log("message")
     }
 
     "do nothing if a different message was received" in {
+      val mockDB = mock[Database]
+        (mockDB.query _).expects(*,*).never
+        (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
+      val dbactor = TestActorRef(new DBActor(mockDB))
       val mockHandler = mock[HttpConnection]
         (mockHandler.postRequest _).expects(*,*).never
         (mockHandler.getRequest _).expects(*).never
-      val actor = TestActorRef(new MessageActor(mockHandler))
+      val actor = TestActorRef(new MessageActor(mockHandler, dbactor))
       actor ! "different"
     }
   }
@@ -297,10 +353,20 @@ class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSende
       actor ! DataPoints(data)
     }
 
+    "drop the specified measurement when a DropMsg is received" in {
+      val serie = "Test"
+      val mockDB = mock[Database]
+      (mockDB.exec _) expects ("DROP MEASUREMENT " + serie)
+
+      val actor = TestActorRef(new DBActor(mockDB))
+      actor ! DropMsg(serie)
+    }
+
     "do nothing when receiving a different message" in {
       val mockDB = mock[Database]
         (mockDB.query _).expects(*,*).never
         (mockDB.multiQuery _).expects(*,*).never
+        (mockDB.exec _).expects(*).never
       val actor = TestActorRef(new DBActor(mockDB))
       actor ! "different"
     }

@@ -20,7 +20,7 @@ class HttpHandlerTests extends FlatSpec with Matchers {
   }
 
   it should "be able to make a delete request to any site" in {
-    val resp = HttpHandler.deleteRequest("http://httpbin.org/delete", "foo")
+    val resp = HttpHandler.deleteRequest("http://httpbin.org/delete")
     resp.isSuccess should be (true)
     resp.get.code should be (200)
   }
@@ -36,7 +36,7 @@ class HttpHandlerTests extends FlatSpec with Matchers {
   }
 
   it should "return a failure if the delete request fails due to an non-existent url" in {
-    val resp = HttpHandler.deleteRequest("invalid", "foo")
+    val resp = HttpHandler.deleteRequest("invalid")
     resp.isFailure should be (true)
   }
 }
