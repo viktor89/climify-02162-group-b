@@ -74,31 +74,35 @@ function RolesTable({ classes, roles, handleRoleNameChange, handlePermissionChan
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-            <div className={classes.column}/>
+          <div className={classes.column}>
+                <Typography className={classes.secondaryHeading}>Role ID:</Typography>
+                <Typography className={classes.secondaryHeading}>{role.id}</Typography>
+          </div>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Role Name</InputLabel>
               <Input name="rolename" defaultValue={role.name} onChange={(e) => handleRoleNameChange(e, role)} />
             </FormControl>
           </div>
-          <div className={classes.column}>
+          
           <FormGroup row>
             {role.permissions.map(permission => (
-              <FormControlLabel
-              key={permission.permID}
-              control={
-                <Checkbox
-                  name={permission.permID}
-                  checked={permission.hasPermission !== 0}
-                  value={`${permission.permID}-${permission.permName}`}
-                  onChange={(e, checked) => handlePermissionChange(checked, role, permission)}
+              <div key={permission.permID} className={classes.column}>
+                <FormControlLabel
+                control={
+                  <Checkbox
+                    name={`${permission.permID}-${permission.permName}`}
+                    checked={permission.hasPermission !== 0}
+                    value={`${permission.permID}-${permission.permName}`}
+                    onChange={(e, checked) => handlePermissionChange(checked, role, permission)}
+                  />
+                }
+                label={permission.permName}
                 />
-              }
-              label={permission.permName}
-            />
+            </div>
             ))}
             </FormGroup>
-          </div>
+
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
           <Button disabled={!role.changed} classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined" onClick={() => onSaveRole(role)}>Save</Button>

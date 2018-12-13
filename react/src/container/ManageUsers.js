@@ -153,19 +153,36 @@ class ManageUsers extends Component {
       roleID: role.id,
       roleName: role.name
     }));
-    role.permissions.map(currentPermission => {
-      if (currentPermission.hasPermission === 1) {
+
+    role.permissions.map(currentPermission => (
+      promises.push(axios.post("/api/v2/permissions/removePermission.php", {
+        roleID: role.id,
+        permID: currentPermission.permID,
+        instID: 1
+      }))
+    ));
+
+    role.permissions.map(currentPermission => currentPermission.hasPermission === 1 ?
+      (
         promises.push(axios.post("/api/v2/permissions/setPermission.php", {
           roleID: role.id,
           permID: currentPermission.permID,
-          instID: "1"
-        }));
-      }
-    });
+          instID: 1
+        }))
+        )
+      :
+      (
+        promises.push(axios.post("/api/v2/permissions/removePermission.php", {
+          roleID: role.id,
+          permID: currentPermission.permID,
+          instID: 1
+        }))
+      )
+    );
+
     Promise.all(promises).then(response => {
-      if(response.status === 200) {
-        this.getUsersAndRoles();
-      }
+      console.log(response);
+      this.getUsersAndRoles();
     });
   }
 
