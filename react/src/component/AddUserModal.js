@@ -90,8 +90,8 @@ function AddUserModal({ classes, open, roles, newUser, addUserModalClose, handle
         <Grid item xs={12}>
             <FormControl disabled={roles.length === 0} fullWidth className={classes.select}>
                 <InputLabel shrink htmlFor="role">{"Role"}</InputLabel>
-                <Select label="Role" className={classes.select} value={newUser !== null ? newUser.role : ''} name="role" onChange={(e) => handleAddUserInputChange(e)}>{roles.map(role => {
-                    return (<MenuItem key={role.name} value={role.id}>
+                <Select className={classes.select} value={newUser !== null ? newUser.role : 'Nothing'} name="role" onChange={(e) => handleAddUserInputChange(e)}>{roles.map(role => {
+                    return (<MenuItem key={role.id} value={role.name}>
                         <em>{role.name}</em>
                     </MenuItem>)
                 })}</Select>

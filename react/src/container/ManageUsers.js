@@ -76,14 +76,14 @@ class ManageUsers extends Component {
   };
 
   onAddUser = () => {
-    const { users, newUser } = this.state;
+    const { users, newUser, roles } = this.state;
     if (users.filter(currentUser => (currentUser.id === newUser.id) || (currentUser.username === newUser.username)).length === 0) {
       axios.post("/api/v2/users/createUser.php", {
         userName: newUser.username, 
         firstName: newUser.firstname, 
         lastName: newUser.lastname, 
         email: newUser.email, 
-        roleName: newUser.role,
+        roleName: roles.filter(role => newUser.role === role.name)[0].id,
         password: newUser.password
       })
         .then(response => {
@@ -108,13 +108,14 @@ class ManageUsers extends Component {
   }
 
   onSaveUser = (user) => {
+    const {roles} = this.state;
     axios.put("/api/v2/users/editUser.php", { 
       userID: user.id, 
       userName: user.username, 
       firstName: user.firstname, 
       lastName: user.lastname, 
       email: user.email, 
-      roleName: user.role
+      roleName: roles.filter(role => user.role === role.name)[0].id
     })
     .then(response => {
         if(response.status === 200) {

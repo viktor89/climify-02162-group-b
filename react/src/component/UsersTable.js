@@ -112,10 +112,10 @@ function UsersTable({ classes, users, roles, handleChange, onSaveUser, onDeleteU
                 </FormControl>
             </div>
             <div className={classes.column}>
-              <FormControl disabled={roles.length === 0} className={classes.formControl}>
+              <FormControl fullWidth disabled={roles.length === 0} className={classes.formControl}>
                   <InputLabel shrink htmlFor="component-simple">{"Role"}</InputLabel>
                   <Select name="role" className={classes.select} value={user.role} onChange={(e) => handleChange(e, user)}>{roles.map(role => {
-                      return (<MenuItem key={role.name} value={role.name}>
+                      return (<MenuItem key={role.id} value={role.name}>
                           <em>{role.name}</em>
                       </MenuItem>)
                   })}</Select>
