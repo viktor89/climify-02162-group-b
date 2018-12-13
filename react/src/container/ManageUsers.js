@@ -148,15 +148,25 @@ class ManageUsers extends Component {
   }
 
   onSaveRole = (role) => {
-    axios.put("/api/v2/roles/editRole.php", { 
+    let promises = [];
+    promises.push(axios.put("/api/v2/roles/editRole.php", { 
       roleID: role.id,
       roleName: role.name
-    })
-    .then(response => {
-        if(response.status === 200) {
-          this.getUsersAndRoles();
-        }
-      });
+    }));
+    role.permissions.map(currentPermission => {
+      if (currentPermission.hasPermission === 1) {
+        promises.push(axios.post("/api/v2/permissions/setPermission.php", {
+          roleID: role.id,
+          permID: currentPermission.permID,
+          instID: "1"
+        }));
+      }
+    });
+    Promise.all(promises).then(response => {
+      if(response.status === 200) {
+        this.getUsersAndRoles();
+      }
+    });
   }
 
   handleChange = (e, value) => {
