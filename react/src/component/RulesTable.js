@@ -73,7 +73,7 @@ class RulesTable extends Component {
     this.setState({
       selectedRule: selectedRule === ruleId ? '' : ruleId,
     })
-  } ;
+  };
 
   handleRuleRoomChange = (buildings) => {
     const { selectedRule } = this.state;
