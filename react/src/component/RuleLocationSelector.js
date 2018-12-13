@@ -127,6 +127,7 @@ class RuleLocationSelector extends Component {
           </FormGroup>
           <Collapse in={building.expanded}>
             <Grid container spacing={16} justify={"space-evenly"}>
+              {console.log(building)}
               {building.rooms.map(room => (
                 <Grid key={ruleId + room.hubID + room.roomName + room.checked} item xs={11}>
                   <FormGroup row>
