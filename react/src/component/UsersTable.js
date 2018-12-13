@@ -53,10 +53,10 @@ const styles = theme => ({
   },
 });
 
-function UsersTable({ classes, users, onHubChange, onSavehub }) {
+function UsersTable({ classes, users, handleChange, onSaveUser, onDeleteUser }) {
   return users.map((user) => (
     <div key={user.id} className={classes.root}>
-      <ExpansionPanel>
+      <ExpansionPanel >
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
             <Typography className={classes.heading}>User ID:</Typography>
@@ -88,41 +88,41 @@ function UsersTable({ classes, users, onHubChange, onSavehub }) {
             <div className={classes.column}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="component-simple">Username</InputLabel>
-                    <Input name="building" defaultValue={user.username} onChange={(e) => onHubChange(user, e)} />
+                    <Input name="username" defaultValue={user.username} onChange={(e) => handleChange(e, user)} />
                 </FormControl>
             </div>
             <div className={classes.column}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="component-simple">First name</InputLabel>
-                    <Input name="building" defaultValue={user.firstname} onChange={(e) => onHubChange(user, e)} />
+                    <Input name="firstname" defaultValue={user.firstname} onChange={(e) => handleChange(e, user)} />
                 </FormControl>
             </div>
             <div className={classes.column}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="component-simple">Last name</InputLabel>
-                    <Input name="building" defaultValue={user.lastname} onChange={(e) => onHubChange(user, e)} />
+                    <Input name="lastname" defaultValue={user.lastname} onChange={(e) => handleChange(e, user)} />
                 </FormControl>
             </div>
             <div className={classes.column}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="component-simple">E-mail</InputLabel>
-                    <Input name="building" defaultValue={user.email} onChange={(e) => onHubChange(user, e)} />
+                    <Input name="email" defaultValue={user.email} onChange={(e) => handleChange(e, user)} />
                 </FormControl>
             </div>
             <div className={classes.column}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="component-simple">Role</InputLabel>
-                    <Input name="building" defaultValue={user.role} onChange={(e) => onHubChange(user, e)} />
+                    <Input name="role" defaultValue={user.role} onChange={(e) => handleChange(e, user)} />
                 </FormControl>
             </div>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
           <Grid container spacing={16}>
             <Grid item xs={6}>
-              <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
+              <Button disabled={!user.changed} classes={{root: classes.buttonRoot}} onClick={(e) => onSaveUser(user)} fullWidth size="small" color="primary" variant="outlined">Save</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
+              <Button classes={{root: classes.buttonRoot}} onClick={(e) => onDeleteUser(user)} fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
             </Grid>
           </Grid>
         </ExpansionPanelActions>

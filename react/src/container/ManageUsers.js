@@ -51,9 +51,46 @@ class ManageUsers extends Component {
       });
   };
 
-  handleChange = (event, value) => {
-    this.setState({ value });
+  onDeleteUser = (user) => {
+    axios.post("/api/v2/users/deleteUser.php", { userID: user.id })
+      .then(response => {
+        if(response.status === 200) {
+          const {users} = this.state;
+          this.setState({
+            users: users.filter(currentUser => currentUser.id !== user.id)
+          });
+        }
+      });
+  }
+
+  onSaveUser = (user) => {
+    axios.put("/api/v2/users/editUser.php", { 
+      userID: user.id, 
+      userName: user.username, 
+      firstName: user.firstname, 
+      lastName: user.lastname, 
+      email: user.email, 
+      roleName: user.role
+    })
+    .then(response => {
+        if(response.status === 200) {
+          this.getUsersAndRoles();
+        }
+      });
+  }
+
+  handleChange = (e, value) => {
+    this.setState({
+      value: value,
+    });
   };
+
+  handleUserChange = (e, user) => {
+    const {users} = this.state;
+    this.setState({
+      users: users.map(currentUser => (currentUser.id === user.id ? {...user, [e.target.name]: e.target.value, changed: true} : currentUser))
+    });
+  }
 
   render() {
     const { classes } = this.props;
@@ -70,7 +107,7 @@ class ManageUsers extends Component {
           <Tab label="Users" />
           <Tab label="Roles" />
         </Tabs>
-        {value === 0 && <UsersTable users={users} />}
+        {value === 0 && <UsersTable users={users} handleChange={this.handleUserChange} onSaveUser={this.onSaveUser} onDeleteUser={this.onDeleteUser}/>}
         {value === 1 && <RolesTable roles={roles}/>}
       </div>
     );
