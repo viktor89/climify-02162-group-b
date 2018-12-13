@@ -49,8 +49,8 @@ class InfluxDBClient
      * @return array
      * @throws \InfluxDB\Exception
      */
-    public function getDataSeriesForRoom($hubID, $minutes) {
-        $result = $this->database->query('SELECT last("value") AS "last_value", "sensor_type" FROM "skoleklima"."autogen"."sensor_measurements" WHERE time > now() - '.$minutes.'m AND "hubID"=\''.$hubID.'\' GROUP BY time(1m), "sensor_type" FILL(previous)');
+    public function getDataSeriesForRoom($hubID, $minutes, $type) {
+        $result = $this->database->query('SELECT last("value") AS "value", "sensor_type" FROM "skoleklima"."autogen"."sensor_measurements" WHERE time > now() - '.$minutes.'m AND "hubID"=\''.$hubID.'\' AND "sensor_type"=\''.$type.'\' GROUP BY time(1m), "sensor_type" FILL(previous)');
         $measurements = $result->getSeries();
         return $measurements;
     }

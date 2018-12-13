@@ -85,4 +85,20 @@ class RuleDAO extends API\V2\Api
         $statement->close();
         return $ruleTypes ;
     }
+
+    public function getRulesByRoom($mac){
+        $statement = $this->database->prepare("SELECT Room.HubID, Rule.id, type, RuleType.id, unit, UpperThreshold, LowerThreshold FROM Rule LEFT JOIN RuleType on RuleType.id = RuleType NATURAL JOIN Room WHERE HubID = ?");
+        $statement->bind_param("s", $mac);
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($ruleId, $type, $typeId, $unit, $upperThreshold, $lowerThreshold);
+
+        $rules = [];
+        /* fetch values */
+        while ($statement->fetch()) {
+            $rules[] = ["id" => $ruleId, "type" => ["id" => $typeId, "name" => $type], "unit" => $unit, "upperThreshold" => $upperThreshold, "lowerThreshold" => $lowerThreshold, "rooms" => []];
+        }
+        $statement->close();
+        return $rules;
+    }
 }

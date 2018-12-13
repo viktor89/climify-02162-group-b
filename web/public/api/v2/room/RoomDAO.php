@@ -13,6 +13,6 @@ class RoomDAO extends API\V2\Api
      * @throws \InfluxDB\Exception
      */
     public function getData($data) {
-        return $this->influxDb->getDataSeriesForRoom($data->hubID, $data->minutes);
+        return $this->influxDb->getDataSeriesForRoom($data->hubID, $data->minutes, $data->type);
     }
 }

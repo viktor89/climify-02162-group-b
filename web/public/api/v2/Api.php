@@ -6,6 +6,7 @@ require 'InfluxDBClient.php';
 require 'exceptions/ValidationException.php';
 require 'Validator.php';
 require 'MQTTService.php';
+require 'RuleEngine.php';
 
 class Api
 {
@@ -13,6 +14,7 @@ class Api
     protected $validator;
     protected $database;
     protected $MQTTService;
+    protected $ruleEngine;
 
     public function __construct()
     {
@@ -27,5 +29,6 @@ class Api
         $this->influxDb = new InfluxDBClient();
         $this->database = new mysqli(getenv('MYSQL_HOST').':3306', getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'), getenv('MYSQL_DATABASE'));
         $this->MQTTService = new MQTTService();
+        $this->ruleEngine = new RuleEngine();
     }
 }
