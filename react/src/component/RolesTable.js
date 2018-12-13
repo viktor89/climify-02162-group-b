@@ -70,7 +70,11 @@ function RolesTable({ classes, roles, handleRoleNameChange, handlePermissionChan
           </div>
           <div className={classes.column}>
             <Typography className={classes.heading}>Permissions:</Typography>
-            <Typography className={classes.secondaryHeading}>{role.permissions.length}</Typography>
+            <Typography className={classes.secondaryHeading}>{
+                role.permissions.filter(permission => permission.hasPermission).length === role.permissions.length ? "All" :
+                role.permissions.filter(permission => permission.hasPermission).length === 0 ? "None" :
+                role.permissions.filter(permission => permission.hasPermission).map(permission => `${permission.permName}, `)
+              }</Typography>
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>

@@ -181,7 +181,6 @@ class ManageUsers extends Component {
     );
 
     Promise.all(promises).then(response => {
-      console.log(response);
       this.getUsersAndRoles();
     });
   }
