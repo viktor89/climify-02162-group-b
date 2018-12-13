@@ -107,7 +107,6 @@ class ManageInstitution extends Component {
     const newHub = Object.assign(registeredHubs.filter(hub => (hub.mac === mac)).shift(), { [name]: value });
     Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
     this.setState({registeredHubs});
-    console.log(registeredHubs);
   };
 
   handleUnregisterHub = (hubID) => {

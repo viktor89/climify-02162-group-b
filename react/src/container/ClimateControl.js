@@ -110,7 +110,6 @@ class Graphs extends Component {
   };
 
   handleRuleChange = (ruleId, e) => {
-    console.log(ruleId, e);
     const { rules } = this.state;
     this.setState({
       rules: rules.map(rule => (ruleId === rule.id ? {...rule, [e.target.name]: e.target.value} : rule))
