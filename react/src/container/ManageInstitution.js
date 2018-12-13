@@ -27,8 +27,8 @@ const styles = theme => ({
     width: '100%',
   },
   refreshIcon: {
-        position: 'absolute',
-        right: '1em',
+    position: 'absolute',
+    right: '1em',
     },
 });
 

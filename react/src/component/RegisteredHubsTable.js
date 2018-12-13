@@ -54,7 +54,7 @@ const styles = theme => ({
 function DetailedExpansionPanel({ classes, buildings, hubs, onHubChange, onSavehub, onUnregisterHub, onCreateBuilding }) {
   return hubs.map((hub) => (
     <div key={hub.mac} className={classes.root}>
-      <ExpansionPanel>
+      <ExpansionPanel data-cy={`${hub.mac}-panel`}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <div className={classes.column}>
             <Typography className={classes.heading}>MAC Addres:</Typography>
@@ -80,6 +80,7 @@ function DetailedExpansionPanel({ classes, buildings, hubs, onHubChange, onSaveh
             </Grid>
             <Grid item xs={4}>
               {buildings && <CreateSelect
+                data-cy={`${hub.mac}-buildings`}
                 name="building"
                 onChange={(name, value) => onHubChange(hub.mac, name, value)}
                 onCreate={onCreateBuilding}
@@ -89,6 +90,7 @@ function DetailedExpansionPanel({ classes, buildings, hubs, onHubChange, onSaveh
             </Grid>
             <Grid item xs={4}>
               <CreateSelect
+                data-cy={`${hub.mac}-rooms`}
                 key={hub.building}
                 disabled={hub.building === undefined || hub.building === ''}
                 name="room"
@@ -108,10 +110,10 @@ function DetailedExpansionPanel({ classes, buildings, hubs, onHubChange, onSaveh
         <ExpansionPanelActions>
           <Grid container spacing={16}>
             <Grid item xs={6}>
-              <Button disabled={!hub.building || !hub.room} fullWidth size="small" color="primary" variant="outlined" onClick={() => onSavehub(hub.mac)}>Save</Button>
+              <Button  data-cy={`${hub.mac}-save`} disabled={!hub.building || !hub.room} fullWidth size="small" color="primary" variant="outlined" onClick={() => onSavehub(hub.mac)}>Save</Button>
             </Grid>
             <Grid item xs={6}>
-              <Button fullWidth size="small" color="secondary" variant="outlined" onClick={() => onUnregisterHub(hub.mac)}>Remove</Button>
+              <Button  data-cy={`${hub.mac}-delete`} fullWidth size="small" color="secondary" variant="outlined" onClick={() => onUnregisterHub(hub.mac)}>Remove</Button>
             </Grid>
           </Grid>
         </ExpansionPanelActions>

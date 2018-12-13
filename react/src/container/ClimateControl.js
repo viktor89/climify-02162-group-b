@@ -53,6 +53,7 @@ class Graphs extends Component {
     this.state = {
       rules: [],
       ruleTypes: [],
+      buildings: [],
       loading: true,
       addRuleModalOpen: false,
       newRule: {
@@ -76,11 +77,13 @@ class Graphs extends Component {
     let promises = [];
     promises.push(axios.get("/api/v2/rule/read.php"));
     promises.push(axios.get("/api/v2/rule/type/read.php"));
+    promises.push(axios.get("/api/v2/institution/getBuildings.php"));
     Promise.all(promises).then((response) => {
       this.setState(() => {
         return {
           rules: response[0].data,
           ruleTypes: response[1].data,
+          buildings: response[2].data,
           loading: false,
         }
       });
@@ -103,6 +106,21 @@ class Graphs extends Component {
         upperThreshold: newRule.upperThreshold,
         lowerThreshold: newRule.lowerThreshold,
       }
+    });
+  };
+
+  handleRuleChange = (ruleId, e) => {
+    console.log(ruleId, e);
+    const { rules } = this.state;
+    this.setState({
+      rules: rules.map(rule => (ruleId === rule.id ? {...rule, [e.target.name]: e.target.value} : rule))
+    });
+  };
+
+  handleRoomRuleChange = (ruleId, rooms) => {
+    const { rules } = this.state;
+    this.setState({
+      rules: rules.map(rule => (ruleId === rule.id ? {...rule, rooms: rooms} : rule))
     });
   };
 
@@ -131,16 +149,25 @@ class Graphs extends Component {
     });
   };
 
+  saveRule = (rule) => {
+    console.log(rule);
+  };
+
   deleteRule = (id) => {
     axios.post('/api/v2/rule/delete.php', {id}).then(() => {
       this.getRules();
     })
   };
 
-  render() {
-    const { rules, ruleTypes, newRule } = this.state;
-    const { classes } = this.props;
+  handleBuildingChange = (buildings) => {
+    this.setState({
+      buildings
+    })
+  };
 
+  render() {
+    const { rules, ruleTypes, newRule, buildings } = this.state;
+    const { classes } = this.props;
     return (
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={11}>
@@ -151,7 +178,7 @@ class Graphs extends Component {
           <CachedIcon />
         </IconButton>
         <Grid item xs={12}>
-            {rules && <RulesTable rules={rules} ruleTypes={ruleTypes} deleteRuleCB={this.deleteRule} />}
+            {rules && <RulesTable onExpandBuilding={this.handleBuildingChange} rules={rules} ruleTypes={ruleTypes} buildings={buildings} saveRuleCB={this.saveRule} deleteRuleCB={this.deleteRule} onRuleChange={this.handleRuleChange} roomRuleChangeCB={this.handleRoomRuleChange} />}
         </Grid>
         <Button className={classes.addRuleButton} variant="fab" color={"primary"} onClick={this.addRuleOpen}><AddIcon /></Button>
         <Modal
