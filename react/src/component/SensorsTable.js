@@ -91,7 +91,7 @@ function SensorsTable({ classes, sensors, onRemoveSensor }) {
                 <TableCell>
                   <Grid container spacing={16} justify="center">
                     <Grid item xs={12}>
-                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(sensor.SensorID)}}>
+                      <Button fullWidth variant="outlined" color="secondary" onClick={(e) => {onRemoveSensor(sensor.HubID, sensor.SensorID)}}>
                         Remove
                       </Button>
                     </Grid>

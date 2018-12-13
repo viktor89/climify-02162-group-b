@@ -104,9 +104,10 @@ class ManageSensors extends Component {
     })
   }
 
-  handleRemoveSensor = (sensorID) => {
+  handleRemoveSensor = (hubId, sensorID) => {
     axios.post("/api/v2/sensor/remove.php", {
-        sensorID: sensorID
+        sensorID: sensorID,
+        mac: hubId,
       }).then(() => {
         this.getSensors();
       });
