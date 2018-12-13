@@ -29,7 +29,7 @@
 				<li class="menu-link menu-link-manage-sensors" data-go-to="manage-sensors">
 					<a href="#/manage-sensors">
 						<i class="menu-link-ico nav-icon fa fa-rss" aria-hidden="true"></i>
-						<p class="menu-link-text">Manage Sensors</p>
+						<p class="menu-link-text">Manage Devices</p>
 					</a>
 				</li>
             <?php } ?>

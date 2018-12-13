@@ -150,7 +150,7 @@ class ManageSensors extends Component {
         <Grid item xs={12}>
             <Grid container spacing={16}>
                 <Grid item xs={6}>
-                    <h2>Manage Sensors</h2>
+                    <h2>Manage Devices</h2>
                 </Grid>
                 <Grid item xs={6}>
                   <Grid container spacing={16} justify="flex-end">
@@ -185,11 +185,11 @@ class ManageSensors extends Component {
               {loading ? <LinearProgress className={classes.loadingBar} /> : (
                 <Grid container spacing={16}>
                   <Grid item xs={12}>
-                    <Typography variant="h5">Pending  Sensors</Typography>
+                    <Typography variant="h5">Pending  Devices</Typography>
                     <PendingSensorsTable sensors={pendingSensors.filter(sensor => (sensor.HubID === selectedRoom))} onApproveSensor={this.handleApproveSensor} onRemoveSensor={this.handleRemoveSensor} />
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="h5">Sensors</Typography>
+                    <Typography variant="h5">Devices</Typography>
                     <SensorsTable sensors={sensors.filter(sensor => (sensor.HubID === selectedRoom))} onRemoveSensor={this.handleRemoveSensor} />
                   </Grid>
                 </Grid>
