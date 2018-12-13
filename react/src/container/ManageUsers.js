@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from "@material-ui/core/Typography/Typography";
+import Grid from "@material-ui/core/Grid/Grid";
 import axios from "axios";
 import UsersTable from "../component/UsersTable";
 import RolesTable from "../component/RolesTable";
+import Button from "@material-ui/core/Button/Button";
+import AddIcon from '@material-ui/icons/Add';
+import AddUserModal from '../component/AddUserModal';
+import AddRoleModal from '../component/AddRoleModal';
 
 const styles = {
   root: {
@@ -20,7 +24,11 @@ class ManageUsers extends Component {
     this.state = {
       value: 0,
       users: [],
-      roles: []
+      roles: [],
+      addUserModalOpen: false,
+      addRoleModalOpen: false,
+      newUser: null,
+      newRole: null
     };
   }
 
@@ -36,6 +44,22 @@ class ManageUsers extends Component {
     });
   }
 
+  addRoleOpen = () => {
+    this.setState({ addRoleModalOpen: true });
+  }
+
+  addRoleClose = () => {
+    this.setState({ addRoleModalOpen: false });
+  }
+
+  addUserOpen = () => {
+    this.setState({ addUserModalOpen: true });
+  };
+    
+  addUserClose = () => {
+    this.setState({ addUserModalOpen: false });
+  };
+
   getUsersAndRoles = () => {
     axios.get("/api/v2/users/getUsers.php")
       .then(response => {
@@ -50,6 +74,26 @@ class ManageUsers extends Component {
         });
       });
   };
+
+  onAddUser = () => {
+    const { users, newUser } = this.state;
+    if (users.filter(currentUser => (currentUser.id === newUser.id) || (currentUser.username === newUser.username)).length === 0) {
+      axios.post("/api/v2/users/createUser.php", {
+        userName: newUser.username, 
+        firstName: newUser.firstname, 
+        lastName: newUser.lastname, 
+        email: newUser.email, 
+        roleName: newUser.role,
+        password: newUser.password
+      })
+        .then(response => {
+          this.getUsersAndRoles();
+          this.setState({
+            addUserModalOpen: false
+          });
+        });
+    }
+  }
 
   onDeleteUser = (user) => {
     axios.post("/api/v2/users/deleteUser.php", { userID: user.id })
@@ -79,6 +123,10 @@ class ManageUsers extends Component {
       });
   }
 
+  onAddRole = () => {
+
+  }
+
   handleChange = (e, value) => {
     this.setState({
       value: value,
@@ -92,9 +140,24 @@ class ManageUsers extends Component {
     });
   }
 
+  handleRoleChange = (e, role) => {
+
+  }
+
+  handleAddUserInputChange = (e) => {
+    const { newUser } = this.state;
+    this.setState({
+      newUser: {...newUser, [e.target.name]: e.target.value}
+    });
+  }
+
+  handleAddRoleInputChange = (e) => {
+
+  }
+
   render() {
     const { classes } = this.props;
-    const { value, users, roles } = this.state;
+    const { value, users, roles, addUserModalOpen, addRoleModalOpen } = this.state;
     return (
       <div className={classes.root}>
         <Tabs
@@ -103,12 +166,30 @@ class ManageUsers extends Component {
           indicatorColor="primary"
           textColor="primary"
           centered
-        >
+          >
           <Tab label="Users" />
           <Tab label="Roles" />
         </Tabs>
-        {value === 0 && <UsersTable users={users} handleChange={this.handleUserChange} onSaveUser={this.onSaveUser} onDeleteUser={this.onDeleteUser}/>}
-        {value === 1 && <RolesTable roles={roles}/>}
+        {value === 0 && 
+        <div>
+          <UsersTable users={users} handleChange={this.handleUserChange} onSaveUser={this.onSaveUser} onDeleteUser={this.onDeleteUser}/>
+          <Grid container spacing={16}>
+            <Grid item xs={12}></Grid>
+            <Button className={classes.addRuleButton} variant="fab" color={"primary"} onClick={this.addUserOpen}><AddIcon /></Button>
+          </Grid>
+          <AddUserModal open={addUserModalOpen} addUserModalClose={this.addUserClose} handleAddUserInputChange={this.handleAddUserInputChange} onAddUser={this.onAddUser}/>
+        </div>
+        }
+        {value === 1 && 
+        <div>  
+          <RolesTable roles={roles} handleChange={this.handleRoleChange} onSaveRole={this.onSaveRole} onDeleteRole={this.onDeleteRole}/>
+          <Grid container spacing={16}>
+            <Grid item xs={12}></Grid>
+            <Button className={classes.addRoleButton} variant="fab" color={"primary"} onClick={this.addRoleOpen}><AddIcon/></Button>
+          </Grid>
+          <AddRoleModal open={addRoleModalOpen} addRoleModalClose={this.addRoleClose} handleAddRoleInputChange={this.handleAddRoleInputChange} onAddRole={this.onAddRole}/>
+        </div>
+        }
       </div>
     );
   }
