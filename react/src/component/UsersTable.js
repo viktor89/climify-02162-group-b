@@ -12,6 +12,8 @@ import Grid from "@material-ui/core/Grid/Grid";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
   root: {
@@ -53,7 +55,7 @@ const styles = theme => ({
   },
 });
 
-function UsersTable({ classes, users, handleChange, onSaveUser, onDeleteUser }) {
+function UsersTable({ classes, users, roles, handleChange, onSaveUser, onDeleteUser }) {
   return users.map((user) => (
     <div key={user.id} className={classes.root}>
       <ExpansionPanel >
@@ -110,10 +112,14 @@ function UsersTable({ classes, users, handleChange, onSaveUser, onDeleteUser }) 
                 </FormControl>
             </div>
             <div className={classes.column}>
-                <FormControl className={classes.formControl}>
-                    <InputLabel htmlFor="component-simple">Role</InputLabel>
-                    <Input name="role" defaultValue={user.role} onChange={(e) => handleChange(e, user)} />
-                </FormControl>
+              <FormControl disabled={roles.length === 0} className={classes.formControl}>
+                  <InputLabel shrink htmlFor="component-simple">{"Role"}</InputLabel>
+                  <Select name="role" className={classes.select} value={user.role} onChange={(e) => handleChange(e, user)}>{roles.map(role => {
+                      return (<MenuItem key={role.name} value={role.name}>
+                          <em>{role.name}</em>
+                      </MenuItem>)
+                  })}</Select>
+              </FormControl>
             </div>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>

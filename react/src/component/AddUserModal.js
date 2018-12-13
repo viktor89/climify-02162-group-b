@@ -5,6 +5,10 @@ import Typography from "@material-ui/core/Typography/Typography";
 import TextField from "@material-ui/core/TextField/TextField";
 import Grid from "@material-ui/core/Grid/Grid";
 import Button from "@material-ui/core/Button/Button";
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 
 const styles = theme => ({
     root: {
@@ -37,7 +41,7 @@ const styles = theme => ({
     },
 });
 
-function AddUserModal({ classes, open, addUserModalClose, handleAddUserInputChange, onAddUser}) {
+function AddUserModal({ classes, open, roles, newUser, addUserModalClose, handleAddUserInputChange, onAddUser}) {
     return <Modal
     aria-labelledby="simple-modal-title"
     aria-describedby="simple-modal-description"
@@ -84,12 +88,14 @@ function AddUserModal({ classes, open, addUserModalClose, handleAddUserInputChan
             />
         </Grid>
         <Grid item xs={12}>
-            <TextField
-                label="Role"
-                name="role"
-                fullWidth
-                onChange={(e) => handleAddUserInputChange(e)}
-            />
+            <FormControl disabled={roles.length === 0} fullWidth className={classes.select}>
+                <InputLabel shrink htmlFor="role">{"Role"}</InputLabel>
+                <Select label="Role" className={classes.select} value={newUser !== null ? newUser.role : ''} name="role" onChange={(e) => handleAddUserInputChange(e)}>{roles.map(role => {
+                    return (<MenuItem key={role.name} value={role.id}>
+                        <em>{role.name}</em>
+                    </MenuItem>)
+                })}</Select>
+            </FormControl>
         </Grid>
         <Grid item xs={12}>
             <TextField

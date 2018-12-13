@@ -237,7 +237,7 @@ class ManageUsers extends Component {
 
   render() {
     const { classes } = this.props;
-    const { value, users, roles, addUserModalOpen, addRoleModalOpen } = this.state;
+    const { value, users, roles, addUserModalOpen, addRoleModalOpen, newUser } = this.state;
     return (
       <div className={classes.root}>
         <Tabs
@@ -252,12 +252,12 @@ class ManageUsers extends Component {
         </Tabs>
         {value === 0 && 
         <div>
-          <UsersTable users={users} handleChange={this.handleUserChange} onSaveUser={this.onSaveUser} onDeleteUser={this.onDeleteUser}/>
+          <UsersTable users={users} roles={roles} handleChange={this.handleUserChange} onSaveUser={this.onSaveUser} onDeleteUser={this.onDeleteUser}/>
           <Grid container spacing={16}>
             <Grid item xs={12}></Grid>
             <Button className={classes.addRuleButton} variant="fab" color={"primary"} onClick={this.addUserOpen}><AddIcon /></Button>
           </Grid>
-          <AddUserModal open={addUserModalOpen} addUserModalClose={this.addUserClose} handleAddUserInputChange={this.handleAddUserInputChange} onAddUser={this.onAddUser}/>
+          <AddUserModal open={addUserModalOpen} newUser={newUser} roles={roles} addUserModalClose={this.addUserClose} handleAddUserInputChange={this.handleAddUserInputChange} onAddUser={this.onAddUser}/>
         </div>
         }
         {value === 1 && 

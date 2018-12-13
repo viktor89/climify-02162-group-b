@@ -73,7 +73,7 @@ class RulesTable extends Component {
     this.setState({
       selectedRule: selectedRule === ruleId ? '' : ruleId
     })
-  } ;
+  };
 
   handleRuleRoomChange = (buildings) => {
     const rooms = buildings.flatMap(building => (building.rooms)).filter(room => (room.checked));
