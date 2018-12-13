@@ -98,6 +98,7 @@ class SensorDAO extends API\V2\Api
                 $this->registerPendingSensor($object);
             }
             if($this->isSensorApproved($sensor->sensorName)){
+                //$this->ruleEngine->applyRuleToMeasurement($sensor, $data->mac);
                 $this->validator::validateMeasurement($sensor);
                 $points[] =
                     new Point(
@@ -184,5 +185,18 @@ class SensorDAO extends API\V2\Api
     public function getSensorData($data)
     {
         return $this->influxDb->getDataSeries($data->sensorName, $data->minutes);
+    }
+
+    public function getSensorTypes(){
+        $statement = $this->database->prepare("SELECT SensorTypeID, SensorTypeName FROM SensorType");
+        $statement->execute();
+        $statement->store_result();
+        $statement->bind_result($sensorTypeId, $sensorTypeName);
+        $sensorTypes = [];
+        while($statement->fetch()){
+            $sensorTypes[] = ["id" => $sensorTypeId, "name" => $sensorTypeName];
+        }
+        $statement->close();
+        return $sensorTypes;
     }
 }

@@ -11,6 +11,9 @@ import Button from '@material-ui/core/Button';
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import InputLabel from "@material-ui/core/InputLabel/InputLabel";
 import Input from "@material-ui/core/Input/Input";
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const styles = theme => ({
   root: {
@@ -52,7 +55,7 @@ const styles = theme => ({
   },
 });
 
-function RolesTable({ classes, roles }) {
+function RolesTable({ classes, roles, handleRoleNameChange, handlePermissionChange, onSaveRole, onDeleteRole }) {
   return roles.map((role) => (
     <div key={role.id} className={classes.root}>
       <ExpansionPanel>
@@ -67,24 +70,47 @@ function RolesTable({ classes, roles }) {
           </div>
           <div className={classes.column}>
             <Typography className={classes.heading}>Permissions:</Typography>
-            <Typography className={classes.secondaryHeading}>{role.permissions.length}</Typography>
+            <Typography className={classes.secondaryHeading}>{
+                role.permissions.filter(permission => permission.hasPermission).length === role.permissions.length ? "All" :
+                role.permissions.filter(permission => permission.hasPermission).length === 0 ? "None" :
+                role.permissions.filter(permission => permission.hasPermission).map(permission => `${permission.permName}, `)
+              }</Typography>
           </div>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>
-            <div className={classes.column}/>
+          <div className={classes.column}>
+                <Typography className={classes.secondaryHeading}>Role ID:</Typography>
+                <Typography className={classes.secondaryHeading}>{role.id}</Typography>
+          </div>
           <div className={classes.column}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="component-simple">Role Name</InputLabel>
-              <Input name="building" defaultValue={role.name} onChange={(e) => onHubChange(role, e)} />
+              <Input name="rolename" defaultValue={role.name} onChange={(e) => handleRoleNameChange(e, role)} />
             </FormControl>
           </div>
-          <div className={classes.column}>
+          
+          <FormGroup row>
+            {role.permissions.map(permission => (
+              <div key={permission.permID} className={classes.column}>
+                <FormControlLabel
+                control={
+                  <Checkbox
+                    name={`${permission.permID}-${permission.permName}`}
+                    checked={permission.hasPermission !== 0}
+                    value={`${permission.permID}-${permission.permName}`}
+                    onChange={(e, checked) => handlePermissionChange(checked, role, permission)}
+                  />
+                }
+                label={permission.permName}
+                />
+            </div>
+            ))}
+            </FormGroup>
 
-          </div>
         </ExpansionPanelDetails>
         <ExpansionPanelActions>
-          <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined">Save</Button>
-          <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary" variant="outlined">Delete</Button>
+          <Button disabled={!role.changed} classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary" variant="outlined" onClick={() => onSaveRole(role)}>Save</Button>
+          <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary" variant="outlined" onClick={() => onDeleteRole(role)}>Delete</Button>
         </ExpansionPanelActions>
       </ExpansionPanel>
     </div>

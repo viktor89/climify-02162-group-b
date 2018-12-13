@@ -5,7 +5,7 @@ use API\V2\ValidationException;
 require_once './UserDAO.php';
 require '../../../vendor/autoload.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'DELETE') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     die("Method not allowed!");
 }

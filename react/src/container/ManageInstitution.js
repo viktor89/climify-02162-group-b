@@ -29,7 +29,7 @@ const styles = theme => ({
   refreshIcon: {
     position: 'absolute',
     right: '1em',
-    },
+  },
 });
 
 class ManageInstitution extends Component {
