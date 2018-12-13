@@ -149,9 +149,19 @@ class Graphs extends Component {
     });
   };
 
+  saveRule = (rule) => {
+    console.log(rule);
+  };
+
   deleteRule = (id) => {
     axios.post('/api/v2/rule/delete.php', {id}).then(() => {
       this.getRules();
+    })
+  };
+
+  handleBuildingChange = (buildings) => {
+    this.setState({
+      buildings
     })
   };
 
@@ -168,7 +178,7 @@ class Graphs extends Component {
           <CachedIcon />
         </IconButton>
         <Grid item xs={12}>
-            {rules && <RulesTable rules={rules} ruleTypes={ruleTypes} buildings={buildings} deleteRuleCB={this.deleteRule} onRuleChange={this.handleRuleChange} roomRuleChangeCB={this.handleRoomRuleChange} />}
+            {rules && <RulesTable onExpandBuilding={this.handleBuildingChange} rules={rules} ruleTypes={ruleTypes} buildings={buildings} saveRuleCB={this.saveRule} deleteRuleCB={this.deleteRule} onRuleChange={this.handleRuleChange} roomRuleChangeCB={this.handleRoomRuleChange} />}
         </Grid>
         <Button className={classes.addRuleButton} variant="fab" color={"primary"} onClick={this.addRuleOpen}><AddIcon /></Button>
         <Modal

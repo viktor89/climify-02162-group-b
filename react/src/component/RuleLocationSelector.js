@@ -23,32 +23,8 @@ const styles = () => ({
 });
 
 class RuleLocationSelector extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      buildings: [],
-    };
-  }
-
-  componentDidMount() {
-    this.getBuildings();
-  }
-
-  getBuildings = () => {
-    axios.get("/api/v2/institution/getBuildings.php")
-      .then(response => {
-        this.setState(() => {
-          return {
-            loading: false,
-            buildings: response.data,
-          };
-        });
-      });
-  };
-
   selectAllChildren(name, checked) {
-    const { onChangeCB } = this.props;
-    const { buildings } = this.state;
+    const { onChangeCB, buildings } = this.props;
     const newState = {
       buildings: buildings.map(building => ({
         id: building.id,
@@ -61,15 +37,11 @@ class RuleLocationSelector extends Component {
         }))
       }))
     };
-    this.setState(() => {
-      return newState
-    });
     onChangeCB(newState.buildings);
   }
 
   handleSelect = (name, value) => {
-    const { onChangeCB } = this.props;
-    const { buildings } = this.state;
+    const { onChangeCB, buildings } = this.props;
     const newState = {
       buildings: buildings.map(building => ({
         id: building.id,
@@ -82,29 +54,16 @@ class RuleLocationSelector extends Component {
         }))
       }))
     };
-    this.setState(() => {
-      return newState
-    });
     onChangeCB(newState.buildings);
   };
 
   expandBuilding = (name) => {
-    const { buildings } = this.state;
-    this.setState(() => {
-      return {
-        buildings: buildings.map(building => ({
-          id: building.id,
-          expanded: building.name === name ? !building.expanded : building.expanded,
-          name: building.name,
-          rooms: building.rooms
-        }))
-      }
-    });
+    const { buildings, onExpandBuildingCB } = this.props;
+    onExpandBuildingCB(buildings.map(building => ({...building, expanded: building.name === name ? !building.expanded : building.expanded})));
   };
 
   render() {
-    const { classes, ruleId } = this.props;
-    const { buildings } = this.state;
+    const { classes, ruleId, buildings } = this.props;
     return (<Grid key={ruleId} container spacing={16}>
       {buildings.map(building => (
         <Grid key={building.id+ruleId} item xs={12}>
@@ -127,7 +86,6 @@ class RuleLocationSelector extends Component {
           </FormGroup>
           <Collapse in={building.expanded}>
             <Grid container spacing={16} justify={"space-evenly"}>
-              {console.log(building)}
               {building.rooms.map(room => (
                 <Grid key={ruleId + room.hubID + room.roomName + room.checked} item xs={11}>
                   <FormGroup row>

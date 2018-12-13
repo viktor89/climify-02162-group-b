@@ -82,7 +82,7 @@ class RulesTable extends Component {
   };
 
   render() {
-    const { classes, rules, buildings, deleteRuleCB, onRuleChange } = this.props;
+    const { classes, rules, buildings, deleteRuleCB, onRuleChange, onExpandBuilding, saveRuleCB } = this.props;
     const { selectedRule } = this.state;
     return (<Grid container spacing={16} alignItems={selectedRule ? "flex-start" : "center"}>
         <Grid item xs={12} md={6}>
@@ -108,23 +108,31 @@ class RulesTable extends Component {
                   <Grid container space={16}>
                     <Grid item xs={6}>
                     {rule.rooms.map(room => (
-                      <Chip variant={"outlined"} color={"primary"} label={room.roomName} className={classes.chip} icon={<MeetingRoomIcon />} />
+                      <Chip key={room.hubID + room.roomName} variant={"outlined"} color={"primary"} label={room.roomName} className={classes.chip} icon={<MeetingRoomIcon />} />
                     ))}
                     </Grid>
                     <Grid item xs={2} />
                     <Grid item xs={2}>
-                      <TextField label="Lower Threshold" name="lowerThreshold" onChange={(e) => onRuleChange(rule.id, e)} />
+                      <TextField value={rule.lowerThreshold} label="Lower Threshold" name="lowerThreshold" onChange={(e) => onRuleChange(rule.id, e)} />
                     </Grid>
                     <Grid item xs={2}>
-                      <TextField label="Upper Threshold" name="upperThreshold" onChange={(e) => onRuleChange(rule.id, e)} />
+                      <TextField value={rule.upperThreshold} label="Upper Threshold" name="upperThreshold" onChange={(e) => onRuleChange(rule.id, e)} />
                     </Grid>
                   </Grid>
                 </ExpansionPanelDetails>
                 <ExpansionPanelActions>
                   <Grid container spacing={16}>
                     <Grid item xs={6}>
-                      <Button classes={{root: classes.buttonRoot}} fullWidth size="small" color="primary"
-                            variant="outlined">Save</Button>
+                      <Button
+                        classes={{root: classes.buttonRoot}}
+                        fullWidth
+                        size="small"
+                        color="primary"
+                        variant="outlined"
+                        onClick={() => saveRuleCB(rule)}
+                      >
+                        Save
+                      </Button>
                     </Grid>
                     <Grid item xs={6}>
                       <Button onClick={(e) => {deleteRuleCB(rule.id)}} classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary"
@@ -141,7 +149,8 @@ class RulesTable extends Component {
             key={selectedRule}
             ruleId={selectedRule}
             onChangeCB={this.handleRuleRoomChange}
-            value={
+            onExpandBuildingCB={onExpandBuilding}
+            buildings={
               buildings.map(building => (
                 {
                   ...building,
@@ -156,18 +165,6 @@ class RulesTable extends Component {
               ))
             }
           />}
-          {selectedRule && console.log(buildings.map(building => (
-            {
-              ...building,
-              rooms: building.rooms.map(
-                room => (
-                  {...room,
-                    checked: rules.filter(rule => (rule.id === selectedRule)).shift().rooms.findIndex(ruleRoom => ruleRoom .hubID === room.hubID && ruleRoom.name === room.name) >= 0
-                  }
-                )
-              )
-            }
-          )))}
           {!selectedRule && <em>Select a rule</em>}
         </Grid>
       </Grid>
