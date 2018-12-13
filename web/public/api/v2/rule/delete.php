@@ -15,8 +15,8 @@ try {
     # Get as an object
     $data = json_decode($json_str);
     $ruleDAO = new RuleDAO();
-    $rules = $ruleDAO->deleteRule($data);
-    echo json_encode($rules);
+    $ruleDAO->deleteRule($data);
+    echo json_encode(["status" => "ok"]);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

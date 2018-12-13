@@ -81,8 +81,15 @@ class RulesTable extends Component {
     roomRuleChangeCB(selectedRule, buildings.flatMap(building => (building.rooms)).filter(room => (room.checked)));
   };
 
+  handleDeleteRule = (ruleId) => {
+    const { deleteRuleCB } = this.props;
+    this.setState({
+      selectedRule: null
+    }, deleteRuleCB(ruleId));
+  };
+
   render() {
-    const { classes, rules, buildings, deleteRuleCB, onRuleChange, onExpandBuilding, saveRuleCB } = this.props;
+    const { classes, rules, buildings, onRuleChange, onExpandBuilding, saveRuleCB } = this.props;
     const { selectedRule } = this.state;
     return (<Grid container spacing={16} alignItems={selectedRule ? "flex-start" : "center"}>
         <Grid item xs={12} md={6}>
@@ -135,7 +142,7 @@ class RulesTable extends Component {
                       </Button>
                     </Grid>
                     <Grid item xs={6}>
-                      <Button onClick={(e) => {deleteRuleCB(rule.id)}} classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary"
+                      <Button onClick={(e) => {this.handleDeleteRule(rule.id)}} classes={{root: classes.buttonRoot}} fullWidth size="small" color="secondary"
                             variant="outlined">Delete</Button>
                     </Grid>
                   </Grid>

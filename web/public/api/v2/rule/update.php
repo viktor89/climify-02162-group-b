@@ -5,7 +5,7 @@ use API\V2\ValidationException;
 require_once './RuleDAO.php';
 require '../../../vendor/autoload.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     die("Method not allowed!");
 }
@@ -16,7 +16,7 @@ try {
     $data = json_decode($json_str);
     $ruleDAO = new RuleDAO();
     $rules = $ruleDAO->updateRule($data);
-    echo json_encode($rules);
+    echo json_encode(["status" => "ok"]);
 } catch (ValidationException $e){
     http_response_code(400);
     die($e->getMessage());

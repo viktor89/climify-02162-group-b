@@ -150,7 +150,13 @@ class Graphs extends Component {
   };
 
   saveRule = (rule) => {
-    console.log(rule);
+    axios.post('/api/v2/rule/update.php', {
+      ...rule,
+      rooms: rule.rooms.map(room => ({hubID: room.hubID})),
+      type: rule.type.id
+    }).then(() => {
+      this.getRules();
+    })
   };
 
   deleteRule = (id) => {
