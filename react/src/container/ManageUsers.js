@@ -124,7 +124,39 @@ class ManageUsers extends Component {
   }
 
   onAddRole = () => {
+    const {newRole} = this.state;
+    if(newRole !== null) {
+      axios.post("/api/v2/roles/createRole.php", { roleName: newRole })
+      .then(response => {
+        if(response.status === 200) {
+          this.getUsersAndRoles();
+          this.setState({
+            addRoleModalOpen: false
+          });
+        }
+      });
+    }
+  }
 
+  onDeleteRole = (role) => {
+    axios.post("/api/v2/roles/deleteRole.php", { roleID: role.id })
+      .then(response => {
+        if(response.status === 200) {
+          this.getUsersAndRoles();
+        }
+      });
+  }
+
+  onSaveRole = (role) => {
+    axios.put("/api/v2/roles/editRole.php", { 
+      roleID: role.id,
+      roleName: role.name
+    })
+    .then(response => {
+        if(response.status === 200) {
+          this.getUsersAndRoles();
+        }
+      });
   }
 
   handleChange = (e, value) => {
@@ -134,14 +166,34 @@ class ManageUsers extends Component {
   };
 
   handleUserChange = (e, user) => {
-    const {users} = this.state;
+    const { users } = this.state;
     this.setState({
       users: users.map(currentUser => (currentUser.id === user.id ? {...user, [e.target.name]: e.target.value, changed: true} : currentUser))
     });
   }
 
-  handleRoleChange = (e, role) => {
+  handleRoleNameChange = (e, role) => {
+    const {roles} = this.state;
+    this.setState({
+      roles: roles.map(currentRole => (role.id === currentRole.id) ? {
+          ...currentRole,
+          name: e.target.value,
+          changed: true
+        } : currentRole)
+    });
+  }
 
+  handlePermissionChange = (checked, role, permission) => {
+    const { roles } = this.state;
+    const newState = roles.map(currentRole => (role.id === currentRole.id) ? {
+      ...currentRole,
+      changed: true,
+      permissions: currentRole.permissions.map(
+        currentPermission => (currentPermission.permID === permission.permID) ? {...permission, hasPermission: checked ? 1 : 0} : currentPermission)
+    } : currentRole);
+    this.setState({
+      roles: newState
+    });
   }
 
   handleAddUserInputChange = (e) => {
@@ -152,7 +204,9 @@ class ManageUsers extends Component {
   }
 
   handleAddRoleInputChange = (e) => {
-
+    this.setState({
+      newRole: e.target.value
+    });
   }
 
   render() {
@@ -182,7 +236,7 @@ class ManageUsers extends Component {
         }
         {value === 1 && 
         <div>  
-          <RolesTable roles={roles} handleChange={this.handleRoleChange} onSaveRole={this.onSaveRole} onDeleteRole={this.onDeleteRole}/>
+          <RolesTable roles={roles} handleRoleNameChange={this.handleRoleNameChange} handlePermissionChange={this.handlePermissionChange} onSaveRole={this.onSaveRole} onDeleteRole={this.onDeleteRole}/>
           <Grid container spacing={16}>
             <Grid item xs={12}></Grid>
             <Button className={classes.addRoleButton} variant="fab" color={"primary"} onClick={this.addRoleOpen}><AddIcon/></Button>

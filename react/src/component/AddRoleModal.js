@@ -54,19 +54,10 @@ function AddRoleModal({ classes, open, addRoleModalClose, handleAddRoleInputChan
         <Grid item xs={12}>
             <TextField
                 label="Role name"
-                name="rolename"
+                name="roleName"
                 fullWidth
                 onChange={(e) => handleAddRoleInputChange(e)}
                 />
-        </Grid>
-        <Grid item xs={12}>
-            <TextField
-                label="Password"
-                name="password"
-                type="password"
-                fullWidth
-                onChange={(e) => handleAddRoleInputChange(e)}
-            />
         </Grid>
         <Grid item xs={12}>
             <Button color={"primary"} variant={"outlined"} fullWidth onClick={onAddRole}>Save</Button>
