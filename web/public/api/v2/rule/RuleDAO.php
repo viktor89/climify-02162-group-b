@@ -21,13 +21,13 @@ class RuleDAO extends API\V2\Api
         $statement->close();
 
         for($i = 0; $i < count($rules); $i++){
-            $statement = $this->database->prepare("SELECT Room.HubID, Room.RoomName FROM RoomRule NATURAL JOIN Room WHERE id = ?");
+            $statement = $this->database->prepare("SELECT Room.HubID, Room.RoomName FROM RoomRule LEFT JOIN Room on RoomId = HubID WHERE RuleId = ?");
             $statement->bind_param("d", $rules[$i]['id']);
             $statement->execute();
             $statement->store_result();
             $statement->bind_result($roomId, $roomName);
             while ($statement->fetch()) {
-                $rules[$i]['rooms'][] = ["id" => $roomId, "name" => $roomName];
+                $rules[$i]['rooms'][] = ["hubID" => $roomId, "roomName" => $roomName, "checked" => true];
             }
             $statement->close();
         }
@@ -46,13 +46,28 @@ class RuleDAO extends API\V2\Api
         $statement = $this->database->prepare("INSERT INTO Rule (RuleType, UpperThreshold, LowerThreshold) VALUES (?, ?, ?)");
         $statement->bind_param("ddd", $data->type, $data->upperThreshold, $data->lowerThreshold);
         $statement->execute();
+        $statement->close();
         return $this->database->insert_id;
     }
 
     public function updateRule($data) {
         $statement = $this->database->prepare("UPDATE Rule SET RuleType = ?, UpperThreshold = ?, LowerThreshold = ? WHERE id = ?");
-        $statement->bind_param("dddd", $data->ruleType, $data->upperThreshold, $data->lowerThreshold, $data->ruleId);
+        $statement->bind_param("dddd", $data->type, $data->upperThreshold, $data->lowerThreshold, $data->id);
         $statement->execute();
+        $statement->close();
+        $statement = $this->database->prepare("DELETE FROM RoomRule WHERE RuleId = ?");
+        $statement->bind_param("d", $data->id);
+        $statement->execute();
+        $statement->close();
+        if(count($data->rooms) > 0) {
+            foreach($data->rooms as $room) {
+                //var_dump($room); die();
+                $statement = $this->database->prepare("INSERT INTO RoomRule (RoomId, RuleId) VALUES (?, ?)");
+                $statement->bind_param("sd", $room->hubID, $data->id);
+                $statement->execute();
+                $statement->close();
+            }
+        }
     }
 
     public function getRuleTypes() {
