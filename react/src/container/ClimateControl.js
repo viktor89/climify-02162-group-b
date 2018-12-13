@@ -147,11 +147,11 @@ class Graphs extends Component {
           <h2>Climate Control</h2>
           <h3>Manage Rules</h3>
         </Grid>
-        <IconButton className={classes.refreshIcon} aria-label="refresh" onClick={(e) => {this.getRules()}}>
+        <IconButton className={classes.refreshIcon} aria-label="refresh" onClick={() => {this.getRules()}}>
           <CachedIcon />
         </IconButton>
         <Grid item xs={12}>
-          <RulesTable rules={rules} ruleTypes={ruleTypes} deleteRuleCB={this.deleteRule} />
+            {rules && <RulesTable rules={rules} ruleTypes={ruleTypes} deleteRuleCB={this.deleteRule} />}
         </Grid>
         <Button className={classes.addRuleButton} variant="fab" color={"primary"} onClick={this.addRuleOpen}><AddIcon /></Button>
         <Modal

@@ -7,16 +7,16 @@ use API\V2\ValidationException;
 class UserDAO extends API\V2\Api
 {
     public function getUsers(){
-        $statement = $this->database->prepare("SELECT UserID, UserName, FirstName, LastName, Role.RoleName, LastLogin FROM Person LEFT JOIN Role ON Person.RoleName = Role.RoleID");
+        $statement = $this->database->prepare("SELECT UserID, UserName, FirstName, LastName, Email, Role.RoleName FROM Person LEFT JOIN Role ON Person.RoleName = Role.RoleID");
 
         $statement->execute();
         $statement->store_result();
-        $statement->bind_result($userID, $userName, $firstName, $lastName, $role, $lastLogin);
+        $statement->bind_result($userID, $userName, $firstName, $lastName, $email, $role);
 
         $users = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $users[] = ["id" => $userID, "username" => $userName, "firstname" => $firstName, "lastname" => $lastName, "role" => $role, "lastLogin" => $lastLogin];
+            $users[] = ["id" => $userID, "username" => $userName, "firstname" => $firstName, "lastname" => $lastName, "email" => $email, "role" => $role];
         }
         $statement->close();
         return $users;
@@ -34,6 +34,7 @@ class UserDAO extends API\V2\Api
         $statement->bind_param("ssssss",$userName_escaped,$firstName_escaped,$lastName_escaped,$email_escaped,$roleName_escaped,$password_escaped);
 
         $statement->execute();
+        $userID = $this->database->insert_id;
         $affectedRows = $statement->affected_rows;
         $statement->close();
 
@@ -41,7 +42,7 @@ class UserDAO extends API\V2\Api
             throw new ValidationException("User not created!");
         }
 
-        //TODO skal return nyt ID
+        return $userID;
     }
 
     public function editUser($data){

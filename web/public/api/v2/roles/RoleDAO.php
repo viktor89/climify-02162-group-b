@@ -8,28 +8,42 @@ class RoleDAO extends API\V2\Api
 {
     public function getRoles(){
         $statement = $this->database->prepare("SELECT RoleID, RoleName FROM Role");
+        //TODO rollens permissions skal være med, gerne som key/value(boolean) pair
 
         $statement->execute();
         $statement->store_result();
         $statement->bind_result($roleID, $roleName);
 
-        $users = [];
+        $roles = [];
         /* fetch values */
         while ($statement->fetch()) {
-            $users[] = ["id" => $roleID, "name" => $roleName];
+            $roles[] = ["id" => $roleID, "name" => $roleName, "permissions" => []];
         }
         $statement->close();
-        return $users;
+
+        for($i = 0; $i < count($roles); $i++){
+            $statement = $this->database->prepare("SELECT PermID as pid, PermName, CASE WHEN (SELECT PermID from RolePermission NATURAL JOIN Permission where RoleID = ? AND PermID = pid) IS NULL THEN false ELSE true END as HasPermission FROM Permission");
+            $statement->bind_param("d", $roles[$i]["id"]);
+            $statement->execute();
+            $statement->store_result();
+            $statement->bind_result($permID, $permName, $hasPermission);
+            while ($statement->fetch()) {
+                $roles[$i]{"permissions"}[] = ["permID" => $permID, "permName" => $permName, "hasPermission" => $hasPermission];
+            }
+            $statement->close();
+        }
+
+        return $roles;
     }
 
     public function createRole($data){
-        $roleID_escaped = empty($data->roleID) ? null : $this->database->real_escape_string($data->roleID);
         $roleName_escaped = empty($data->roleName) ? null : $this->database->real_escape_string($data->roleName);
 
-        $statement = $this->database->prepare("INSERT INTO Role (RoleID,RoleName) VALUES (?,?)");
-        $statement->bind_param("ds",$roleID_escaped,$roleName_escaped);
+        $statement = $this->database->prepare("INSERT INTO Role (RoleName) VALUES (?)");
+        $statement->bind_param("s",$roleName_escaped);
 
         $statement->execute();
+        $roleID = $this->database->insert_id;
         $affectedRows = $statement->affected_rows;
         $statement->close();
 
@@ -37,7 +51,7 @@ class RoleDAO extends API\V2\Api
             throw new ValidationException("Role not created!");
         }
 
-        //TODO skal return nyt ID (hvis det er auto increment)
+        return $roleID;
     }
 
     public function editRole($data){

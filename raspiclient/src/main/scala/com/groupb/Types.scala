@@ -1,9 +1,7 @@
 package com.groupb
 
-import scala.util.Try
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation.{JsonSubTypes, JsonTypeInfo}
-import scalaj.http._
 
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -13,41 +11,20 @@ import scalaj.http._
 @JsonSubTypes(Array(
   new Type(value = classOf[ApproveThing], name="ApproveThing"),
   new Type(value = classOf[TState], name="TState"),
-  new Type(value = classOf[ViewInbox], name="ViewInbox")
+  new Type(value = classOf[ViewInbox], name="ViewInbox"),
+  new Type(value = classOf[DeleteItem], name="DeleteItem")
 ))
 sealed trait Message
 case class ApproveThing(val name : String) extends Message
 case class TState(val uuid: String, val temp : String) extends Message
 case class ViewInbox() extends Message
+case class DeleteItem(val uuid : String) extends Message
+
 case class Data(val sensorName : String, val sensorType : String, val time : Any, val value : Any)
-
-sealed trait TransportMessage
-case class MacMessage(val mac : String) extends TransportMessage
-case class DataMessage(val mac : String, val data : String) extends TransportMessage
-
-trait HttpConnection {
-  def getRequest(url : String) : Try[HttpResponse[String]]
-  def postRequest(url : String, data : String) : Try[HttpResponse[String]]
-}
-
-object HttpHandler extends HttpConnection {
-  def getRequest(url : String) = {
-    Try{
-      Http(url)
-        .header("Accept", "application/json")
-        .asString
-    }
-  }
-
-  def postRequest(url : String, data : String) = {
-    Try {
-      Http(url)
-        .header("Content-Type", "text/plain")
-        .header("Accept", "application/json")
-        .postData(data).asString
-    }
-  }
-}
+case class Log(val msg : String)
+case class ReadDB(val types : Map[String, String])
+case class DataPoints(val data : Seq[Data])
+case class DropMsg(val serie : String)
 
 case class OpenHABItems(val name : String, val label : String)
 case class Sensor(val sensorName : String, val sensorType : String)

@@ -53,6 +53,12 @@ const styles = theme => ({
   },
   chipRefresh: {
     color: 'white',
+  },
+  redText: {
+    color: 'red'
+  },
+  greenText: {
+    color: 'green'
   }
 });
 
@@ -81,7 +87,7 @@ function SensorsTable({ classes, sensors, onRemoveSensor }) {
                 <TableCell>{sensor.SensorType}</TableCell>
                 <TableCell>{sensor.Building}</TableCell>
                 <TableCell numeric>{sensor.Room}</TableCell>
-                <TableCell>Running</TableCell>
+                <TableCell className={sensor.running ? classes.greenText : classes.redText}>{sensor.running ? 'Running' : 'Not Running'}</TableCell>
                 <TableCell>
                   <Grid container spacing={16} justify="center">
                     <Grid item xs={12}>

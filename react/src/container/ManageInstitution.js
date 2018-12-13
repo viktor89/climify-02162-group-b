@@ -5,6 +5,8 @@ import axios from "axios";
 import PendingHubsTable from "../component/PendingHubsTable";
 import RegisteredHubsTable from "../component/RegisteredHubsTable";
 import LinearProgress from "@material-ui/core/LinearProgress/LinearProgress";
+import CachedIcon from '@material-ui/icons/Cached';
+import IconButton from "@material-ui/core/IconButton/IconButton";
 
 const styles = theme => ({
   root: {
@@ -24,11 +26,11 @@ const styles = theme => ({
   loadingBar: {
     width: '100%',
   },
+  refreshIcon: {
+        position: 'absolute',
+        right: '1em',
+    },
 });
-
-const createBuilding = (value) => ({
-    building: value
-})
 
 class ManageInstitution extends Component {
   constructor(props) {
@@ -48,13 +50,10 @@ class ManageInstitution extends Component {
   componentWillMount() {
     const promises = [];
     promises.push(axios.get('/api/v2/institution/getInstitutions.php'));
-    promises.push(axios.get('/api/v2/institution/getBuildings.php'))
+    promises.push(this.getBuildings());
     Promise.all(promises).then((response) => {
       this.setState(() => {
         return {institutions: response[0].data};
-      });
-      this.setState(() => {
-        return {buildings: response[1].data};
       });
       this.getHubs(response[0].data[0].id);
     });
@@ -95,16 +94,21 @@ class ManageInstitution extends Component {
     });
   }
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-    this.getHubs(event.target.value);
-  }
+  getBuildings = () => {
+      return axios.get('/api/v2/institution/getBuildings.php').then((response) => {
+          this.setState(() => {
+              return {buildings: response.data};
+          });
+      });
+  };
 
-  handleRegisteredHubChanged = (hub, event, val) => {
+  handleRegisteredHubChanged = (mac, name, value) => {
     const { registeredHubs } = this.state;
-    const newHub = Object.assign(hub, { [event.target.name]: event.target.value || val });
+    const newHub = Object.assign(registeredHubs.filter(hub => (hub.mac === mac)).shift(), { [name]: value });
     Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
-  }
+    this.setState({registeredHubs});
+    console.log(registeredHubs);
+  };
 
   handleUnregisterHub = (hubID) => {
     const { selectedInstitution } = this.state;
@@ -115,7 +119,7 @@ class ManageInstitution extends Component {
       .then(() => {
         this.getHubs(selectedInstitution);
       });
-  }
+  };
 
   handleSaveRegisteredHub = (mac) => {
     const { registeredHubs, selectedInstitution, buildings } = this.state;
@@ -124,51 +128,50 @@ class ManageInstitution extends Component {
       .post("/api/v2/hub/update.php", {
         mac: hub.mac,
         room: hub.room,
-        building: buildings.filter((building) => (building.name === hub.building)).shift().id || "",
+        building: hub.building,
         receiveMode: hub.receiveMode || false,
       })
       .then(() => {
         this.getHubs(selectedInstitution);
       });
-  }
+  };
 
-  handlePendingHubChanged = (hub, event) => {
-    const { registeredHubs } = this.state;
-    const newHub = Object.assign(hub, { [event.target.name]: event.target.value });
-    Object.assign(registeredHubs, registeredHubs.map(el=> el.mac === newHub.mac? newHub : el));
-  }
+  handlePendingHubChanged = (mac, name, value) => {
+    const { pendingHubs } = this.state;
+    const newHub = Object.assign(pendingHubs.filter(hub => (hub.mac === mac)).shift(), { [name]: value });
+    Object.assign(pendingHubs, pendingHubs.map(el=> el.mac === newHub.mac? newHub : el));
+    this.setState({pendingHubs});
+  };
 
   handleSavePendingHub = (mac) => {
-    const { pendingHubs, selectedInstitution, buildings } = this.state;
+    const { pendingHubs, selectedInstitution } = this.state;
     const hub = pendingHubs.filter((hub) => (hub.mac === mac)).shift();
+    console.log(hub);
     axios
       .post("/api/v2/hub/approve.php", {
         mac: hub.mac,
         room: hub.room,
-        building: buildings.filter((building) => (building.name === hub.building)).shift().id || ""
+        building: hub.building
       })
       .then(() => {
         this.getHubs(selectedInstitution);
       });
-  }
+  };
+
   // Creatable component
-
-  handleCreate = (event) => {
-      setTimeout(() => {
-          const {buildings} = this.state;
-          const newBuilding = createBuilding(event.value)
-
-          this.setState({
-              buildings: [...buildings, newBuilding],
-              value: newBuilding,
-          });
-      }, 1000);
-  }
+  handleCreateBuilding = (value) => {
+    const {buildings} = this.state;
+    buildings.push({
+      id: buildings[buildings.length-1].id+1,
+      name: value,
+      rooms: []
+    });
+    this.setState({buildings});
+  };
 
   render() {
     const { classes } = this.props;
-    const { pendingHubs, registeredHubs, loading, buildings, rooms} = this.state;
-    const buildingList = buildings.map(building => ({label: building.name}));
+    const { pendingHubs, registeredHubs, loading, buildings, selectedInstitution} = this.state;
     return (
       <Grid container className={classes.root} spacing={16}>
         <Grid item xs={12}>
@@ -179,6 +182,9 @@ class ManageInstitution extends Component {
           </Grid>
           <hr />
         </Grid>
+          <IconButton className={classes.refreshIcon} aria-label="refresh" onClick={() => {this.getHubs(selectedInstitution)}}>
+              <CachedIcon />
+          </IconButton>
         {loading
           ? (<LinearProgress className={classes.loadingBar} />)
           : (registeredHubs.length === 0 && pendingHubs.length === 0)
@@ -187,11 +193,24 @@ class ManageInstitution extends Component {
               <Grid container spacing={16}>
                 <Grid item md={6} xs={12}>
                   <h3>Registered Hubs</h3>
-                  {registeredHubs && <RegisteredHubsTable hubs={registeredHubs} onSavehub={this.handleSaveRegisteredHub} onHubChange={this.handleRegisteredHubChanged} onUnregisterHub={this.handleUnregisterHub} />}
+                  {registeredHubs && <RegisteredHubsTable
+                      hubs={registeredHubs}
+                      buildings={buildings}
+                      onCreateBuilding={this.handleCreateBuilding}
+                      onSavehub={this.handleSaveRegisteredHub}
+                      onHubChange={this.handleRegisteredHubChanged}
+                      onUnregisterHub={this.handleUnregisterHub} />}
                 </Grid>
                 <Grid item md={6} xs={12}>
                   <h3>Unregistered Hubs</h3>
-                  <PendingHubsTable hubs={pendingHubs} buildings={buildingList} onSavehub={this.handleSavePendingHub} onHubChange={this.handlePendingHubChanged} rooms={rooms} onCreate={this.handleCreate} onChange={this.handleChange}/>
+                  {pendingHubs && <PendingHubsTable
+                      hubs={pendingHubs}
+                      buildings={buildings}
+                      onCreateBuilding={this.handleCreateBuilding}
+                      onSavehub={this.handleSavePendingHub}
+                      onHubChange={this.handlePendingHubChanged}
+                      onUnregisterHub={this.handleUnregisterHub}
+                  />}
                 </Grid>
               </Grid>)
         }
@@ -199,5 +218,5 @@ class ManageInstitution extends Component {
     );
   }
 };
-export default withStyles(styles)(ManageInstitution);
 
+export default withStyles(styles)(ManageInstitution);
