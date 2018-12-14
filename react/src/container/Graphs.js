@@ -6,6 +6,12 @@ import axios from "axios";
 import LocationDropdown from "../component/LocationDropdown";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import CachedIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import Typography from '@material-ui/core/es/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@material-ui/core/Radio';
 
 const styles = theme => ({
   root: {
@@ -32,6 +38,7 @@ class Graphs extends Component {
       selectedBuilding: null,
       selectedRoom: null,
       sensorTypes: [],
+      timeFrame: "60"
     };
   }
 
@@ -94,9 +101,9 @@ class Graphs extends Component {
   }
 
   getData = () => {
-    const { selectedRoom, sensorTypes } = this.state;
+    const { selectedRoom, sensorTypes, timeFrame } = this.state;
     const promises = sensorTypes.map(sensorType => (
-        axios.post("/api/v2/room/getData.php", { hubID: selectedRoom.id, minutes: 30, type: sensorType.name })
+        axios.post("/api/v2/room/getData.php", { hubID: selectedRoom.id, minutes: timeFrame, type: sensorType.name })
     ));
     Promise.all(promises).then(responses => {
       this.setState({
@@ -121,6 +128,10 @@ class Graphs extends Component {
     }, () => {
       this.getData();
     });
+  };
+
+  handleTimeChange = event => {
+    this.setState({ timeFrame: event.target.value }, this.getData);
   };
 
   render() {
@@ -159,20 +170,50 @@ class Graphs extends Component {
           </Grid>
         </Grid>
         <Grid container spacing={16}>
+          <Grid item xs={12}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Time Frame</FormLabel>
+              <RadioGroup
+                aria-label="position"
+                name="position"
+                row
+                value={this.state.timeFrame}
+                onChange={this.handleTimeChange}
+              >
+                <FormControlLabel
+                  value="60"
+                  control={<Radio color="primary" />}
+                  label="1 Hour"
+                />
+                <FormControlLabel
+                  value="1440"
+                  control={<Radio color="primary" />}
+                  label="1 Day"
+                />
+                <FormControlLabel
+                  value="10080"
+                  control={<Radio color="primary" />}
+                  label="7 Days"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
           {roomData && roomData.length > 0 && roomData.map(roomDataType => (
             <Grid key={roomDataType.tags.sensor_type} item xs={12} md={6}>
+              <Typography variant="h6" align="center">
+                {roomDataType.tags.sensor_type}
+              </Typography>
               <Line data={this.getGraphDataObject(roomDataType.tags.sensor_type)} options={{
                 scales: {
                   yAxes: [{
                     scaleLabel: {
                       display: true,
-                      labelString: 'Time',
                     },
                   }],
                   xAxes: [{
                     scaleLabel: {
                       display: true,
-                      labelString: roomDataType.tags.sensor_type,
+                      labelString: 'Time',
                     },
                   }],
                 },
