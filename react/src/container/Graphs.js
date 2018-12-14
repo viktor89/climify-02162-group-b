@@ -198,8 +198,9 @@ class Graphs extends Component {
               </RadioGroup>
             </FormControl>
           </Grid>
+          {console.log(roomData)}
           {roomData && roomData.length > 0 && roomData.map(roomDataType => (
-            <Grid key={roomDataType.tags.sensor_type} item xs={12} md={6}>
+            roomDataType ? <Grid key={roomDataType.tags.sensor_type} item xs={12} md={6}>
               <Typography variant="h6" align="center">
                 {roomDataType.tags.sensor_type}
               </Typography>
@@ -218,7 +219,7 @@ class Graphs extends Component {
                   }],
                 },
               }} />
-            </Grid>
+            </Grid> : <Typography variant="h6" align="center">No Data</Typography>
           ))}
         </Grid>
       </Grid>
