@@ -131,7 +131,7 @@ class Graphs extends Component {
   };
 
   handleTimeChange = event => {
-    this.setState({ timeFrame: event.target.value }, this.getData());
+    this.setState({ timeFrame: event.target.value }, this.getData);
   };
 
   render() {
