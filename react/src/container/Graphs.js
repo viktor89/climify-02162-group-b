@@ -73,7 +73,7 @@ class Graphs extends Component {
   getGraphDataObject = (type) => {
     const { roomData, selectedRoom } = this.state;
     return {
-      labels: roomData.filter(rd => rd.tags.sensor_type === type).map(dataPoint => (dataPoint.values.map(value => value[0]))).shift(),
+      labels: roomData.filter(rd => rd && rd.tags.sensor_type === type).map(dataPoint => (dataPoint.values.map(value => value[0]))).shift(),
       datasets: [
         {
           label: selectedRoom.name,
@@ -94,7 +94,7 @@ class Graphs extends Component {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: roomData.filter(rd => rd.tags.sensor_type === type).map(dataPoint => (dataPoint.values.map(value => value[1]))).shift(),
+          data: roomData.filter(rd => rd && rd.tags.sensor_type === type).map(dataPoint => (dataPoint.values.map(value => value[1]))).shift(),
         },
       ],
     }
@@ -198,13 +198,12 @@ class Graphs extends Component {
               </RadioGroup>
             </FormControl>
           </Grid>
-          {console.log(roomData)}
-          {roomData && roomData.length > 0 && roomData.map(roomDataType => (
-            typeof roomDataType !== 'undefined' ? <Grid key={roomDataType.tags.sensor_type} item xs={12} md={6}>
+          {roomData && roomData.length > 0 && roomData.filter(item => (typeof item !== 'undefined')).map(dataArray => (
+            <Grid key={dataArray.tags.sensor_type} item xs={12} md={6}>
               <Typography variant="h6" align="center">
-                {roomDataType.tags.sensor_type}
+                {dataArray.tags.sensor_type}
               </Typography>
-              <Line data={this.getGraphDataObject(roomDataType.tags.sensor_type)} options={{
+              <Line data={this.getGraphDataObject(dataArray.tags.sensor_type)} options={{
                 scales: {
                   yAxes: [{
                     scaleLabel: {
@@ -219,7 +218,7 @@ class Graphs extends Component {
                   }],
                 },
               }} />
-            </Grid> :  <Grid key={roomDataType} item xs={12} md={6}><Typography variant="h6" align="center">No {roomDataType} Data</Typography></Grid>
+            </Grid>
           ))}
         </Grid>
       </Grid>
