@@ -219,7 +219,7 @@ class Graphs extends Component {
                   }],
                 },
               }} />
-            </Grid> : <Typography variant="h6" align="center">No Data</Typography>
+            </Grid> :  <Grid key={roomDataType} item xs={12} md={6}><Typography variant="h6" align="center">No {roomDataType} Data</Typography></Grid>
           ))}
         </Grid>
       </Grid>
