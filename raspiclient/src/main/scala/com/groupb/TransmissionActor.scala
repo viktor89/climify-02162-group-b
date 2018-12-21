@@ -5,6 +5,9 @@ import akka.event.Logging
 import scala.util.Success
 import com.typesafe.config.ConfigFactory
 
+/**
+  * @author s144456
+  */
 class TransmissionActor(val dbActor : ActorRef, val http : HttpConnection) extends Actor with ActorLogging {
   private def transmitData(data : Seq[Data]) = {
     val sendURL = ConfigFactory.load("endpoints").getString("endpoints.send")

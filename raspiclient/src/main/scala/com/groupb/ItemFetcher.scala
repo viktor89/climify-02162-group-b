@@ -3,6 +3,9 @@ package com.groupb
 import scala.language.postfixOps
 import scala.util.{Success, Failure}
 
+/**
+  * @author s144456
+  */
 object ItemFetcher {
   private def convertToMap(body : String) = {
     JsonMapper.convert[Seq[OpenHABItems]](body) match {

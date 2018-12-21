@@ -4,6 +4,9 @@ import org.eclipse.paho.client.mqttv3.{ MqttCallback, MqttMessage, IMqttDelivery
 import akka.actor.ActorRef
 import scala.util.{ Success, Failure }
 
+/**
+  * @author s144456
+  */
 class MQTTHandler(val msgHandler : ActorRef) extends MqttCallback {
   override def messageArrived(topic: String, message: MqttMessage) = {
     JsonMapper.convert[Message](message.toString) match {

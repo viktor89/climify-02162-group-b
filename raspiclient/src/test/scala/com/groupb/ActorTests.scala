@@ -15,6 +15,9 @@ import akka.testkit.{ ImplicitSender, TestActors, TestActorRef, TestKit }
 import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 import org.scalamock.scalatest.MockFactory
 
+/**
+  * @author s144456
+  */
 class ActorTests() extends TestKit(ActorSystem("ActorTests")) with ImplicitSender
     with WordSpecLike with Matchers with BeforeAndAfterAll with MockFactory {
   val responseMap = Map[String, IndexedSeq[String]]()

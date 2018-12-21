@@ -3,7 +3,9 @@ package com.groupb
 import scala.util.Try
 import scalaj.http.{ Http, HttpResponse }
 
-
+/**
+  * @author s144456
+  */
 trait HttpConnection {
   def getRequest(url : String) : Try[HttpResponse[String]]
   def postRequest(url : String, data : String) : Try[HttpResponse[String]]

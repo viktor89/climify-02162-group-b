@@ -7,6 +7,9 @@ import akka.event.Logging
 import com.paulgoldbaum.influxdbclient._
 import com.paulgoldbaum.influxdbclient.Parameter.Precision.Precision
 
+/**
+  * @author s144456
+  */
 class DBActor(private val db : Database) extends Actor with ActorLogging {
   private def readData(types : Map[String, String]) = {
     val seriesQuery = db.query("SELECT * FROM /^*/ WHERE time > now() - 7200s", Parameter.Precision.NANOSECONDS)
