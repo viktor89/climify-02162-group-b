@@ -6,6 +6,9 @@ import scala.util.{ Success, Failure }
 import scalaj.http.HttpResponse
 import com.typesafe.config.ConfigFactory
 
+/**
+  * @author s144456
+  */
 class MessageActor(val http : HttpConnection, val dbActor : ActorRef) extends Actor with ActorLogging {
   def receive() = {
     case ApproveThing(name) => http.postRequest("http://localhost:8080/rest/inbox/" + name + "/approve", name)

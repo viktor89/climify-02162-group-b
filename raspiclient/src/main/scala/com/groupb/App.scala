@@ -11,7 +11,7 @@ import com.typesafe.config.ConfigFactory
 import scala.util.{ Try, Success, Failure }
 
 /**
-  * @author pll
+  * @author s144456
   */
 object App extends App {
   val influxdbConfig = ConfigFactory.load("influxdb")

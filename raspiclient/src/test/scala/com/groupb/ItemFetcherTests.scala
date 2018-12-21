@@ -5,6 +5,9 @@ import scala.util.{Success, Failure}
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalamock.scalatest.MockFactory
 
+/**
+  * @author s144456
+  */
 class ItemFetcherTests extends FlatSpec with Matchers with MockFactory {
   val responseMap = Map[String, IndexedSeq[String]]()
 

@@ -4,6 +4,7 @@ import scalaj.http._
 import org.scalatest.{FlatSpec, Matchers}
 
 /**
+  * @author s144456
   * URLs in test originate from scalaj-http's tests
   */
 class HttpHandlerTests extends FlatSpec with Matchers {

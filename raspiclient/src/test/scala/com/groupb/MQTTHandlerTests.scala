@@ -12,6 +12,9 @@ import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 import org.scalamock.scalatest.MockFactory
 import akka.testkit.TestActorRef
 
+/**
+  * @author s144456
+  */
 class MQTTHandlerTests extends TestKit(ActorSystem("MQTTHandlerTests")) with ImplicitSender
     with WordSpecLike with Matchers with BeforeAndAfterAll with MockFactory {
   val responseMap = Map[String, IndexedSeq[String]]()

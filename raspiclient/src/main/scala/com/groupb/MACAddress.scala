@@ -3,6 +3,9 @@ package com.groupb
 import java.net.{InetAddress, NetworkInterface}
 import scala.collection.JavaConverters._
 
+/**
+  * @author s144456
+  */
 object MACAddress {
   private def scanNetworkInterfaces() = {
     NetworkInterface.getNetworkInterfaces.asScala collect {
